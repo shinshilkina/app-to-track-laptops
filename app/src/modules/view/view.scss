@@ -1,0 +1,12 @@
+.view {
+  &__element{
+    list-style: none;
+    display: flex;
+    div{
+      margin: 1rem;
+    }
+    & .id_employee{
+      display: none;
+    }
+  }
+}

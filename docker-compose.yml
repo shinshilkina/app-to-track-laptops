@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  app:
+    build: ./server
+    container_name: server
+    ports:
+      - 5000:5000
+    environment:
+      MYSQL_HOST: mysql
+    links:
+      - mysql
+    restart: always
+    volumes:
+      - ./server/:/server
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+            MYSQL_ROOT_PASSWORD: 123
+            MYSQL_DATABASE: users
+            MYSQL_USER: asya
+            MYSQL_PASSWORD: 1234
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db/:/var/lib/mysql
+
+#172.17.0.2
