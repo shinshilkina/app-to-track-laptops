@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const configurator = require('webpack-config');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = new configurator.default().merge({
     entry: './src/entry.js',
@@ -85,6 +86,7 @@ module.exports = new configurator.default().merge({
         ]
     },
     devServer: {
-        watchContentBase: true
+        watchContentBase: true,
+        hot: true
     }
 });
