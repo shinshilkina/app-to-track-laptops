@@ -1,4 +1,64 @@
+@import "src/theme/colors";
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+
+@mixin buttonsAddDel($url) {
+  width: 2rem;
+  height: 2rem;
+  background-color: transparent;
+  background-image: $url;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  align-self: center;
+}
+
+@mixin input() {
+  width: 95%;
+  height: 2rem;
+  padding: 1rem 1rem;
+  margin-bottom: 0.7rem;
+
+  background: #FFFFFF;
+  border: 1px solid gray;
+  box-sizing: border-box;
+  border-radius: 4px;
+
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1.1em;
+  line-height: 129%;
+  color: gray;
+}
+
+@mixin buttonSaveCancel($text-color) {
+  width: 35%;
+  height: 2.5rem;
+
+  font-family: Montserrat, sans-serif;
+  font-size: 0.9em;
+  font-weight: bold;
+  color: $text-color;
+
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 1.7rem 1.7rem;
+}
+
 .view {
+  display: flex;
+  flex-wrap: wrap;
+  &__title{
+    font-family: Montserrat, sans-serif;
+    font-size: 1.5em;
+  }
+  &__refresh{
+    @include buttonsAddDel(url("../icons/refresh.svg"));
+    margin-left: 1rem;
+  }
   &__element{
     list-style: none;
     display: flex;
@@ -8,5 +68,44 @@
     & .id_employee{
       display: none;
     }
+    & .button__delete{
+      @include buttonsAddDel(url("../icons/icons8-delete.svg"));
+    }
+    & .button__update{
+      @include buttonsAddDel(url("../icons/add-button.svg"));
+    }
+  }
+}
+
+.update {
+  width: 25rem;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1rem 2rem 2rem 1rem;
+
+  background: white;
+  border-radius: 5px;
+  &__title{
+    font-family: Montserrat, sans-serif;
+    font-size: 1.2em;
+    margin-bottom: 1rem;
+  }
+  &__name {
+    @include input;
+  }
+  &__position{
+    @include input;
+  }
+  &__phone{
+    @include input;
+  }
+  &__cancel{
+    @include buttonSaveCancel($dark_shade_50);
+    border: 1px solid $dark_shade_25;
+  }
+  &__save{
+    @include buttonSaveCancel(#FFFFFF);
+    margin-left: auto;
+    background-image: $gradient;
   }
 }
