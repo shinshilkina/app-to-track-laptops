@@ -22,12 +22,9 @@ const sendHttpRequest = (method, url, data) => {
 const getData = () => {
     sendHttpRequest('GET', 'http://localhost:5000/employees/list').then(responseData => {
         for (let i = 0; i < responseData.length; i++) {
-            console.log(responseData[i].name);
-            console.log(responseData[i].position);
-            console.log(responseData[i].phone_number);
             renderView(responseData[i]);
+            listenButtons();
         }
-        return responseData;
     });
 };
 
@@ -38,10 +35,7 @@ function renderView(data) {
     newElem.classList.add('view__element');
     viewArea.appendChild(newElem);
 
-    let elemID = document.createElement('div');
-    elemID.classList.add('id_employee');
-    elemID.textContent = data.id_employee;
-
+    renderElement('div', 'id_employee', data.id_employee, newElem);
     renderElement('div', 'name', data.name, newElem);
     renderElement('div', 'position', data.position, newElem);
     renderElement('div', 'phone_number', data.phone_number, newElem);
@@ -56,6 +50,19 @@ function renderElement(tagName, className, data, parent) {
 
     parent.appendChild(element);
 }
+
+const deleteData = (id) => {
+    sendHttpRequest('POST', 'http://localhost:5000/employees/delete', {
+        id_employee: id
+    })
+        .then(responseData => {
+            console.log(responseData);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
 const sendData = () => {
     sendHttpRequest('POST', 'http://localhost:5000/employees/add', {
         name: 'Слава',
@@ -69,16 +76,16 @@ const sendData = () => {
             console.log(err);
         });
 };
-const deleteData = () => {
-    sendHttpRequest('POST', 'http://localhost:5000/employees/delete', {
-        id_employee: 6
-    })
-        .then(responseData => {
-            console.log(responseData);
-        })
-        .catch(err => {
-            console.log(err);
-        });
-};
+
 
 document.addEventListener("DOMContentLoaded", getData);
+
+function listenButtons() {
+    const buttonsDel = document.querySelectorAll('.button__delete');
+    for (let button of buttonsDel) {
+        button.addEventListener('click', function (event) {
+            const idElement = parseInt( this.parentElement.querySelector('.id_employee').textContent, 10);
+            deleteData(idElement);
+        });
+    }
+}
