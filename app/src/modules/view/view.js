@@ -1,5 +1,4 @@
 import './view.scss';
-import './requests';
 
 const sendHttpRequest = (method, url, data) => {
     console.log(JSON.stringify(data));
@@ -64,7 +63,7 @@ const deleteData = (id) => {
 
 const updateData = (id, name, position, phone) => {
     
-    sendHttpRequest('POST', 'http://localhost:5000/employees/add', {
+    sendHttpRequest('POST', 'http://localhost:5000/employees/update', {
         id_employee: id,
         name: name,
         position: position,
@@ -77,31 +76,6 @@ const updateData = (id, name, position, phone) => {
             console.log(err);
         });
 };
-
-function renderUpdateArea(id, name, position, phone) {
-    const main = document.querySelector('main');
-    clearPrevUpdArea(main);
-
-    renderElement('div', 'update', '', main);
-    const viewArea = document.querySelector('.update');
-    renderElement('div', 'update__title', 'Изменить данные', viewArea);
-    renderElement('input', 'update__name', '', viewArea);
-    document.querySelector('.update__name').placeholder=name;
-    renderElement('input', 'update__position', '', viewArea);
-    document.querySelector('.update__position').placeholder=position;
-    renderElement('input', 'update__phone', '', viewArea);
-    document.querySelector('.update__phone').placeholder=phone;
-    renderElement('div', 'update__cancel', 'отменить', viewArea);
-    document.querySelector('.update__cancel').type='button';
-    renderElement('div', 'update__save', 'сохранить', viewArea);
-    document.querySelector('.update__save').type='button';
-    listenUpdButtons();
-}
-
-function clearPrevUpdArea(main) {
-    const updateArea = main.querySelector('.update');
-    updateArea != null ? updateArea.remove() : null;
-}
 
 function formatCheckData(id, name, position, phone) {
     typeof id != "number" ? id = parseInt(id, 10): null;
@@ -124,6 +98,73 @@ const sendData = () => {
         });
 };
 
+function renderUpdateArea(id, name, position, phone, updateEmployeeArea) {
+    const [employeeId,employeeName, employeePosition, employeePhone] = getElementsOfUpdateArea();
+
+    employeeId.textContent = id;
+    employeeName.placeholder=name;
+    employeePhone.placeholder=phone;
+    employeePosition.placeholder=position;
+
+    listenUpdButtons();
+}
+
+function getElementsOfUpdateArea() {
+    const updateEmployeeArea = document.body.querySelector('main').querySelector('.update');
+
+    const employeeId = updateEmployeeArea.querySelector('.update__id');
+    const employeeName = updateEmployeeArea.querySelector('.update__name');
+    const employeePosition = updateEmployeeArea.querySelector('.update__position');
+    const employeePhone = updateEmployeeArea.querySelector('.update__phone');
+    const buttonSave = updateEmployeeArea.querySelector('.update__buttons__save');
+    const buttonCancel = updateEmployeeArea.querySelector('.update__buttons__cancel');
+
+    return ([employeeId, employeeName, employeePosition, employeePhone, buttonSave, buttonCancel]);
+}
+function getValuesOfUpdateArea() {
+    const [id, name, position, phone] = getElementsOfUpdateArea();
+    const idValue = parseInt(id.textContent, 10);
+    const nameValue = name.value;
+    const positionValue = position.value;
+    const phoneValue = parseInt(phone.value, 10);
+    return [idValue, nameValue, positionValue, phoneValue];
+}
+
+function getValuesOfEmployeeProfile(viewElement) {
+    const idElement = parseInt( viewElement.querySelector('.id_employee').textContent, 10);
+    const name = viewElement.querySelector('.name').textContent;
+    const position = viewElement.querySelector('.position').textContent;
+    const phone = parseInt(viewElement.querySelector('.phone_number').textContent, 10);
+    return [idElement, name, position, phone];
+}
+
+function comparisonValuesSave () {
+    //find element from update area in listing employees
+    const [id, newName, newPosition, newPhone] = getValuesOfUpdateArea();
+
+    let viewElement;
+    const viewLists = document.body.querySelectorAll('.view__element');
+    for (let list of viewLists) {
+        const idList = parseInt( list.querySelector('.id_employee').textContent, 10);
+        idList === id ? viewElement = list : null ;
+    }
+    const [oldId,oldName, oldPosition, oldPhone] = getValuesOfEmployeeProfile(viewElement);
+
+    //comparison changes
+    let queryName, queryPosition, queryPhone;
+    oldName === newName ? queryName = oldName :
+        newName != '' ? queryName = newName: queryName = oldName;
+    oldPosition === newPosition ? queryPosition = oldPosition :
+        newPosition != '' ? queryPosition = newPosition : queryPosition = oldPosition;
+    oldPhone === newPhone ? queryPhone = oldPhone :
+        isNaN(newPhone) ? queryPhone=oldPhone : queryPhone = newPhone ;
+
+    updateData(id, queryName, queryPosition, queryPhone);
+    const updateEmployeeArea = document.body.querySelector('main').querySelector('.update');
+    updateEmployeeArea.classList.toggle('unvisible');
+    refreshView.click();
+}
+
 document.addEventListener("DOMContentLoaded", getData);
 const refreshView = document.querySelector('.view__refresh');
 
@@ -140,29 +181,30 @@ function listenButtonsView() {
 
     for (let button of buttonsUpd) {
         button.addEventListener('click', function (event) {
-            const idElement = parseInt( this.parentElement.querySelector('.id_employee').textContent, 10);
-            const name = this.parentElement.querySelector('.name').textContent;
-            const position = this.parentElement.querySelector('.position').textContent;
-            const phone = parseInt( this.parentElement.querySelector('.phone_number').textContent, 10);
-
-            renderUpdateArea(idElement,name, position, phone);
+            const [idElement, name, position, phone] = getValuesOfEmployeeProfile(this.parentElement);
+            const updateEmployeeArea = document.body.querySelector('main').querySelector('.update');
+            updateEmployeeArea.classList.toggle('unvisible');
+            renderUpdateArea(idElement,name, position, phone, updateEmployeeArea);
         })
     }
 }
 
 function listenUpdButtons() {
-    const updateWindow = document.querySelector('.update');
-    const buttonSave = updateWindow.querySelector('.update__save');
-    const buttonCancel = updateWindow.querySelector('.update__cancel');
-    //TODO: make func for button save updates for employees data
-    //buttonSave.addEventListener('click');
+    const [employeeId, employeeName, employeePosition, employeePhone, buttonSave, buttonCancel] = getElementsOfUpdateArea();
+    buttonSave.addEventListener('click', function (event) {
+        comparisonValuesSave();
+    });
     buttonCancel.addEventListener('click', function (event) {
-        const area = this.parentElement;
-        area.remove();
+        document.body.querySelector('main').querySelector('.update').classList.toggle('unvisible');
     });
 }
 
 refreshView.addEventListener('click', function (event) {
+    const updateEmployeeArea = document.body.querySelector('main').querySelector('.update');
+    if (!updateEmployeeArea.classList.contains('unvisible')) {
+        updateEmployeeArea.classList.add('unvisible');
+    }
+
     const listEmployees = document.querySelector('.view_list');
     listEmployees.remove();
     const main = document.querySelector('main');
@@ -170,3 +212,4 @@ refreshView.addEventListener('click', function (event) {
     getData();
 });
 
+//TODO: сделать кнопку и функционал добавления работника в список
