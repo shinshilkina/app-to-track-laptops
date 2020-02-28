@@ -84,11 +84,11 @@ function formatCheckData(id, name, position, phone) {
     typeof phone != "number" ? phone = parseInt(phone, 10): null;
 }
 
-const sendData = () => {
+const sendData = (name, position, phone) => {
     sendHttpRequest('POST', 'http://localhost:5000/employees/add', {
-        name: 'Слава',
-        position: 'аспирант',
-        phone_number: 11111111
+        name: name,
+        position: position,
+        phone_number: phone
     })
         .then(responseData => {
             console.log(responseData);
@@ -121,12 +121,39 @@ function getElementsOfUpdateArea() {
 
     return ([employeeId, employeeName, employeePosition, employeePhone, buttonSave, buttonCancel]);
 }
+
+function getElementsOfAddArea () {
+    const addArea = document.querySelector('.add');
+    const name = addArea.querySelector('.add__name');
+    const position = addArea.querySelector('.add__position');
+    const phone = addArea.querySelector('.add__phone');
+    const buttonSave = addArea.querySelector('.add__buttons__save');
+    const buttonCancel = addArea.querySelector('.add__buttons__cancel');
+    return [name, position, phone, buttonCancel, buttonSave, addArea];
+}
+
+function clearAddArea(name, position, phone) {
+    name.value = '';
+    position.value = '';
+    phone.value = '';
+}
+
+function getValuesOfAddArea() {
+    const [name, position, phone] = getElementsOfAddArea();
+    const nameValue = name.value;
+    const positionValue = position.value;
+    let phoneValue = parseInt(phone.value, 10);
+    isNaN(phoneValue) ? phoneValue = parseInt('000000000' , 10): null;
+    return [nameValue, positionValue, phoneValue];
+}
+
 function getValuesOfUpdateArea() {
     const [id, name, position, phone] = getElementsOfUpdateArea();
     const idValue = parseInt(id.textContent, 10);
     const nameValue = name.value;
     const positionValue = position.value;
-    const phoneValue = parseInt(phone.value, 10);
+    let phoneValue = parseInt(phone.value, 10);
+    isNaN(phoneValue) ? phoneValue = parseInt('000000000' , 10): null;
     return [idValue, nameValue, positionValue, phoneValue];
 }
 
@@ -137,6 +164,7 @@ function getValuesOfEmployeeProfile(viewElement) {
     const phone = parseInt(viewElement.querySelector('.phone_number').textContent, 10);
     return [idElement, name, position, phone];
 }
+
 
 function comparisonValuesSave () {
     //find element from update area in listing employees
@@ -167,6 +195,7 @@ function comparisonValuesSave () {
 
 document.addEventListener("DOMContentLoaded", getData);
 const refreshView = document.querySelector('.view__refresh');
+const buttonAddEmployee = document.querySelector('.view__add-employee');
 
 function listenButtonsView() {
     const listEmployees = document.querySelector('.view_list');
@@ -212,4 +241,22 @@ refreshView.addEventListener('click', function (event) {
     getData();
 });
 
-//TODO: сделать кнопку и функционал добавления работника в список
+buttonAddEmployee.addEventListener('click', function (event) {
+    const addArea = document.querySelector('.add');
+    addArea.classList.toggle('unvisible');
+    addArea.classList.contains('unvisible') ? null : listenAddEmployeeButtons();
+});
+
+function listenAddEmployeeButtons() {
+    const [name, position, phone, buttonCancel, buttonSave, addArea]= getElementsOfAddArea();
+    buttonCancel.addEventListener('click', function (event) {
+        addArea.classList.toggle('unvisible');
+    });
+    buttonSave.addEventListener('click', function (event) {
+        const [queryName, queryPosition, queryPhone] = getValuesOfAddArea();
+        sendData(queryName, queryPosition, queryPhone);
+        clearAddArea(name, position, phone);
+        addArea.classList.toggle('unvisible');
+    });
+}
+

@@ -4,7 +4,7 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
     app.get('/employees/list', async (req, res) => {
         try{
             const [rows, fields] = await mysqlQuery(
-                'SELECT * FROM employees'
+                'SELECT * FROM employees ORDER BY id_employee;'
             );
             res.status(200).send(rows);
         } catch (e) {

@@ -72,8 +72,10 @@
     display: flex;
     flex-wrap: wrap;
     list-style: none;
+    font-family: Montserrat, sans-serif;
+    word-wrap: break-word;
     .name , .position , .phone_number {
-      min-width  : 6rem;
+      min-width : 7rem;
       margin: 1rem;
     }
     & .id_employee{
@@ -125,6 +127,13 @@
     }
   }
 }
+
+.add {
+  position: absolute;
+  top: 50px;
+  z-index: 2;
+}
+
 .unvisible {
   display: none;
 }
