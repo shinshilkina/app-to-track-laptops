@@ -49,6 +49,9 @@
 }
 
 .view {
+  margin-left: auto;
+  margin-right: auto;
+  width: 65%;
   &__title{
     font-family: Montserrat, sans-serif;
     font-size: 1.5em;
@@ -59,14 +62,14 @@
     margin-left: 1rem;
     position: absolute;
     left: 16rem;
-    top: 0.5rem;
+    top: 0.2rem;
   }
   &__add-employee {
     @include buttonsAddDel(url("../icons/add-button.svg"));
     margin-left: 1rem;
     position: absolute;
     left: 19rem;
-    top: 0.5rem;
+    top: 0.2rem;
   }
   &__element{
     display: flex;
@@ -75,7 +78,7 @@
     font-family: Montserrat, sans-serif;
     word-wrap: break-word;
     .name , .position , .phone_number {
-      min-width : 7rem;
+      width : 7rem;
       margin: 1rem;
     }
     & .id_employee{
@@ -87,6 +90,17 @@
     }
     & .button__update{
       @include buttonsAddDel(url("../icons/add-button.svg"));
+    }
+    & .button__login{
+      display: flex;
+
+      margin: 0.5rem;
+      padding: 0 0.3rem;
+      justify-content: center;
+      align-items: center;
+     }
+    & .button__login:hover{
+      background-image: $gradient;
     }
   }
 }

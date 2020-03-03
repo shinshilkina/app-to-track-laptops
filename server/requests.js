@@ -13,7 +13,7 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
     });
 
     app.post('/requests/add', async (req, res) => {
-        const {id_user, id_device, date, description} = req.query;
+        const {id_user, id_device, date, description} = req.body;
         try {
             await mysqlQuery(
                 `INSERT INTO requests(id_user, id_device, date, description) VALUES (?, ?, ?, ?);`,
@@ -26,8 +26,8 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             restAPIerror(res, e);
         }
     });
-    app.get('/requests/delete', async (req, res) => {
-        const {id} = req.query;
+    app.post('/requests/delete', async (req, res) => {
+        const {id} = req.body;
         try{
             await mysqlQuery(
                 `DELETE FROM requests WHERE id_request = ?;`,
@@ -41,7 +41,7 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
         }
     });
     app.post('/requests/update', async (req, res) => {
-        const {id_user, id_device, date, description, id} = req.query;
+        const {id_user, id_device, date, description, id} = req.body;
         try {
             await mysqlQuery(
                 `UPDATE requests SET ofid_userfice = ?, 

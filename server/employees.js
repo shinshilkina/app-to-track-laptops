@@ -12,7 +12,6 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
         }
     });
     app.post('/employees/add', async (req, res) => {
-        console.log('body', req.body);
         const {name, position, phone_number} = req.body;
         try {
             console.error({name, position, phone_number});

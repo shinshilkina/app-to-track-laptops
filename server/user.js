@@ -13,8 +13,8 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
     });
 
 
-    app.get('/user/add', async (req, res) => {
-        const {id_employee, login, password} = req.query;
+    app.post('/user/add', async (req, res) => {
+        const {id_employee, login, password} = req.body;
         try {
             await mysqlQuery(
                 `INSERT INTO user(id_employee, login, password) VALUES (?, ?, ?);`,
@@ -27,8 +27,8 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             restAPIerror(res, e);
         }
     });
-    app.get('/user/delete', async (req, res) => {
-        const {id} = req.query;
+    app.post('/user/delete', async (req, res) => {
+        const {id} = req.body;
         try{
             await mysqlQuery(
                 `DELETE FROM user WHERE id_user = ?;`,
@@ -41,8 +41,8 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             restAPIerror(res, e);
         }
     });
-    app.get('/user/update', async (req, res) => {
-        const {id_employee, login, password, id} = req.query;
+    app.post('/user/update', async (req, res) => {
+        const {id_employee, login, password, id} = req.body;
         try {
             await mysqlQuery(
                 `UPDATE user SET id_employee = ?, 

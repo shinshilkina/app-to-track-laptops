@@ -12,9 +12,9 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
         }
     });
 
-    app.get('/device/add', async (req, res) => {
+    app.post('/device/add', async (req, res) => {
         const {id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-            write_off_date, description, OS} = req.query;
+            write_off_date, description, OS} = req.body;
         try {
             await mysqlQuery(
                 `INSERT INTO device(office, housing, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
@@ -28,8 +28,8 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             restAPIerror(res, e);
         }
     });
-    app.get('/device/delete', async (req, res) => {
-        const {id} = req.query;
+    app.post('/device/delete', async (req, res) => {
+        const {id} = req.body;
         try{
             await mysqlQuery(
                 `DELETE FROM device WHERE id_device = ?;`,
@@ -42,9 +42,9 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             restAPIerror(res, e);
         }
     });
-    app.get('/device/update', async (req, res) => {
+    app.post('/device/update', async (req, res) => {
         const {id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-            write_off_date, description, OS, id} = req.query;
+            write_off_date, description, OS, id} = req.body;
         try {
             await mysqlQuery(
                 `UPDATE device SET id_employee = ?, 

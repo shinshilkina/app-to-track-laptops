@@ -1,4 +1,5 @@
 import './view.scss';
+import './requests';
 
 const sendHttpRequest = (method, url, data) => {
     console.log(JSON.stringify(data));
@@ -39,6 +40,7 @@ function renderView(data) {
     renderElement('div', 'phone_number', data.phone_number, liElement);
     renderElement('div', 'button__delete', '', liElement);
     renderElement('div', 'button__update', '', liElement);
+    renderElement('div', 'button__login', 'Логин/пароль', liElement);
 }
 
 function renderElement(tagName, className, data, parent) {

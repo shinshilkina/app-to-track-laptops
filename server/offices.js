@@ -12,8 +12,8 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
         }
     });
 
-    app.get('/offices/add', async (req, res) => {
-        const {office, housing, type} = req.query;
+    app.post('/offices/add', async (req, res) => {
+        const {office, housing, type} = req.body;
         try {
             await mysqlQuery(
                 `INSERT INTO offices(office, housing, type) VALUES (?, ?, ?);`,
@@ -26,8 +26,8 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             restAPIerror(res, e);
         }
     });
-    app.get('/offices/delete', async (req, res) => {
-        const {id} = req.query;
+    app.post('/offices/delete', async (req, res) => {
+        const {id} = req.body;
         try{
             await mysqlQuery(
                 `DELETE FROM offices WHERE id_office = ?;`,
@@ -40,8 +40,8 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             restAPIerror(res, e);
         }
     });
-    app.get('/offices/update', async (req, res) => {
-        const {office, housing, type, id} = req.query;
+    app.post('/offices/update', async (req, res) => {
+        const {office, housing, type, id} = req.body;
         try {
             await mysqlQuery(
                 `UPDATE offices SET office = ?, 
