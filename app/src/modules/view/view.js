@@ -1,5 +1,5 @@
 import './view.scss';
-import './requests';
+const loginpassword = require('./requests');
 
 const sendHttpRequest = (method, url, data) => {
     console.log(JSON.stringify(data));
@@ -261,4 +261,6 @@ function listenAddEmployeeButtons() {
         addArea.classList.toggle('unvisible');
     });
 }
+
+loginpassword();
 
