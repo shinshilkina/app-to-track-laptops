@@ -1,5 +1,5 @@
 import './view.scss';
-const loginpassword = require('./requests');
+import doWork from './requests';
 
 const sendHttpRequest = (method, url, data) => {
     console.log(JSON.stringify(data));
@@ -262,5 +262,5 @@ function listenAddEmployeeButtons() {
     });
 }
 
-loginpassword();
+doWork();
 
