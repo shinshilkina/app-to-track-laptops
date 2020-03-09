@@ -1,0 +1,47 @@
+@import "../../theme/default-theme";
+
+.update , .insert{
+  width: 25rem;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1rem 2rem 2rem 1rem;
+
+  background: white;
+  border-radius: 5px;
+
+  & .title{
+    font-family: Montserrat, sans-serif;
+    font-size: 1.2em;
+    margin-bottom: 1rem;
+  }
+  & .id_employee{
+    display: none;
+  }
+  & .name {
+    @include input;
+  }
+  & .position{
+    @include input;
+  }
+  & .phone_number{
+    @include input;
+  }
+  & .buttons {
+    display: flex;
+    & .cancel{
+      @include buttonSaveCancel($dark_shade_50);
+      border: 1px solid $dark_shade_25;
+    }
+    & .save{
+      @include buttonSaveCancel(#FFFFFF);
+      margin-left: 6rem;
+      background-image: $gradient;
+    }
+  }
+}
+
+.add {
+  position: absolute;
+  top: 50px;
+  z-index: 2;
+}

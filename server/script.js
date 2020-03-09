@@ -5,10 +5,8 @@ const app = express();
 app.use(express.json());
 
 const employees = require('./employees');
-const user = require('./user');
 const offices = require('./offices');
 const device = require('./device');
-const requests = require('./requests');
 
 let mysqlConnection = null;
 let tryIndex = 0;
@@ -53,7 +51,7 @@ const getActiveConnection = async () => {
 
   const restAPIerror = async(res, e) => {
     console.error(e);
-    res.status(500).send('Server Error');
+    res.status(500).send('Server Error2');
   };
 
 
@@ -64,8 +62,6 @@ const getActiveConnection = async () => {
   });
 
 employees(app, mysqlQuery, restAPIerror);
-user(app, mysqlQuery, restAPIerror);
 offices(app, mysqlQuery, restAPIerror);
 device(app, mysqlQuery, restAPIerror);
-requests(app, mysqlQuery, restAPIerror);
 

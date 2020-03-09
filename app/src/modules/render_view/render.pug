@@ -1,0 +1,11 @@
+table.view
+    tr.element(class="header")
+        each header in headers
+            th(class=header.class)=header.title
+    each row in rows
+        tr.element
+            each col, i in row
+                td(class=i)=col
+            td.buttons
+                div.button__delete
+                div.button__update

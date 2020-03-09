@@ -51,8 +51,8 @@ module.exports = new configurator.default().merge({
                 use: ["pug-loader"]
             },
             {
-                test: /\.m?js$/,
-                exclude: /(node_modules|bower_components)/,
+                test: /\.js$/,
+                exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
                     options: {

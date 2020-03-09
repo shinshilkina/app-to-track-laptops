@@ -1,0 +1,55 @@
+@import "../../theme/default-theme";
+
+
+.view {
+  margin-left: auto;
+  margin-right: auto;
+  width: 65%;
+  &__title{
+    font-family: Montserrat, sans-serif;
+    font-size: 1.5em;
+    position: relative;
+
+    & .refresh{
+      @include buttonsAddDel(url("../../modules/icons/refresh.svg"));
+      margin-left: 1rem;
+      position: absolute;
+      left: 16rem;
+      top: 0.2rem;
+    }
+    & .add-employee {
+      @include buttonsAddDel(url("../../modules/icons/add-button.svg"));
+      margin-left: 1rem;
+      position: absolute;
+      left: 19rem;
+      top: 0.2rem;
+    }
+  }
+
+  & .list {
+    margin-top: 2rem;
+    & .element{
+      list-style: none;
+      font-family: Montserrat, sans-serif;
+      word-wrap: break-word;
+      & .name , & .position , & .phone_number {
+
+      }
+      & .id_employee{
+        display: none;
+      }
+      & .buttons{
+        display: flex;
+        flex-wrap: wrap;
+        & .button__delete{
+          @include buttonsAddDel(url("../../modules/icons/icons8-delete.svg"));
+          margin-right: 1rem;
+        }
+        & .button__update{
+          @include buttonsAddDel(url("../../modules/icons/add-button.svg"));
+        }
+      }
+
+    }
+  }
+}

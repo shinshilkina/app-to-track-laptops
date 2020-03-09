@@ -14,7 +14,6 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
     app.post('/employees/add', async (req, res) => {
         const {name, position, phone_number} = req.body;
         try {
-            console.error({name, position, phone_number});
             await mysqlQuery(
                 `INSERT INTO employees(name, position, phone_number) VALUES (?, ?, ?);`,
                 [name, position, phone_number]
@@ -57,5 +56,3 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
         }
     });
 };
-
-//http://localhost:5000/employees/update?id=1?name=Olegg?position=student?phone_number=111111111

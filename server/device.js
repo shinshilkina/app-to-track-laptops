@@ -14,12 +14,12 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
 
     app.post('/device/add', async (req, res) => {
         const {id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-            write_off_date, description, OS} = req.body;
+            write_off_date, description, OS, depreciation, depreciation_lenght} = req.body;
         try {
             await mysqlQuery(
-                `INSERT INTO device(office, housing, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+                `INSERT INTO device(office, housing, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
                 [id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-                    write_off_date, description, OS]
+                    write_off_date, description, OS, depreciation, depreciation_lenght]
             );
             res.status(200).send({
                 success: true
@@ -29,11 +29,11 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
         }
     });
     app.post('/device/delete', async (req, res) => {
-        const {id} = req.body;
+        const {id_device} = req.body;
         try{
             await mysqlQuery(
                 `DELETE FROM device WHERE id_device = ?;`,
-                [id]
+                [id_device]
             );
             res.status(200).send({
                 success: true
@@ -44,17 +44,18 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
     });
     app.post('/device/update', async (req, res) => {
         const {id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-            write_off_date, description, OS, id} = req.body;
+            write_off_date, description, OS, depreciation, depreciation_lenght, id_device} = req.body;
         try {
             await mysqlQuery(
                 `UPDATE device SET id_employee = ?, 
                     id_office = ?, manufacturer = ?, model = ?,
                     serial_number = ?, inventory_number = ?,
                     date_added = ?, write_off_date = ?, 
-                    description = ?, OS = ? 
+                    description = ?, OS = ? , depreciation = ?, 
+                    depreciation_lenght = ?
                     WHERE id_device = ?;`,
                 [id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-                    write_off_date, description, OS, id]
+                    write_off_date, description, OS, depreciation, depreciation_lenght, id_device]
             );
             res.status(200).send({
                 success: true
