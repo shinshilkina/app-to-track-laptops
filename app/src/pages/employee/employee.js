@@ -3,7 +3,7 @@ import renderTable from '../../modules/render_view/render.pug';
 import {getEmployees, deleteEmployee, updateEmployee, sendEmployee} from '../../modules/requests';
 import '../../modules/refreshView';
 import windowUpdIns from '../../modules/updInsWindow/window.js';
-import refreshEmployee from "../../modules/refreshView";
+import refreshView from "../../modules/refreshView";
 
 
 const getData = () => {
@@ -57,7 +57,7 @@ function listenButtons() {
             const row = this.parentElement.parentElement;
             const id = row.querySelector('.id_employee').textContent;
             const deleteRow = deleteEmployee(id);
-            deleteRow.then(setTimeout(refreshEmployee,500));
+            deleteRow.then(setTimeout(refreshView,500));
         });
     }
 

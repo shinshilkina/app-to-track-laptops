@@ -1,0 +1,23 @@
+@import "../../theme/default-theme";
+
+.header {
+  & .elements {
+    height: 3rem;
+
+    list-style: none;
+    display: flex;
+    justify-content: center;
+
+    font-family: Montserrat, sans-serif;
+    font-size: 1.5em;
+    & .employees, & .office, & .device {
+      margin: 0 1rem;
+    }
+    & .employees:hover, & .office:hover, & .device:hover {
+      border-radius: 4px;
+      padding: 0.5rem 0.5rem;
+      background-color: #FFFFFF;
+      border-radius: 1.7rem 1.7rem;
+    }
+  }
+}

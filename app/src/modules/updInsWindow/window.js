@@ -1,7 +1,7 @@
 import './window.scss';
 import windowUpdate from "./window.pug";
 import {getEmployees, deleteEmployee, updateEmployee, sendEmployee} from '../requests';
-import refreshEmployee from "../refreshView";
+import refreshView from "../refreshView";
 
 /**
  *
@@ -61,13 +61,13 @@ function listenButtonsWindow(popUp, rowElements) {
         const values = getNewRow(popUp, rowElements);
         if (popUp.classList.contains('update')) {
             const update = updateEmployee(values);
-            update.then(setTimeout(refreshEmployee,500));
+            update.then(setTimeout(refreshView,500));
         } else if (popUp.classList.contains('insert')) {
             values.splice(0, 1);
             const verifyValues = checkElementsInsert(popUp, rowElements);
             if (verifyValues) {
                 const insert = sendEmployee(values);
-                insert.then(setTimeout(refreshEmployee,500));
+                insert.then(setTimeout(refreshView,500));
             }
         }
         popUp.remove();

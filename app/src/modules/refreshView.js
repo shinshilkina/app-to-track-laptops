@@ -4,20 +4,17 @@ const refresh = document.querySelector('.refresh');
 
 refresh.addEventListener('click', function (event) {
     const classOfArea = this.parentElement.parentElement.className;
-    classOfArea === 'view' ? refreshEmployee() : console.log('-');
+    classOfArea === 'view' ? refreshView() : null;
 });
 
-function refreshEmployee() {
-    /*const updateEmployeeArea = document.body.querySelector('main').querySelector('.update');
-    if (!updateEmployeeArea.classList.contains('unvisible')) {
-        updateEmployeeArea.classList.add('unvisible');
-    }*/
-
-    const listEmployees = document.querySelector('.list');
-    listEmployees.remove();
+function refreshView() {
+    const list = document.querySelector('.list');
+    list.remove();
     const main = document.querySelector('.view');
     renderElement('ul', 'list', '', main);
-    getEmployee();
+    if (main.classList.contains('employee')) {
+        getEmployee();
+    }
 }
 
 /**
@@ -34,4 +31,4 @@ function renderElement(tagName, className, data, parent) {
     parent.appendChild(element);
 }
 
-export default refreshEmployee;
+export default refreshView;
