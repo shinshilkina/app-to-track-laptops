@@ -63,7 +63,7 @@ function listenButtons() {
         });
     }
 
-    const buttonsUpdate = document.querySelectorAll('.buttons .button__update');
+    const buttonsUpdate = document.querySelector("main").querySelector('.employee').querySelectorAll('.button__update');
     for (let button of buttonsUpdate){
         button.addEventListener('click', function (event) {
             const row = this.parentElement.parentElement;

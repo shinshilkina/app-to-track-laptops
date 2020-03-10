@@ -17,13 +17,7 @@
   & .id_employee{
     display: none;
   }
-  & .name {
-    @include input;
-  }
-  & .position{
-    @include input;
-  }
-  & .phone_number{
+  & input {
     @include input;
   }
   & .buttons {

@@ -181,7 +181,7 @@ const getOffice = () => {
 
 const deleteOffice = (id_office) => {
     return sendHttpRequest('POST', 'http://localhost:5000/offices/delete', {
-        id_office: id_office
+        id: id_office
     })
         .then(responseData => {
             console.log(responseData);
@@ -205,9 +205,15 @@ const sendOffice = ([office, housing, type]) => {
             console.log(err);
         });
 };
-
-const updateOffice = ([office, housing, type, id_office]) => {
-
+/**
+ *
+ * @param office{string}
+ * @param housing{string}
+ * @param type{string}
+ * @param id_office{string}
+ * @returns {Promise<Object>}
+ */
+const updateOffice = ([id_office, office, housing, type]) => {
     return sendHttpRequest('POST', 'http://localhost:5000/offices/update', {
         office : office,
         housing : housing,

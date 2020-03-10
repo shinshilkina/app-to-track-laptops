@@ -1,21 +1,26 @@
 import getEmployee from '../pages/employee/employee';
+import getOffice from '../pages/offices/offices';
 
-const refresh = document.querySelector('.refresh');
+const refresh = document.querySelectorAll('.refresh');
 
-refresh.addEventListener('click', function (event) {
-    const classOfArea = this.parentElement.parentElement.className;
-    classOfArea === 'view' ? refreshView() : null;
-});
+for (let button of refresh) {
+    button.addEventListener('click', function (event) {
+        const classOfArea = this.parentElement.parentElement;
+        if (classOfArea.classList.contains('view')){
+            refreshView(classOfArea);
+        }
+    });
+}
 
-function refreshView() {
-    const list = document.querySelector('.list');
+function refreshView(classOfArea) {
+    const list = classOfArea.querySelector('.list');
     list.remove();
-    const main = document.querySelector('.view, .active');
-    renderElement('ul', 'list', '', main);
-    if (main.classList.contains('employee')) {
+    renderElement('ul', 'list', '', classOfArea);
+    if (classOfArea.classList.contains('employee')) {
         getEmployee();
-    } else if (main.classList.contains('office')) {
-        getEmployee();
+    }
+    if (classOfArea.classList.contains('office')) {
+        getOffice();
     }
 }
 

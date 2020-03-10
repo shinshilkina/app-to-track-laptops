@@ -1,5 +1,3 @@
-
-
 module.exports = (app, mysqlQuery, restAPIerror) => {
     app.get('/employees/list', async (req, res) => {
         try{

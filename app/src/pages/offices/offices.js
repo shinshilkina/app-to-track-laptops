@@ -48,35 +48,34 @@ const getDataOffice = () => {
  */
 function renderViewOffice(data) {
     const tableHTML = renderTable(data);
-    console.log(data);
-    console.log(tableHTML);
-
     const viewArea = document.querySelector("main").querySelector('.office').querySelector('.list');
     viewArea.insertAdjacentHTML('beforeend', tableHTML);
 }
 
 function listenButtonsOffice() {
-    const buttonsDeleteOffice = document.querySelector('.view, .office').querySelectorAll('.buttons .button__delete');
+    const buttonsDeleteOffice = document.querySelector("main").querySelector('.office').querySelectorAll('.button__delete');
     for (let button of buttonsDeleteOffice){
         button.addEventListener('click', function (event) {
             const row = this.parentElement.parentElement;
-            const id = row.querySelector('.id_employee').textContent;
+            const id = row.querySelector('.id_office').textContent;
             const deleteRow = deleteOffice(id);
-            deleteRow.then(setTimeout(refreshView,500));
+            const area = row.parentElement.parentElement.parentElement.parentElement;
+            deleteRow.then(setTimeout(refreshView,500, area));
         });
     }
 
-    const buttonsUpdateOffice = document.querySelector('.view, .office').querySelectorAll('.buttons .button__update');
+    const buttonsUpdateOffice = document.querySelector("main").querySelector('.office').querySelectorAll('.button__update');
+
     for (let button of buttonsUpdateOffice){
         button.addEventListener('click', function (event) {
             const row = this.parentElement.parentElement;
             if (!document.querySelector('.update')) {
                 windowUpdIns(row,'update');
             } else {
-                const window = document.querySelector('.update');
-                const prevId = this.parentElement.parentElement.querySelector('.id_employee').textContent;
-                const newID = window.querySelector('.id_employee').value;
-                window.remove();
+                const popUp = document.querySelector('.update');
+                const prevId = this.parentElement.parentElement.querySelector('.id_office').textContent;
+                const newID = popUp.querySelector('.id_office').value;
+                popUp.remove();
                 if (newID != prevId){
                     windowUpdIns(row,'update');
                 }
@@ -85,9 +84,10 @@ function listenButtonsOffice() {
     }
 }
 
-const addButton = document.querySelector('.view .add-employee');
+const parent = document.querySelector("main").querySelector('.office');
+    const addButton = parent.querySelector(' .add-employee');
 addButton.addEventListener('click', function (event) {
-    const row = document.querySelector('.view .header');
+    const row = document.querySelector("main").querySelector('.office').querySelector('.header');
     windowUpdIns(row,'insert');
 });
 

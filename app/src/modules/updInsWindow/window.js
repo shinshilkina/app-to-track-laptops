@@ -1,6 +1,8 @@
 import './window.scss';
 import windowUpdate from "./window.pug";
-import {getEmployees, deleteEmployee, updateEmployee, sendEmployee} from '../requests';
+import {getEmployees, deleteEmployee, updateEmployee, sendEmployee,
+    getlaptops, deletelaptops, updatelaptops,sendlaptops,
+    getOffice, deleteOffice, updateOffice, sendOffice} from '../../modules/requests';
 import refreshView from "../refreshView";
 
 /**
@@ -53,6 +55,7 @@ function getElements(row) {
 function listenButtonsWindow(popUp, rowElements) {
     const buttonSave = popUp.querySelector('.save');
     const buttonCancel = popUp.querySelector('.cancel');
+    const activePage = document.querySelector("main").querySelector('.active');
     buttonCancel.addEventListener('click', function (event) {
         popUp.remove();
     });
@@ -60,14 +63,25 @@ function listenButtonsWindow(popUp, rowElements) {
     buttonSave.addEventListener('click', function (event) {
         const values = getNewRow(popUp, rowElements);
         if (popUp.classList.contains('update')) {
-            const update = updateEmployee(values);
-            update.then(setTimeout(refreshView,500));
+            if (activePage.classList.contains('employee')) {
+                const update = updateEmployee(values);
+                update.then(setTimeout(refreshView,500));
+            } else
+            if (activePage.classList.contains('office')) {
+                const update = updateOffice(values);
+                update.then(setTimeout(refreshView,500, activePage));
+            }
         } else if (popUp.classList.contains('insert')) {
             values.splice(0, 1);
             const verifyValues = checkElementsInsert(popUp, rowElements);
             if (verifyValues) {
-                const insert = sendEmployee(values);
-                insert.then(setTimeout(refreshView,500));
+                if (activePage.classList.contains('employee')) {
+                    const insert = sendEmployee(values);
+                    insert.then(setTimeout(refreshView,500));
+                } else if (activePage.classList.contains('office')) {
+                    const insert = sendOffice(values);
+                    insert.then(setTimeout(refreshView,500));
+                }
             }
         }
         popUp.remove();
