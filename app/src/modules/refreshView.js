@@ -10,9 +10,11 @@ refresh.addEventListener('click', function (event) {
 function refreshView() {
     const list = document.querySelector('.list');
     list.remove();
-    const main = document.querySelector('.view');
+    const main = document.querySelector('.view, .active');
     renderElement('ul', 'list', '', main);
     if (main.classList.contains('employee')) {
+        getEmployee();
+    } else if (main.classList.contains('office')) {
         getEmployee();
     }
 }

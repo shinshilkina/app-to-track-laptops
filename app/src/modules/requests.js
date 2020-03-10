@@ -173,4 +173,55 @@ function convertToDataTime(date) {
     return newDate.toISOString().slice(0, 19).replace('T', ' ');
 }
 
-export {getEmployees, deleteEmployee, updateEmployee, sendEmployee};
+//OFFICES
+
+const getOffice = () => {
+    return sendHttpRequest('GET', 'http://localhost:5000/offices/list');
+};
+
+const deleteOffice = (id_office) => {
+    return sendHttpRequest('POST', 'http://localhost:5000/offices/delete', {
+        id_office: id_office
+    })
+        .then(responseData => {
+            console.log(responseData);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+const sendOffice = ([office, housing, type]) => {
+
+    return sendHttpRequest('POST', 'http://localhost:5000/offices/add', {
+        office : office,
+        housing : housing,
+        type : type
+    })
+        .then(responseData => {
+            console.log(responseData);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+const updateOffice = ([office, housing, type, id_office]) => {
+
+    return sendHttpRequest('POST', 'http://localhost:5000/offices/update', {
+        office : office,
+        housing : housing,
+        type : type,
+        id_office : id_office
+    })
+        .then(responseData => {
+            console.log(responseData);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+export {getEmployees, deleteEmployee, updateEmployee, sendEmployee,
+    getlaptops, deletelaptops, updatelaptops,sendlaptops,
+    getOffice, deleteOffice, updateOffice, sendOffice};
