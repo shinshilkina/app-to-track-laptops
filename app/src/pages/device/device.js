@@ -2,7 +2,7 @@ import './device.scss';
 import renderDiv from '../../modules/render_view/renderDiv.pug';
 import {getEmployees, deleteEmployee, updateEmployee, sendEmployee,
     getlaptops, deletelaptops, updatelaptops,sendlaptops,
-    getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId} from '../../modules/requests';
+    getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId, getOfficeFromId} from '../../modules/requests';
 import '../../modules/refreshView';
 import windowUpdIns from '../../modules/updInsWindow/window.js';
 import refreshView from "../../modules/refreshView";
@@ -33,7 +33,8 @@ function renderViewDevice(data) {
 
 function correctHtmlDevice(viewArea) {
     const dates = getDates(viewArea); //array
-    getEmployeeName(viewArea)
+    getEmployeeName(viewArea);
+    getOfficeValue(viewArea);
 }
 
 function listenButtonsDevice() {
@@ -96,8 +97,40 @@ function getDates(viewArea) {
 function getEmployeeName(viewArea) {
     const employeeArea = viewArea.querySelector('.employee-data');
     const employeeId = viewArea.querySelector('.id_employee').textContent;
-    const request = getEmployeeFromId(employeeId);
-    request.then(employeeArea.textContent = request).catch(e => console.error(e));
+    let request = getEmployeeFromId(employeeId);
+    request.then((data) => {
+        let textContent = [];
+        for (let i = 0; i < data.length; i++) {
+            for (let key in data[i]) {
+                textContent.push(data[i][key]);
+            }
+        }
+        textContent.splice(0, 1);
+        textContent.splice(2, 1);
+        textContent[1].toString().toLowerCase(textContent[1].toString());
+        textContent.join('');
+        employeeArea.textContent = textContent;
+    }).catch(e => console.error(e));
+}
+function foo() {
+
+}
+
+function getOfficeValue(viewArea) {
+    const officeArea = viewArea.querySelector('.office-data');
+    const officeId = viewArea.querySelector('.id_office').textContent;
+    const request = getOfficeFromId(officeId);
+    request.then((data) => {
+        let textContent = [];
+        for (let i = 0; i < data.length; i++) {
+            for (let key in data[i]) {
+                textContent.push(data[i][key]);
+            }
+        }
+        textContent.splice(0, 1);
+        textContent.join('');
+        officeArea.textContent = 'Место: ' + textContent;
+    }).catch(e => console.error(e));
 }
 
 export default getDataDevice;

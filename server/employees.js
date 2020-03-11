@@ -12,13 +12,11 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
     app.post('/employees/list/id', async (req, res) => {
         const {id_employee} = req.body;
         try{
-            await mysqlQuery(
+            const [rows, fields] = await mysqlQuery(
                 `SELECT * FROM employees WHERE id_employee = ?;`,
                 [id_employee]
             );
-            res.status(200).send({
-                success: true
-            });
+            res.status(200).send(rows);
         } catch (e) {
             restAPIerror(res, e);
         }

@@ -10,6 +10,19 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
         }
     });
 
+    app.post('/offices/list/id', async (req, res) => {
+        const {id_office} = req.body;
+        try{
+            const [rows, fields] = await mysqlQuery(
+                `SELECT * FROM offices WHERE id_office = ?`,
+                [id_office]
+            );
+            res.status(200).send(rows);
+        } catch (e) {
+            restAPIerror(res, e);
+        }
+    });
+
     app.post('/offices/add', async (req, res) => {
         const {office, housing, type} = req.body;
         try {

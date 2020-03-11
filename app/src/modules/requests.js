@@ -34,6 +34,7 @@ const getEmployeeFromId = (id) => {
     })
         .then(responseData => {
             console.log(responseData);
+            return responseData;
         })
         .catch(err => {
             console.log(err);
@@ -132,7 +133,6 @@ const sendlaptops = ([id_employee, id_office, manufacturer, model, serial_number
         depreciation = true;
     } else depreciation=false;
 
-    debugger
     return sendHttpRequest('POST', 'http://localhost:5000/device/add', {
         id_employee : id_employee,
         id_office : id_office,
@@ -197,6 +197,19 @@ const getOffice = () => {
     return sendHttpRequest('GET', 'http://localhost:5000/offices/list');
 };
 
+const getOfficeFromId = (id_office) => {
+    return sendHttpRequest('POST', 'http://localhost:5000/offices/list/id', {
+        id_office: id_office
+    })
+        .then(responseData => {
+            console.log(responseData);
+            return responseData;
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
 const deleteOffice = (id_office) => {
     return sendHttpRequest('POST', 'http://localhost:5000/offices/delete', {
         id: id_office
@@ -248,4 +261,4 @@ const updateOffice = ([id_office, office, housing, type]) => {
 
 export {getEmployees, deleteEmployee, updateEmployee, sendEmployee,
     getlaptops, deletelaptops, updatelaptops,sendlaptops,
-    getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId};
+    getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId, getOfficeFromId};
