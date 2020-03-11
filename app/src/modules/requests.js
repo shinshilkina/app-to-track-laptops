@@ -28,6 +28,18 @@ const sendHttpRequest = (method, url, data) => {
 const getEmployees = () => {
     return sendHttpRequest('GET', 'http://localhost:5000/employees/list');
 };
+const getEmployeeFromId = (id) => {
+    return sendHttpRequest('POST', 'http://localhost:5000/employees/list/id', {
+        id_employee: id
+    })
+        .then(responseData => {
+            console.log(responseData);
+        })
+        .catch(err => {
+            console.log(err);
+
+        });
+};
 /**
  * @param id
  * @returns {Promise<Object>}
@@ -112,11 +124,15 @@ const deletelaptops = (id) => {
 };
 
 const sendlaptops = ([id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-                         write_off_date, description, OS, depreciation, depreciation_lenght]) => {
+                         write_off_date, description, OS, status, depreciation, depreciation_lenght]) => {
 
-    date_added = convertToDataTime(date_added);
-    write_off_date = convertToDataTime(write_off_date);
+    //date_added = convertToDataTime(date_added);
+    //write_off_date = convertToDataTime(write_off_date);
+    if (depreciation) {
+        depreciation = true;
+    } else depreciation=false;
 
+    debugger
     return sendHttpRequest('POST', 'http://localhost:5000/device/add', {
         id_employee : id_employee,
         id_office : id_office,
@@ -128,6 +144,7 @@ const sendlaptops = ([id_employee, id_office, manufacturer, model, serial_number
         write_off_date : write_off_date,
         description : description,
         OS : OS,
+        status: status,
         depreciation : depreciation,
         depreciation_lenght : depreciation_lenght
     })
@@ -140,10 +157,10 @@ const sendlaptops = ([id_employee, id_office, manufacturer, model, serial_number
 };
 
 const updatelaptops = ([id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-                           write_off_date, description, OS, depreciation, depreciation_lenght, id_device]) => {
+                           write_off_date, description, OS, status, depreciation, depreciation_lenght, id_device]) => {
 
-    date_added = convertToDataTime(date_added);
-    write_off_date = convertToDataTime(write_off_date);
+   // date_added = convertToDataTime(date_added);
+    //write_off_date = convertToDataTime(write_off_date);
 
     return sendHttpRequest('POST', 'http://localhost:5000/device/update', {
         id_employee : id_employee,
@@ -156,6 +173,7 @@ const updatelaptops = ([id_employee, id_office, manufacturer, model, serial_numb
         write_off_date : write_off_date,
         description : description,
         OS : OS,
+        status: status,
         depreciation : depreciation,
         depreciation_lenght : depreciation_lenght,
         id_device : id_device
@@ -230,4 +248,4 @@ const updateOffice = ([id_office, office, housing, type]) => {
 
 export {getEmployees, deleteEmployee, updateEmployee, sendEmployee,
     getlaptops, deletelaptops, updatelaptops,sendlaptops,
-    getOffice, deleteOffice, updateOffice, sendOffice};
+    getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId};

@@ -4,6 +4,11 @@
   width: 25rem;
   display: flex;
   flex-wrap: wrap;
+
+  position: absolute;
+  margin-left: auto;
+  margin-top: auto;
+
   padding: 1rem 2rem 2rem 1rem;
 
   background: white;
@@ -14,7 +19,7 @@
     font-size: 1.2em;
     margin-bottom: 1rem;
   }
-  & .id_employee{
+  & .id_employee {
     display: none;
   }
   & input {
@@ -34,8 +39,9 @@
   }
 }
 
-.add {
-  position: absolute;
-  top: 50px;
-  z-index: 2;
+.device + .insert {
+  & .id_employee, & .id_office {
+    display: table-cell !important;
+  }
 }
+

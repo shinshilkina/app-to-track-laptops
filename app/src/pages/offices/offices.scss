@@ -1,5 +1,11 @@
 @import "../employee/employee";
-
+.add-office {
+  @include buttonsAddDel(url("../../modules/icons/add-button.svg"));
+  margin-left: 1rem;
+  position: absolute;
+  left: 19rem;
+  top: 0.2rem;
+}
 .id_office{
   display: none;
 }

@@ -1,5 +1,6 @@
 import getEmployee from '../pages/employee/employee';
 import getOffice from '../pages/offices/offices';
+import getDataDevice from "../pages/device/device";
 
 const refresh = document.querySelectorAll('.refresh');
 
@@ -21,6 +22,9 @@ function refreshView(classOfArea) {
     }
     if (classOfArea.classList.contains('office')) {
         getOffice();
+    }
+    if (classOfArea.classList.contains('device')) {
+        getDataDevice();
     }
 }
 

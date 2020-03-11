@@ -2,7 +2,7 @@ import './employee.scss';
 import renderTable from '../../modules/render_view/render.pug';
 import {getEmployees, deleteEmployee, updateEmployee, sendEmployee,
     getlaptops, deletelaptops, updatelaptops,sendlaptops,
-    getOffice, deleteOffice, updateOffice, sendOffice} from '../../modules/requests';
+    getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId} from '../../modules/requests';
 import '../../modules/refreshView';
 import windowUpdIns from '../../modules/updInsWindow/window.js';
 import refreshView from "../../modules/refreshView";

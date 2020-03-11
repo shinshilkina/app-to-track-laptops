@@ -1,0 +1,27 @@
+@import "../../theme/default-theme";
+
+.device {
+  font-family: Montserrat, sans-serif;
+  & .view-div {
+
+    & .element {
+
+      & .id_device, & .serial_number, & .depreciation,
+      & .id_employee, & .id_office,
+      & .depreciation_lenght, & .description, & .OS{
+        display: none;
+      }
+      & .id_office, & .id_employee {
+        display: block;
+      }
+    }
+  }
+}
+
+.add-device {
+  @include buttonsAddDel(url("../../modules/icons/add-button.svg"));
+  margin-left: 1rem;
+  position: absolute;
+  left: 19rem;
+  top: 0.2rem;
+}

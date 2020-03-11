@@ -16,13 +16,15 @@ for (let button of buttons){
         if (newActivePageClass==='employees') {
             employeeArea.classList.toggle('active');
             employeeArea.classList.toggle('invisible');
+            refreshView(employeeArea);
         } else if (newActivePageClass==='device') {
             deviceArea.classList.toggle('active');
             deviceArea.classList.toggle('invisible');
+            refreshView(deviceArea);
         } else if (newActivePageClass==='office') {
             officeArea.classList.toggle('active');
             officeArea.classList.toggle('invisible');
+            refreshView(officeArea);
         }
-        refreshView();
     });
 }

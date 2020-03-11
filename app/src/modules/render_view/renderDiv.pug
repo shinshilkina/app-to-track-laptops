@@ -1,0 +1,17 @@
+div.view-div
+    div.model='model'
+    div.manufacture='manufacture'
+    div.dates='dates'
+    div.params='params'
+    div.show_more='- show more -'
+    br
+
+    each row in rows
+        div.element
+            each col, i in row
+                div(class=i)=col
+            div.employee-data='employee data'
+            div.office-data='office data'
+            div.buttons
+                div.button__more(type=button)='- show more -'
+            br
