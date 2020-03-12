@@ -1,0 +1,10 @@
+div.view-div-more
+    each row in locals
+        div.element
+            each col, i in row
+                div(class=i)=col
+            div.employee-data='employee data'
+            div.office-data='office data'
+            div.buttons
+                div.button__delete
+                div.button__update

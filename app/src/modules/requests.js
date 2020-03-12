@@ -33,7 +33,6 @@ const getEmployeeFromId = (id) => {
         id_employee: id
     })
         .then(responseData => {
-            console.log(responseData);
             return responseData;
         })
         .catch(err => {
@@ -110,6 +109,18 @@ const updateEmployee = ([id, name, position, phone]) => {
 
 const getlaptops = () => {
     return sendHttpRequest('GET', 'http://localhost:5000/device/list');
+};
+
+const getlaptopFromId = (id_device) => {
+    return sendHttpRequest('POST', 'http://localhost:5000/device/list/id', {
+        id_device: id_device
+    })
+        .then(responseData => {
+            return responseData;
+        })
+        .catch(err => {
+            console.log(err);
+        });
 };
 
 const deletelaptops = (id) => {
@@ -202,7 +213,6 @@ const getOfficeFromId = (id_office) => {
         id_office: id_office
     })
         .then(responseData => {
-            console.log(responseData);
             return responseData;
         })
         .catch(err => {
@@ -261,4 +271,4 @@ const updateOffice = ([id_office, office, housing, type]) => {
 
 export {getEmployees, deleteEmployee, updateEmployee, sendEmployee,
     getlaptops, deletelaptops, updatelaptops,sendlaptops,
-    getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId, getOfficeFromId};
+    getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId, getOfficeFromId, getlaptopFromId};

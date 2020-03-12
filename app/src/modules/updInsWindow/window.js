@@ -124,4 +124,4 @@ function getNewRow(window, rowElements) {
     return newValues;
 }
 
-export default windowUpdIns;
+export {windowUpdIns, getElements,getNewRow};

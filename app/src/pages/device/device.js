@@ -1,10 +1,12 @@
 import './device.scss';
 import renderDiv from '../../modules/render_view/renderDiv.pug';
+import renderDivShowMore from '../../modules/render_view/renderDivDeviceMore.pug';
 import {getEmployees, deleteEmployee, updateEmployee, sendEmployee,
     getlaptops, deletelaptops, updatelaptops,sendlaptops,
-    getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId, getOfficeFromId} from '../../modules/requests';
+    getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId,
+    getOfficeFromId, getlaptopFromId} from '../../modules/requests';
 import '../../modules/refreshView';
-import windowUpdIns from '../../modules/updInsWindow/window.js';
+import {windowUpdIns, getElements,getNewRow} from '../../modules/updInsWindow/window.js';
 import refreshView from "../../modules/refreshView";
 
 
@@ -17,7 +19,7 @@ const getDataDevice = () => {
         renderViewDevice({
             rows: data
         });
-        listenButtonsDevice();
+        listenButtonsShowDevice();
     })
 };
 
@@ -37,36 +39,29 @@ function correctHtmlDevice(viewArea) {
     getOfficeValue(viewArea);
 }
 
-function listenButtonsDevice() {
-    const buttonsDeleteDevice = document.querySelector("main").querySelector('.device').querySelectorAll('.button__delete');
-    for (let button of buttonsDeleteDevice){
+function listenButtonsShowDevice() {
+    const buttonsShowDevice = document.querySelector("main").querySelector('.device').querySelectorAll('.button__more');
+    for (let button of buttonsShowDevice){
         button.addEventListener('click', function (event) {
             const row = this.parentElement.parentElement;
-            const id = row.querySelector('.id_device').textContent;
-            const deleteRow = deletelaptops(id);
-            const area = row.parentElement.parentElement.parentElement.parentElement;
-            deleteRow.then(setTimeout(refreshView,500, area));
+            const id_str = row.querySelector('.id_device').textContent;
+            const elements = getlaptopFromId(id_str);
+            elements.then((res) => {
+                console.log(res);
+                const divHTML = renderDivShowMore(res);
+                const viewArea = document.querySelector("main");
+                viewArea.insertAdjacentHTML('beforeend', divHTML);
+                redactDivAllAboutDevice();
+            }).catch(e => console.error(e));
         });
     }
+}
 
-    const buttonsUpdateDevice = document.querySelector("main").querySelector('.device').querySelectorAll('.button__update');
-
-    for (let button of buttonsUpdateDevice){
-        button.addEventListener('click', function (event) {
-            const row = this.parentElement.parentElement;
-            if (!document.querySelector('.update')) {
-                windowUpdIns(row,'update');
-            } else {
-                const popUp = document.querySelector('.update');
-                const prevId = this.parentElement.parentElement.querySelector('.id_device').textContent;
-                const newID = popUp.querySelector('.id_device').value;
-                popUp.remove();
-                if (newID != prevId){
-                    windowUpdIns(row,'update');
-                }
-            }
-        });
-    }
+function redactDivAllAboutDevice() {
+    const viewDivDevice = document.querySelector('.view-div-more');
+    getEmployeeName(viewDivDevice);
+    getOfficeValue(viewDivDevice);
+    getDates(viewDivDevice);
 }
 
 const parent = document.querySelector("main").querySelector('.device');

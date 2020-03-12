@@ -4,7 +4,7 @@ import {getEmployees, deleteEmployee, updateEmployee, sendEmployee,
     getlaptops, deletelaptops, updatelaptops,sendlaptops,
     getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId} from '../../modules/requests';
 import '../../modules/refreshView';
-import windowUpdIns from '../../modules/updInsWindow/window.js';
+import {windowUpdIns, getElements,getNewRow} from '../../modules/updInsWindow/window.js';
 import refreshView from "../../modules/refreshView";
 
 

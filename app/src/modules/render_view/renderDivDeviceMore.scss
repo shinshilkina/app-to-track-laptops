@@ -1,0 +1,33 @@
+@import "../../theme/default-theme";
+.view-div-more {
+  position: absolute;
+  top: 25%;
+  left: 30%;
+
+  padding: 1.5rem 1.5rem;
+  width: 40%;
+  font-family: Montserrat, sans-serif;
+
+  background-color: #FFFFFF;
+  border-radius: 1.7rem 1.7rem;
+  & .element {
+
+  }
+  & .id_employee, & .id_office, & .id_device {
+    display: none;
+  }
+  & .buttons{
+    display: flex;
+    flex-wrap: wrap;
+    & .button__delete{
+      @include buttonsAddDel(url("../../modules/icons/icons8-delete.svg"));
+      margin-right: 1rem;
+      margin-left: auto;
+    }
+    & .button__update{
+      @include buttonsAddDel(url("../../modules/icons/add-button.svg"));
+
+      margin-right: auto;
+    }
+  }
+}

@@ -9,6 +9,18 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             restAPIerror(res, e);
         }
     });
+    app.post('/device/list/id', async (req, res) => {
+        const {id_device} = req.body;
+        try{
+            const [rows, fields] = await mysqlQuery(
+                `SELECT * FROM device WHERE id_device = ?`,
+                [id_device]
+            );
+            res.status(200).send(rows);
+        } catch (e) {
+            restAPIerror(res, e);
+        }
+    });
 
 
     app.post('/device/add', async (req, res) => {
