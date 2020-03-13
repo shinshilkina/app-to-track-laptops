@@ -1,0 +1,6 @@
+div.dropdown
+    div.dropdown__select
+    ul.dropdown__items(class='invisible')
+        each col, i in locals
+            li
+                div.item(type = 'button')=col

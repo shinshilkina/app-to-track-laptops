@@ -22,6 +22,20 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             restAPIerror(res, e);
         }
     });
+    app.post('/offices/list/find_id', async (req, res) => {
+        const {office, housing, type} = req.body;
+        try{
+            const [rows, fields] = await mysqlQuery(
+                `SELECT id_office FROM offices WHERE office = ?, 
+                housing = ?, type = ?`,
+                [office, housing, type]
+            );
+            res.status(200).send(rows);
+        } catch (e) {
+            restAPIerror(res, e);
+        }
+    });
+
 
     app.post('/offices/add', async (req, res) => {
         const {office, housing, type} = req.body;

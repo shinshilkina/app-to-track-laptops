@@ -70,13 +70,8 @@ function listenButtonsWindow(popUp, rowElements) {
             if (activePage.classList.contains('office')) {
                 const update = updateOffice(values);
                 update.then(setTimeout(refreshView,500, activePage));
-            } else
-            if (activePage.classList.contains('device')) {
-                const update = updatelaptops(values);
-                update.then(setTimeout(refreshView,500, activePage));
             }
         } else if (popUp.classList.contains('insert')) {
-            debugger
             values.splice(0, 1);
             const verifyValues = checkElementsInsert(popUp, rowElements);
             if (verifyValues) {
@@ -86,9 +81,6 @@ function listenButtonsWindow(popUp, rowElements) {
                 } else if (activePage.classList.contains('office')) {
                     const insert = sendOffice(values);
                     insert.then(setTimeout(refreshView,500));
-                }else if (activePage.classList.contains('office')) {
-                    const insert = sendlaptops(values);
-                    insert.then(setTimeout(refreshView,500));
                 }
             }
         }
@@ -97,15 +89,8 @@ function listenButtonsWindow(popUp, rowElements) {
 }
 
 function checkElementsInsert(popUp, rowElements) {
-    debugger
     const newValues = getNewRow(popUp, rowElements);
-    let startIndex;
-    if (rowElements[0].className==='id_device') {
-        startIndex = 3;
-    } else {
-        startIndex= 1;
-    }
-    for (let i = startIndex; i < rowElements.length; i ++) {
+    for (let i = 1; i < rowElements.length; i ++) {
         const oldValue = rowElements[i].value;
         if (newValues[i]===oldValue) {
             return false;
@@ -124,4 +109,4 @@ function getNewRow(window, rowElements) {
     return newValues;
 }
 
-export {windowUpdIns, getElements,getNewRow};
+export {windowUpdIns, getElements,getNewRow, checkElementsInsert};

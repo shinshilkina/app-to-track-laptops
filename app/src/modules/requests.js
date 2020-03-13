@@ -40,6 +40,23 @@ const getEmployeeFromId = (id) => {
 
         });
 };
+const getEmployeeFindId = ([name, position, phone]) => {
+    phone = parseInt(phone, 10);
+    if (!isNaN(phone) ) {
+        return sendHttpRequest('POST', 'http://localhost:5000/employees/list/find_id', {
+            name: name,
+            position: position,
+            phone_number: phone
+        })
+            .then(responseData => {
+                return responseData;
+            })
+            .catch(err => {
+                console.log(err);
+
+            });
+    }
+};
 /**
  * @param id
  * @returns {Promise<Object>}
@@ -121,6 +138,18 @@ const getlaptopFromId = (id_device) => {
         .catch(err => {
             console.log(err);
         });
+};
+
+const getlaptopFromManufacturer = () => {
+    return sendHttpRequest('GET', 'http://localhost:5000/device/list/manufacturer');
+};
+
+const getlaptopFromModels= () => {
+    return sendHttpRequest('GET', 'http://localhost:5000/device/list/model');
+};
+
+const getlaptopFromSerialNumber = () => {
+    return sendHttpRequest('GET', 'http://localhost:5000/device/list/inventory_number');
 };
 
 const deletelaptops = (id) => {
@@ -220,6 +249,20 @@ const getOfficeFromId = (id_office) => {
         });
 };
 
+const getOfficeFindId = ([office, housing, type]) => {
+    return sendHttpRequest('POST', 'http://localhost:5000/offices/list/find_id', {
+        office : office,
+        housing : housing,
+        type : type
+    })
+        .then(responseData => {
+            return responseData;
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
 const deleteOffice = (id_office) => {
     return sendHttpRequest('POST', 'http://localhost:5000/offices/delete', {
         id: id_office
@@ -271,4 +314,6 @@ const updateOffice = ([id_office, office, housing, type]) => {
 
 export {getEmployees, deleteEmployee, updateEmployee, sendEmployee,
     getlaptops, deletelaptops, updatelaptops,sendlaptops,
-    getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId, getOfficeFromId, getlaptopFromId};
+    getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId, getOfficeFromId,
+    getlaptopFromId, getlaptopFromManufacturer, getlaptopFromModels, getlaptopFromSerialNumber,
+    getEmployeeFindId, getOfficeFindId};

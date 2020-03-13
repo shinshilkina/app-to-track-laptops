@@ -8,6 +8,10 @@ import {getEmployees, deleteEmployee, updateEmployee, sendEmployee,
 import '../../modules/refreshView';
 import {windowUpdIns, getElements,getNewRow} from '../../modules/updInsWindow/window.js';
 import refreshView from "../../modules/refreshView";
+import {listenButtonsDeviceUpdDel, removeInsUpdDeviceArea} from '../../modules/render_view/renderDivDeviceMore';
+import renderDivUpdIns from "../../modules/updInsWindow/UpdInsDevice.pug";
+import listenInputs from "../../modules/placeholders";
+import listenUpdInsDeviceArea from "../../modules/updInsWindow/UpdInsDevice";
 
 
 const getDataDevice = () => {
@@ -43,15 +47,19 @@ function listenButtonsShowDevice() {
     const buttonsShowDevice = document.querySelector("main").querySelector('.device').querySelectorAll('.button__more');
     for (let button of buttonsShowDevice){
         button.addEventListener('click', function (event) {
+            const viewAreaDevice = document.querySelector('.view-div-more');
+            if (viewAreaDevice) {
+                viewAreaDevice.remove();
+            }
             const row = this.parentElement.parentElement;
             const id_str = row.querySelector('.id_device').textContent;
             const elements = getlaptopFromId(id_str);
             elements.then((res) => {
-                console.log(res);
                 const divHTML = renderDivShowMore(res);
                 const viewArea = document.querySelector("main");
                 viewArea.insertAdjacentHTML('beforeend', divHTML);
                 redactDivAllAboutDevice();
+                listenButtonsDeviceUpdDel();
             }).catch(e => console.error(e));
         });
     }
@@ -67,8 +75,32 @@ function redactDivAllAboutDevice() {
 const parent = document.querySelector("main").querySelector('.device');
 const addButton = parent.querySelector(' .add-device');
 addButton.addEventListener('click', function (event) {
-    const row = document.querySelector("main").querySelector('.device').querySelector('.header');
-    windowUpdIns(row,'insert device');
+    removeInsUpdDeviceArea();
+    const data = [
+        {
+            id_device: "",
+            id_employee: "",
+            id_office: "",
+            manufacturer: "",
+            model: "",
+            serial_number: "",
+            inventory_number: "",
+            date_added: "",
+            write_off_date: "",
+            status: "",
+            depreciation: "0",
+            depreciation_lenght: "",
+            description: "",
+            OS: ""
+        }
+    ];
+
+    const divHTML = renderDivUpdIns(data);
+    const viewArea = document.querySelector("main");
+    viewArea.insertAdjacentHTML('beforeend', divHTML);
+    const areaInsertDevice = document.querySelector('.view-div-updIns');
+    listenInputs(areaInsertDevice);
+    listenUpdInsDeviceArea(areaInsertDevice, 'insert');
 });
 
 document.addEventListener("DOMContentLoaded", getDataDevice);

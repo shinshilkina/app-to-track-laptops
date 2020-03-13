@@ -22,6 +22,36 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
         }
     });
 
+    app.get('/device/list/manufacturer', async (req, res) => {
+        try{
+            const [rows, fields] = await mysqlQuery(
+                'SELECT manufacturer FROM device'
+            );
+            res.status(200).send(rows);
+        } catch (e) {
+            restAPIerror(res, e);
+        }
+    });
+    app.get('/device/list/model', async (req, res) => {
+        try{
+            const [rows, fields] = await mysqlQuery(
+                'SELECT model FROM device'
+            );
+            res.status(200).send(rows);
+        } catch (e) {
+            restAPIerror(res, e);
+        }
+    });
+    app.get('/device/list/inventory_number', async (req, res) => {
+        try{
+            const [rows, fields] = await mysqlQuery(
+                'SELECT inventory_number FROM device'
+            );
+            res.status(200).send(rows);
+        } catch (e) {
+            restAPIerror(res, e);
+        }
+    });
 
     app.post('/device/add', async (req, res) => {
         const {id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,

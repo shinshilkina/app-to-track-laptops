@@ -9,6 +9,19 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             restAPIerror(res, e);
         }
     });
+    app.post('/employees/list/find_id', async (req, res) => {
+        const {name, position, phone_number} = req.body;
+        try{
+            const [rows, fields] = await mysqlQuery(
+                `SELECT id_employee FROM employees WHERE name = ? and position = ? and
+                    phone_number = ?;`,
+                [name, position, phone_number]
+            );
+            res.status(200).send(rows);
+        } catch (e) {
+            restAPIerror(res, e);
+        }
+    });
     app.post('/employees/list/id', async (req, res) => {
         const {id_employee} = req.body;
         try{
