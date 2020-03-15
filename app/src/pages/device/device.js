@@ -38,7 +38,7 @@ function renderViewDevice(data) {
 }
 
 function correctHtmlDevice(viewArea) {
-    const dates = getDates(viewArea); //array
+    getDates(viewArea);
     getEmployeeName(viewArea);
     getOfficeValue(viewArea);
 }
@@ -106,19 +106,24 @@ addButton.addEventListener('click', function (event) {
 document.addEventListener("DOMContentLoaded", getDataDevice);
 
 function getDates(viewArea) {
-    const dateAddedEl = viewArea.querySelector('.date_added');
-    const dateOffEl = viewArea.querySelector('.write_off_date');
-    let dateAddedStr = dateAddedEl.textContent.substr(0,10).split("-");
-    let dateOffStr = dateOffEl.textContent.substr(0,10).split("-");
-    const dateAdd = new Date(parseInt(dateAddedStr[0], 10), parseInt(dateAddedStr[1], 10),
-        parseInt(dateAddedStr[2], 10));
-    const dateOff = new Date(parseInt(dateOffStr[0], 10), parseInt(dateOffStr[1], 10),
-        parseInt(dateOffStr[2], 10));
-    dateAddedEl.textContent = 'Дата поступления: ' +dateAdd.getDate()  +'.'
-        + dateAdd.getMonth() +'.'+ dateAdd.getFullYear();
-    dateOffEl.textContent = 'Дата списания: ' +dateOff.getDate()  +'.'
+    const dateAddedEl = viewArea.querySelectorAll('.date_added');
+    const dateOffEl = viewArea.querySelectorAll('.write_off_date');
+    for (let date of dateAddedEl) {
+        let dateAddedStr = date.textContent.substr(0,10).split("-");
+        const dateAdd = new Date(parseInt(dateAddedStr[0], 10), parseInt(dateAddedStr[1], 10),
+            parseInt(dateAddedStr[2], 10));
+        date.textContent = 'Дата поступления: ' + dateAdd.getDate()  +'.'
+            + dateAdd.getMonth() +'.'+ dateAdd.getFullYear();
+    }
+
+    for (let date of dateOffEl) {
+        let dateOffStr = date.textContent.substr(0,10).split("-");
+
+        const dateOff = new Date(parseInt(dateOffStr[0], 10), parseInt(dateOffStr[1], 10),
+            parseInt(dateOffStr[2], 10));
+        date.textContent = 'Дата списания: ' + dateOff.getDate()  +'.'
         + dateOff.getMonth() +'.'+ dateOff.getFullYear();
-    return [dateAdd, dateOff];
+    }
 }
 
 function getEmployeeName(viewArea) {
@@ -138,9 +143,6 @@ function getEmployeeName(viewArea) {
         textContent.join('');
         employeeArea.textContent = textContent;
     }).catch(e => console.error(e));
-}
-function foo() {
-
 }
 
 function getOfficeValue(viewArea) {

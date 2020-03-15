@@ -26,8 +26,7 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
         const {office, housing, type} = req.body;
         try{
             const [rows, fields] = await mysqlQuery(
-                `SELECT id_office FROM offices WHERE office = ?, 
-                housing = ?, type = ?`,
+                `SELECT id_office FROM offices WHERE office = ? and housing = ? and type = ?`,
                 [office, housing, type]
             );
             res.status(200).send(rows);

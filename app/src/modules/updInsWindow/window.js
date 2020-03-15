@@ -103,6 +103,9 @@ function getNewRow(window, rowElements) {
     const newValues = [];
     for (let i = 0; i < rowElements.length; i ++) {
         const element = rowElements[i];
+        if (element.classList.contains('dropdown__area')){
+            element.classList.toggle('dropdown__area');
+        }
         const classElement = "." + element.className;
         newValues.push(window.querySelector(classElement).value);
     }

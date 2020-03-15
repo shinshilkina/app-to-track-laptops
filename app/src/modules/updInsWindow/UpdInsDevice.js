@@ -2,27 +2,17 @@ import './UpdInsDevice.scss';
 import renderDivUpdIns from "./UpdInsDevice.pug";
 import dropdownHTML from "../dropdown/dropdown.pug";
 import listenDropdownShow from "../dropdown/dropdown";
-import {getEmployees, getOffice, getlaptopFromSerialNumber, getEmployeeFindId, getOfficeFindId} from "../requests";
+import {
+    getEmployees,
+    getOffice,
+    getlaptopFromSerialNumber,
+    getEmployeeFindId,
+    getOfficeFindId,
+    sendlaptops
+} from "../requests";
 import {getNewRow} from "./window";
+import refreshView from "../refreshView";
 
-/*TODO:
-   - 1) подзапросы по всем производителям, моделям, серийный номерам,
-    именам работников, кабинетам
-   - 2) сделать массив объектов с перечислением статусов,
-    операционных систем
-   - 3) сделать скрипт плэйсхолдера на подсказки
-   - 4) сделать модуль выпадающего списка с перечислением параметров
-   - 5) сделать календарь и форматирование данных туда и
-   + обратно
-   - 6) в редактировании инвентарный и серийный номера не поддержат редактированию
-   - 7) при добавлении делать проверку на неповторяемость инвентарного номера
-   - 8) input type=number for serial_number, inventory_number
-   - 9) input checkbox for depreciation
-   - 10) input type=date for date_added, write_off_date
-   - 11) дописать запрос: select id_employee from employees where данные
-   12) сделать поиск айдишников сотрудника и офиса и запись в поля
-   13) сделать отправку данных в бд кроме последних двух элементов значения
- */
 const stats = {
    0: 'на складе',
    1: 'в эксплуатации',
@@ -81,25 +71,80 @@ function saveChanges(area, type) {
             let result = true;
             result = checkInputsNotNull(area);
 
-            const inventoryNumbers = getlaptopFromSerialNumber();
-            inventoryNumbers
-                .then((res) => {
-                    const inventoryNumber = area.querySelector('.inventory_number').value;
-                    for (let i = 0; i < res.length; i++){
-                        const ObjEntries = Object.values(res[i]);
-                        ObjEntries.map((elem) => {
-                            if ( elem === inventoryNumber) {
-                                alert('Ноутбук с данным инвентарным номером уже существует!');
-                                result = false;
+            const dropdownEmployee = area.querySelector('.employee-data');
+            const InputIdEmployee = area.querySelector('.id_employee');
+            let writeIdEmployee;
+            if (dropdownEmployee.value){
+                writeIdEmployee = writeIdInInput(area, dropdownEmployee, InputIdEmployee, 'employee');
+            }
+
+            const dropdownOffice = area.querySelector('.office-data');
+            const InputIdOffice = area.querySelector('.id_office');
+            let writeIdOffice;
+            if (dropdownOffice.value){
+                writeIdOffice = writeIdInInput(area, dropdownOffice, InputIdOffice, 'office');
+            }
+            let newDataRows;
+            Promise.all([writeIdEmployee, writeIdOffice])
+                .then(() => {
+                    const inventoryNumbers = getlaptopFromSerialNumber();
+                    inventoryNumbers
+                        .then((res) => {
+                            const inventoryNumber = area.querySelector('.inventory_number').value;
+                            for (let i = 0; i < res.length; i++){
+                                const ObjEntries = Object.values(res[i]);
+                                ObjEntries.map((elem) => {
+                                    if ( elem === inventoryNumber) {
+                                        alert('Ноутбук с данным инвентарным номером уже существует!');
+                                        result = false;
+                                    }
+                                });
                             }
-                        });
-                    }
+                            if (result === true) {
+                                newDataRows.shift();
+                                newDataRows.splice(15, 2);
+                                const addDeviceRequest = sendlaptops(newDataRows);
+                                addDeviceRequest.then(() => {
+                                    area.remove();
+                                    setTimeout(refreshView,500);
+                                }).catch(e => console.error(e));
+                            }
 
+                        })
+                        .catch(e => console.error(e));
+                });
 
-                })
-                .catch(e => console.error(e));
         }
     });
+}
+
+/**
+ *
+ * @param area
+ * @param dropdown
+ * @param inputId
+ * @param typeQuery
+ * @returns {Promise<* | void>}
+ */
+function writeIdInInput(area, dropdown, inputId, typeQuery) {
+    let data = [];
+    data = dropdown.value.split(',');
+    let query;
+    if (typeQuery==='employee'){
+        query = getEmployeeFindId(data);
+        return query
+            .then((res) => {
+                inputId.value = Object.values(res[0]);
+            })
+            .catch(e => console.error(e));
+    } else if (typeQuery === 'office'){
+        query = getOfficeFindId(data);
+        return query
+            .then((res) => {
+                inputId.value = Object.values(res[0]);
+            })
+            .catch(e => console.error(e));
+    }
 }
 
 function checkInputsNotNull(area) {

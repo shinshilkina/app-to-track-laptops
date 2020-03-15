@@ -60,7 +60,7 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             await mysqlQuery(
                 `INSERT INTO device(id_employee, id_office, manufacturer, model, serial_number, inventory_number, 
                 date_added, write_off_date, description, OS, status, depreciation, depreciation_lenght) 
-                VALUES (?, ?, ?, ?, ?, ?, STR_TO_DATE(?,'%d,%m,%Y'), STR_TO_DATE(?,'%d,%m,%Y'), ?, ?, ?, ?);`,
+                VALUES (?, ?, ?, ?, ?, ?, STR_TO_DATE(?,'%Y-%m-%d'), STR_TO_DATE(?,'%Y-%m-%d'), ?, ?, ?, ?, ?);`,
                 [id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
                     write_off_date, description, OS, status, depreciation, depreciation_lenght]
             );

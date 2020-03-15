@@ -31,6 +31,12 @@ function listenButtonsDeviceUpdDel() {
             listenUpdInsDeviceArea(areaUpdateDevice, 'update');
         }).catch(e => console.error(e));
     });
+
+    const buttonCancel = document.querySelector('.view-div-more').querySelector('.button__cancel');
+    buttonCancel.addEventListener('click', function (event) {
+        const area = this.parentElement.parentElement.parentElement;
+        area.remove();
+    });
 }
 
 function removeInsUpdDeviceArea() {
