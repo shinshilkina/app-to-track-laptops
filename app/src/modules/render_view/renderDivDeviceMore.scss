@@ -11,8 +11,8 @@
 
   background-color: #FFFFFF;
   border-radius: 1.7rem 1.7rem;
-  & .element {
-
+  & .title {
+    color: $dark_shade_50;
   }
   & .id_employee, & .id_office, & .id_device {
     display: none;
@@ -20,15 +20,16 @@
   & .buttons{
     display: flex;
     flex-wrap: wrap;
-    & .button__delete{
-      @include buttonsAddDel(url("../../modules/icons/icons8-delete.svg"));
-      margin-right: 1rem;
-      margin-left: auto;
+    justify-content: space-between;
+    & .button__delete, .button__cancel {
+      @include buttonSaveCancel($purple);
+      border: 1px solid $purple;
+      width: 8rem;
     }
-    & .button__update{
-      @include buttonsAddDel(url("../../modules/icons/add-button.svg"));
-
-      margin-right: auto;
+    & .button__update {
+      @include buttonSaveCancel(#000000);
+      background-image: $gradient;
+      width: 8rem;
     }
   }
 }

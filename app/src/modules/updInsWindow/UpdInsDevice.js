@@ -96,6 +96,16 @@ function listenUpdInsDeviceArea(area, type) {
 function saveChanges(area, type) {
     const buttonSave = area.querySelector('.save');
     buttonSave.addEventListener('click', function (event) {
+        const addParamsFromDropdown = (classInput, classDropdown) => {
+            const inputId = area.querySelector(classInput);
+            const dropdown= area.querySelector(classDropdown);
+            if (inputId.value === ''|| inputId.value === null || inputId.value != dropdown.dataset.value) {
+                inputId.value = dropdown.dataset.value;
+            }
+        };
+        addParamsFromDropdown('.id_employee', '.employee-data');
+        addParamsFromDropdown('.id_office', '.office-data');
+
         const fieldsToSend = [
             'id_employee', 'id_office', 'manufacturer', 'model', 'serial_number', 'inventory_number', 'date_added',
             'write_off_date', 'description', 'OS', 'status', 'depreciation', 'depreciation_lenght'

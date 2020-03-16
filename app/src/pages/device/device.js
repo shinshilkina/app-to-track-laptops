@@ -32,7 +32,7 @@ const getDataDevice = () => {
  */
 function renderViewDevice(data) {
     const tableHTML = renderDiv(data);
-    const viewArea = document.querySelector("main").querySelector('.device').querySelector('.list');
+    const viewArea = document.querySelector('main .device .list');
     viewArea.insertAdjacentHTML('beforeend', tableHTML);
     correctHtmlDevice(viewArea);
 }
@@ -41,10 +41,43 @@ function correctHtmlDevice(viewArea) {
     getDates(viewArea);
     getEmployeeName(viewArea);
     getOfficeValue(viewArea);
+    addDescriptionDevice(viewArea)
+}
+
+function addDescriptionDevice(viewArea) {
+    const descriprions = {
+        'manufacturer': 'Производитель :',
+        'model': 'Модель :',
+        'serial_number': 'Серийный номер :',
+        'inventory_number': 'Инвернтарный номер :',
+        'date_added': 'Дата поступления: ',
+        'write_off_date': 'Дата списания :',
+        'description': 'Описание: ',
+        'OS': 'Операционная система :',
+        'status': 'Статус: ',
+        'depreciation': 'Амортизация: ',
+        'depreciation_lenght': 'Срок амортизации :',
+        'employee-data' : 'Работник: ',
+        'office-data' : 'Место :'
+    };
+    const addDescription = (element) => {
+        const className = element.className;
+        const descr = document.createElement('div');
+        descr.textContent = descriprions[className];
+        descr.classList.add(className, 'title');
+        const parentDiv = element.parentNode;
+        parentDiv.insertBefore(descr, element);
+    };
+    const elements = viewArea.querySelectorAll('.element div');
+    for (let element of elements) {
+        if (typeof descriprions[element.className] !== "undefined") {
+            addDescription(element);
+        }
+    }
 }
 
 function listenButtonsShowDevice() {
-    const buttonsShowDevice = document.querySelector("main").querySelector('.device').querySelectorAll('.button__more');
+    const buttonsShowDevice = document.querySelectorAll('main .device .button__more');
     for (let button of buttonsShowDevice){
         button.addEventListener('click', function (event) {
             const viewAreaDevice = document.querySelector('.view-div-more');
@@ -70,6 +103,7 @@ function redactDivAllAboutDevice() {
     getEmployeeName(viewDivDevice);
     getOfficeValue(viewDivDevice);
     getDates(viewDivDevice);
+    addDescriptionDevice(viewDivDevice);
 }
 
 const parent = document.querySelector("main").querySelector('.device');
@@ -112,7 +146,7 @@ function getDates(viewArea) {
         let dateAddedStr = date.textContent.substr(0,10).split("-");
         const dateAdd = new Date(parseInt(dateAddedStr[0], 10), parseInt(dateAddedStr[1], 10),
             parseInt(dateAddedStr[2], 10));
-        date.textContent = 'Дата поступления: ' + dateAdd.getDate()  +'.'
+        date.textContent =  dateAdd.getDate()  +'.'
             + dateAdd.getMonth() +'.'+ dateAdd.getFullYear();
     }
 
@@ -121,45 +155,86 @@ function getDates(viewArea) {
 
         const dateOff = new Date(parseInt(dateOffStr[0], 10), parseInt(dateOffStr[1], 10),
             parseInt(dateOffStr[2], 10));
-        date.textContent = 'Дата списания: ' + dateOff.getDate()  +'.'
+        date.textContent =  dateOff.getDate()  +'.'
         + dateOff.getMonth() +'.'+ dateOff.getFullYear();
     }
 }
 
 function getEmployeeName(viewArea) {
-    const employeeArea = viewArea.querySelector('.employee-data');
-    const employeeId = viewArea.querySelector('.id_employee').textContent;
-    let request = getEmployeeFromId(employeeId);
-    request.then((data) => {
-        let textContent = [];
-        for (let i = 0; i < data.length; i++) {
-            for (let key in data[i]) {
-                textContent.push(data[i][key]);
+    const employeeId = viewArea.querySelectorAll('.id_employee');
+    for (let id of employeeId) {
+        getEmployeeFromId(id.textContent).then((data) => {
+            let textContent = [];
+            for (let i = 0; i < data.length; i++) {
+                for (let key in data[i]) {
+                    textContent.push(data[i][key]);
+                }
             }
-        }
-        textContent.splice(0, 1);
-        textContent.splice(2, 1);
-        textContent[1].toString().toLowerCase(textContent[1].toString());
-        textContent.join('');
-        employeeArea.textContent = textContent;
-    }).catch(e => console.error(e));
+            textContent.splice(0, 1);
+            textContent.splice(2, 1);
+            textContent[1].toString().toLowerCase(textContent[1].toString());
+            textContent.join('');
+            const employeeArea = id.parentElement.querySelectorAll('.employee-data');
+            for (let elem of employeeArea) {
+                if (!elem.classList.contains('title')){
+                    elem.textContent = textContent;
+                }
+            }
+        }).catch(e => console.error(e));
+    }
+
 }
 
 function getOfficeValue(viewArea) {
-    const officeArea = viewArea.querySelector('.office-data');
-    const officeId = viewArea.querySelector('.id_office').textContent;
-    const request = getOfficeFromId(officeId);
-    request.then((data) => {
-        let textContent = [];
-        for (let i = 0; i < data.length; i++) {
-            for (let key in data[i]) {
-                textContent.push(data[i][key]);
+    const officeId = viewArea.querySelectorAll('.id_office');
+    for (let id of officeId) {
+        getOfficeFromId(id.textContent).then((data) => {
+            let textContent = [];
+            for (let i = 0; i < data.length; i++) {
+                for (let key in data[i]) {
+                    textContent.push(data[i][key]);
+                }
             }
-        }
-        textContent.splice(0, 1);
-        textContent.join('');
-        officeArea.textContent = 'Место: ' + textContent;
-    }).catch(e => console.error(e));
+            textContent.splice(0, 1);
+            textContent.join('');
+            const officeArea = id.parentElement.querySelectorAll('.office-data');
+            const newLine = '\r';
+            for (let elem of officeArea) {
+                if (!elem.classList.contains('title')){
+                    elem.textContent = textContent.map((elem) => {
+                        return newLine + elem;
+                    });
+                }
+            }
+        }).catch(e => console.error(e));
+    }
+
 }
 
-export {getDataDevice, listenButtonsDeviceUpdDel, redactDivAllAboutDevice};
+function deleteParamsFromDevice(paramName, paramValue) {
+    return getlaptops().then((laptops) => {
+        laptops.map((laptop) => {
+            if (laptop[paramName] == paramValue) {
+                laptop[paramName]= '';
+                const valuesForRequestUpdate = Object.values(laptop);
+                valuesForRequestUpdate[14] = valuesForRequestUpdate[0];
+                valuesForRequestUpdate.shift();
+                updatelaptops(valuesForRequestUpdate).then((res) => {
+                    return res;
+                });
+            }
+        });
+    });
+}
+
+const buttonsShowFiltres = parent.querySelector('.filter-device__select');
+buttonsShowFiltres.addEventListener('click',
+    function (event) {
+        let dropdownBody = buttonsShowFiltres.parentElement.querySelector('.filter-device__items');
+        dropdownBody.classList.toggle('invisible');
+        buttonsShowFiltres.classList.toggle('rotated');
+    }
+);
+
+
+export {getDataDevice, listenButtonsDeviceUpdDel, redactDivAllAboutDevice, deleteParamsFromDevice, addDescriptionDevice};

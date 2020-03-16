@@ -10,7 +10,7 @@ import {windowUpdIns, getElements,getNewRow} from '../../modules/updInsWindow/wi
 import refreshView from "../../modules/refreshView";
 import renderDivShowMore from "../../modules/render_view/renderDivDeviceMore.pug";
 import {listenButtonsDeviceUpdDel} from "../../modules/render_view/renderDivDeviceMore";
-import {redactDivAllAboutDevice} from "../device/device";
+import {deleteParamsFromDevice, redactDivAllAboutDevice} from "../device/device";
 
 
 const getData = () => {
@@ -63,7 +63,7 @@ function getDevicesDiv(paramIdelements, paramSearch) {
                     const deviceTh = row.querySelector('.devices');
                     const divDevice = document.createElement('div');
                     const newline = "\r\n";
-                    divDevice.textContent = laptop['manufacturer'] + ',' + newline + 'Инвернтарный номер:' + laptop['inventory_number'];
+                    divDevice.textContent =laptop['manufacturer'] + ',' + newline + 'Инвернтарный номер:' + laptop['inventory_number'];
                     divDevice.type = 'button';
                     divDevice.classList.add('div-device');
                     divDevice.dataset.value = laptop['id_device'];
@@ -84,17 +84,21 @@ function renderView(data) {
 }
 
 function listenButtons() {
-    const buttonsDelete = document.querySelectorAll('.buttons .button__delete');
+    const buttonsDelete = document.querySelectorAll('main .employee .button__delete');
     for (let button of buttonsDelete){
         button.addEventListener('click', function (event) {
             const row = this.parentElement.parentElement;
             const id = row.querySelector('.id_employee').textContent;
-            const deleteRow = deleteEmployee(id);
-            deleteRow.then(setTimeout(refreshView,500));
+            deleteEmployee(id).then(() => {
+                deleteParamsFromDevice('id_employee', id).then(() => {
+                    const area = row.parentElement.parentElement.parentElement.parentElement;
+                    refreshView(area);
+                });
+            });
         });
     }
 
-    const buttonsUpdate = document.querySelector("main").querySelector('.employee').querySelectorAll('.button__update');
+    const buttonsUpdate = document.querySelectorAll('main .employee .button__update');
     for (let button of buttonsUpdate){
         button.addEventListener('click', function (event) {
             const row = this.parentElement.parentElement;

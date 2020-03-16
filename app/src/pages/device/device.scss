@@ -3,28 +3,142 @@
 .device {
   font-family: Montserrat, sans-serif;
   width: 90%;
+    & .view-header {
+      display: flex;
+    }
     & .view-div {
       display: flex;
       flex-wrap: wrap;
       & .element {
-
-        width: 15rem;
+        width: 20rem;
         background-color: #FFFFFF;
         border-radius: 1.7rem 1.7rem;
         padding: 1rem 1rem;
         margin: 0.5rem 1rem;
         & div {
-          display: block;
+          white-space: pre;
         }
         & .id_device, & .serial_number, & .depreciation,
         & .id_employee, & .id_office,
         & .depreciation_lenght, & .description, & .OS{
           display: none;
         }
+        & .button__more {
+          width: 60%;
+          margin-top: 0.5rem;
+          margin-left: auto;
+          margin-right: auto;
+          background-image: $gradient;
+          text-transform: uppercase;
+          padding: 0.5rem 0.5rem;
+          border-radius: 0.5rem 0.5rem;
+        }
+        & .title.button__more {
+          display: none;
+        }
+        & .title {
+          color: $dark_shade_50;
+        }
       }
     }
   }
 
+.filter-device {
+  width: 10rem;
+  margin-top: 0.5rem;
+  background-image: $gradient;
+  text-transform: uppercase;
+  padding: 0.5rem 0.5rem;
+  border-radius: 0.5rem 0.5rem;
+  position: relative;
+
+  & .rotated {
+    transform:rotate(180deg);
+    -webkit-transform:rotate(180deg);
+    -moz-transform:rotate(180deg);
+    -o-transform:rotate(180deg);
+  }
+
+  &__select {
+    position: absolute;
+    width: 1.2rem;
+    height: 1.2rem;
+    right: 1rem;
+    top: 0.5rem;
+    background-image: url("../../modules/icons/expand_more.png");
+    background-color: rgba(255,255,255,0.25);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    align-self: center;
+
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+  }
+  &__items {
+    width: 15rem;
+  }
+}
+.filter-device__items {
+  position: absolute;
+  font-family: Montserrat, sans-serif;
+
+  padding: 1rem 1rem;
+
+  background-color: rgb(255, 255, 255);
+  border-radius: 0.5rem 1.75rem 1.75rem 1.75rem;
+  border: 1px solid $purple;
+  & .filter-sort, .filter-depreciation {
+    margin-bottom: 0.5rem;
+    & .filter-abc, .filter-inventary_number, .filter-depreciation-off-area, .filter-depreciation-on-area{
+      display: flex;
+    }
+  }
+  & .filter-date-add{
+    margin-bottom: 0.5rem;
+    & .filter-date-start , .filter-date-end{
+      display: flex;
+      & input {
+        margin-left: 0.5rem;
+      }
+    }
+  }
+//filter-date-off-start
+  & .filter-date-off{
+    margin-bottom: 0.5rem;
+    & .filter-date-off-start , .filter-date-off-end{
+      display: flex;
+      & input {
+        margin-left: 0.5rem;
+      }
+    }
+  }
+
+  & .buttons {
+    display: flex;
+    & .save {
+      width: 7rem;
+      margin: 0.75rem 0.3rem 0.5rem auto;
+      background-image: $gradient;
+      text-transform: uppercase;
+      padding: 0.5rem 0.5rem;
+      border-radius: 1.7rem 1.7rem;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    & .cancel {
+      @include buttonSaveCancel($dark_shade_50);
+      border: 1px solid $dark_shade_50;
+      width: 7rem;
+      margin: 0.75rem auto 0.5rem 0.3rem;
+    }
+  }
+
+}
 
 
 .add-device {

@@ -10,7 +10,7 @@ import {windowUpdIns, getElements,getNewRow} from '../../modules/updInsWindow/wi
 import refreshView from "../../modules/refreshView";
 import {getDevicesDiv} from "../employee/employee";
 import renderDivShowMore from "../../modules/render_view/renderDivDeviceMore.pug";
-import {listenButtonsDeviceUpdDel, redactDivAllAboutDevice} from "../device/device";
+import {listenButtonsDeviceUpdDel, redactDivAllAboutDevice, deleteParamsFromDevice} from "../device/device";
 
 
 const getDataOffice = () => {
@@ -58,23 +58,26 @@ const getDataOffice = () => {
  */
 function renderViewOffice(data) {
     const tableHTML = renderTable(data);
-    const viewArea = document.querySelector("main").querySelector('.office').querySelector('.list');
+    const viewArea = document.querySelector('main .office .list');
     viewArea.insertAdjacentHTML('beforeend', tableHTML);
 }
 
 function listenButtonsOffice() {
-    const buttonsDeleteOffice = document.querySelector("main").querySelector('.office').querySelectorAll('.button__delete');
+    const buttonsDeleteOffice = document.querySelectorAll('main .office .button__delete');
     for (let button of buttonsDeleteOffice){
         button.addEventListener('click', function (event) {
             const row = this.parentElement.parentElement;
             const id = row.querySelector('.id_office').textContent;
-            const deleteRow = deleteOffice(id);
-            const area = row.parentElement.parentElement.parentElement.parentElement;
-            deleteRow.then(setTimeout(refreshView,500, area));
+            deleteOffice(id).then(() => {
+                deleteParamsFromDevice('id_office', id).then(() => {
+                    const area = row.parentElement.parentElement.parentElement.parentElement;
+                    refreshView(area);
+                });
+            });
         });
     }
 
-    const buttonsUpdateOffice = document.querySelector("main").querySelector('.office').querySelectorAll('.button__update');
+    const buttonsUpdateOffice = document.querySelectorAll('main .office .button__update');
 
     for (let button of buttonsUpdateOffice){
         button.addEventListener('click', function (event) {

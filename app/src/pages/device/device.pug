@@ -1,5 +1,44 @@
-div.view(class='device invisible')
+div.view(class='device active')
     span.view__title='Список ноутбуков'
         div.refresh(type='button')
         div.add-device(type='button')
+    div.filter-device(type='button')='Фильтр'
+        div.filter-device__select
+    div.filter-device__items(class='')
+        div.filter-sort='Сортировка'
+            div.filter-abc
+                input.filter-abc-checkbox(type='checkbox')
+                div.filter-abc-title='По производителю'
+            div.filter-inventary_number
+                input.filter-inventary_number-checkbox(type='checkbox')
+                div.filter-inventary_number-title='По инвентарному номеру'
+        div.filter-depreciation='Амортизация'
+            div.filter-depreciation-off-area
+                input.filter-depreciation-off-checkbox(type='checkbox')
+                div.filter-depreciation-off-title='Не амортизирован'
+            div.filter-depreciation-on-area
+                input.filter-depreciation-on-checkbox(type='checkbox')
+                div.filter-depreciation-on-title='Амортизирован'
+        div.filter-date-add='Интервал поступления'
+            div.filter-date-start
+                div.filter-date-start-title='C '
+                input.filter-date-start-input(type='date')
+            div.filter-date-end
+                div.filter-date-end-title='По '
+                input.filter-date-end-input(type='date')
+        div.filter-date-off='Интервал списания'
+            div.filter-date-off-start
+                div.filter-date-off-title='C '
+                input.filter-date-off-input(type='date')
+            div.filter-date-off-end
+                div.filter-date-off-title='По '
+                input.filter-date-off-input(type='date')
+        div.buttons
+            div.save(type='button')='Сохранить'
+            div.cancel(type='button')='Отменить'
     ul.list
+
+
+
+
+//invisible
