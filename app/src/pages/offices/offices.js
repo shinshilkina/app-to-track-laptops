@@ -1,11 +1,16 @@
 import './offices.scss';
 import renderTable from '../../modules/render_view/render.pug';
-import {getEmployees, deleteEmployee, updateEmployee, sendEmployee,
-    getlaptops, deletelaptops, updatelaptops,sendlaptops,
-    getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId} from '../../modules/requests';
+import {
+    getEmployees, deleteEmployee, updateEmployee, sendEmployee,
+    getlaptops, deletelaptops, updatelaptops, sendlaptops,
+    getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId, getlaptopFromId
+} from '../../modules/requests';
 import '../../modules/refreshView';
 import {windowUpdIns, getElements,getNewRow} from '../../modules/updInsWindow/window.js';
 import refreshView from "../../modules/refreshView";
+import {getDevicesDiv} from "../employee/employee";
+import renderDivShowMore from "../../modules/render_view/renderDivDeviceMore.pug";
+import {listenButtonsDeviceUpdDel, redactDivAllAboutDevice} from "../device/device";
 
 
 const getDataOffice = () => {
@@ -33,13 +38,18 @@ const getDataOffice = () => {
                     title: 'Тип кабинета'
                 },
                 {
+                    class: 'devices',
+                    title: 'Устройства'
+                },
+                {
                     class: 'buttons',
                     title: ''
                 }
             ],
             rows: data
         });
-        listenButtonsOffice();
+        const paramIdelements = document.querySelectorAll('main .office .id_office');
+        getDevicesDiv(paramIdelements, 'id_office').then(() => listenButtonsOffice());
     })
 };
 
@@ -80,6 +90,20 @@ function listenButtonsOffice() {
                     windowUpdIns(row,'update');
                 }
             }
+        });
+    }
+    const buttonsDevice = document.querySelectorAll('main .office .element .div-device');
+    for (let button of buttonsDevice) {
+        button.addEventListener('click', function (event) {
+            const id = this.dataset.value;
+            const elements = getlaptopFromId(id);
+            elements.then((res) => {
+                const divHTML = renderDivShowMore(res);
+                const viewArea = document.querySelector("main");
+                viewArea.insertAdjacentHTML('beforeend', divHTML);
+                redactDivAllAboutDevice();
+                listenButtonsDeviceUpdDel();
+            }).catch(e => console.error(e));
         });
     }
 }

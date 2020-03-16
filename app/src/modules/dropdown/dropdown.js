@@ -22,6 +22,7 @@ function listenChoice(buttonSelect) {
     const elements = area.querySelectorAll('.item');
     for (let element of elements) {
         element.addEventListener('click', function (event) {
+            input.dataset.value = this.dataset.id;
             input.value = element.textContent;
             let dropdownBody = buttonSelect.parentElement.querySelector('.dropdown__items');
             dropdownBody.classList.toggle('invisible');

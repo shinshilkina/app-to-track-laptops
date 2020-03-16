@@ -140,6 +140,29 @@ const getlaptopFromId = (id_device) => {
         });
 };
 
+const getEmployeeLaptops = (id_employee) => {
+    return sendHttpRequest('POST', 'http://localhost:5000/device/list/employee', {
+        id_employee: id_employee
+    })
+        .then(responseData => {
+            return responseData;
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+const getLocationLaptops = (id_office) => {
+    return sendHttpRequest('POST', 'http://localhost:5000/device/list/office', {
+        id_office: id_office
+    })
+        .then(responseData => {
+            return responseData;
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
 const getlaptopFromManufacturer = () => {
     return sendHttpRequest('GET', 'http://localhost:5000/device/list/manufacturer');
 };
@@ -149,7 +172,8 @@ const getlaptopFromModels= () => {
 };
 
 const getlaptopFromSerialNumber = () => {
-    return sendHttpRequest('GET', 'http://localhost:5000/device/list/inventory_number');
+    return sendHttpRequest('GET', 'http://localhost:5000/device/list/inventory_number')
+        .then((res) => res.map((data) => data['inventory_number']));
 };
 
 const deletelaptops = (id) => {
@@ -315,4 +339,4 @@ export {getEmployees, deleteEmployee, updateEmployee, sendEmployee,
     getlaptops, deletelaptops, updatelaptops,sendlaptops,
     getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId, getOfficeFromId,
     getlaptopFromId, getlaptopFromManufacturer, getlaptopFromModels, getlaptopFromSerialNumber,
-    getEmployeeFindId, getOfficeFindId};
+    getEmployeeFindId, getOfficeFindId, getEmployeeLaptops, getLocationLaptops};

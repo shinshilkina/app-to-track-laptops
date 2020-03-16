@@ -11,7 +11,10 @@ function listenButtonsDeviceUpdDel() {
         const row = this.parentElement.parentElement;
         const id = row.querySelector('.id_device').textContent;
         const deleteRow = deletelaptops(id);
-        deleteRow.then(setTimeout(refreshView,500));
+        deleteRow.then(() => {
+            const area = document.querySelector('main .device');
+            refreshView(area);
+        });
     });
 
     const buttonUpdate = document.querySelector('.view-div-more').querySelector('.button__update');

@@ -21,7 +21,6 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             restAPIerror(res, e);
         }
     });
-
     app.get('/device/list/manufacturer', async (req, res) => {
         try{
             const [rows, fields] = await mysqlQuery(
@@ -71,6 +70,32 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             restAPIerror(res, e);
         }
     });
+
+    app.post('/device/list/employee', async (req, res) => {
+        const {id_employee} = req.body;
+        try{
+            const [rows] = await mysqlQuery(
+                `SELECT * FROM device WHERE id_employee = ?;`,
+                [id_employee]
+            );
+            res.status(200).send(rows);
+        }catch (e){
+            restAPIerror(res, e);
+        }
+    });
+    app.post('/device/list/office', async (req, res) => {
+        const {id_office} = req.body;
+        try{
+            const [rows] = await mysqlQuery(
+                `SELECT * FROM device WHERE id_office = ?;`,
+                [id_office]
+            );
+            res.status(200).send(rows);
+        }catch (e){
+            restAPIerror(res, e);
+        }
+    });
+
     app.post('/device/delete', async (req, res) => {
         const {id_device} = req.body;
         try{

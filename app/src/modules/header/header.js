@@ -7,9 +7,9 @@ for (let button of buttons){
     button.addEventListener('click', function (event) {
         const newActivePageClass = this.parentElement.className;
         const prevActivePage = document.querySelector('.active');
-        const employeeArea = document.querySelector("main").querySelector('.employee');
-        const deviceArea = document.querySelector("main").querySelector('.device');
-        const officeArea = document.querySelector("main").querySelector('.office');
+        const employeeArea = document.querySelector('main .employee');
+        const deviceArea = document.querySelector('main .device');
+        const officeArea = document.querySelector('main .office');
 
         prevActivePage.classList.toggle('active');
         prevActivePage.classList.toggle('invisible');

@@ -162,4 +162,4 @@ function getOfficeValue(viewArea) {
     }).catch(e => console.error(e));
 }
 
-export default getDataDevice;
+export {getDataDevice, listenButtonsDeviceUpdDel, redactDivAllAboutDevice};

@@ -8,21 +8,39 @@ import {
     getlaptopFromSerialNumber,
     getEmployeeFindId,
     getOfficeFindId,
-    sendlaptops
+    sendlaptops, updatelaptops
 } from "../requests";
 import {getNewRow} from "./window";
 import refreshView from "../refreshView";
 
-const stats = {
-   0: 'на складе',
-   1: 'в эксплуатации',
-   2: 'в ремонте',
-   3: 'списан'
-};
-const operationSystemsValues = {
-  0: 'Windows',
-  1: 'MacOS',
-  2: 'Linux'
+const stats = [
+    'на складе',
+    'в эксплуатации',
+    'в ремонте',
+    'списан'
+];
+const operationSystemsValues = [
+    'Windows',
+    'MacOS',
+    'Linux'
+];
+
+const makeDropDown = (input, options, opt_hiddenInput) => {
+    return options()
+        .then((variants) => {
+            input.classList.add('dropdown__area');
+            const dropdown = dropdownHTML(variants);
+            input.insertAdjacentHTML('afterend', dropdown);
+
+            if (opt_hiddenInput) {
+                const hiddenValue = opt_hiddenInput.value;
+                const defaultVariant = variants.find((obj) => obj.id == hiddenValue);
+                if (defaultVariant) {
+                    input.value = defaultVariant.title;
+                    input.dataset.value = defaultVariant.id;
+                }
+            }
+        });
 };
 
 function listenUpdInsDeviceArea(area, type) {
@@ -34,14 +52,24 @@ function listenUpdInsDeviceArea(area, type) {
         element.type = "date";
     });
 
-    const statusInput = area.querySelector('.status');
-    renderDropdown(stats, statusInput);
+    makeDropDown(
+        area.querySelector('.status'),
+        () => Promise.resolve(stats.map((title, index) => ({
+            title: title,
+            id: title
+        })))
+    );
 
-    const operationSystems = area.querySelector('.OS');
-    renderDropdown(operationSystemsValues, operationSystems);
+    makeDropDown(
+        area.querySelector('.OS'),
+        () => Promise.resolve(operationSystemsValues.map((title, index) => ({
+            title: title,
+            id: title
+        })))
+    );
 
-    const promise1 = getDataForDevice(area, '.employee-data', getEmployees());
-    const promise2 = getDataForDevice(area, '.office-data', getOffice());
+    const promise1 = getDataForDevice(area, '.employee-data', getEmployees, '.id_employee');
+    const promise2 = getDataForDevice(area, '.office-data', getOffice, '.id_office');
 
     Promise.all([promise1, promise2])
         .then(() => listenDropdownShow(area));
@@ -56,6 +84,7 @@ function listenUpdInsDeviceArea(area, type) {
 
     const depreciationElem = area.querySelector('.depreciation');
     depreciationRender(area, depreciationElem);
+
     const buttonCancel = area.querySelector('.cancel');
     buttonCancel.addEventListener('click', function (event) {
         area.remove();
@@ -67,53 +96,42 @@ function listenUpdInsDeviceArea(area, type) {
 function saveChanges(area, type) {
     const buttonSave = area.querySelector('.save');
     buttonSave.addEventListener('click', function (event) {
-        if (type==='insert') {
-            let result = true;
-            result = checkInputsNotNull(area);
+        const fieldsToSend = [
+            'id_employee', 'id_office', 'manufacturer', 'model', 'serial_number', 'inventory_number', 'date_added',
+            'write_off_date', 'description', 'OS', 'status', 'depreciation', 'depreciation_lenght'
+        ];
+        const saveDevice = (saveCallback, additionalFields) => {
+            const dataOrder = fieldsToSend.concat(additionalFields);
+            const newDataRows = Array.from(area.querySelectorAll('input'))
+                .filter(input => Array.from(input.classList).some((className) => dataOrder.includes(className)))
+                .sort((a, b) => {
+                    const findIndex = (node) => Math.min(...Array.from(node.classList).map((className) => dataOrder.indexOf(className)).filter((index) => index !== -1));
+                    const indexA = findIndex(a);
+                    const indexB = findIndex(b);
+                    return indexA - indexB;
+                })
+                .map((input) => input.value);
+            return saveCallback(newDataRows).then(() => {
+                area.remove();
+                const areaDevice = document.querySelector('main .device');
+                refreshView(areaDevice);
+            });
+        };
 
-            const dropdownEmployee = area.querySelector('.employee-data');
-            const InputIdEmployee = area.querySelector('.id_employee');
-            let writeIdEmployee;
-            if (dropdownEmployee.value){
-                writeIdEmployee = writeIdInInput(area, dropdownEmployee, InputIdEmployee, 'employee');
-            }
+        if (type === 'insert') {
+            getlaptopFromSerialNumber()
+                .then((serials) => {
+                    const inventoryNumber = area.querySelector('.inventory_number').value;
+                    if (serials.includes(inventoryNumber)) {
+                        alert('Ноутбук с данным инвентарным номером уже существует!');
+                        return;
+                    }
+                    return saveDevice(sendlaptops, []);
+                })
+                .catch(e => console.error(e));
 
-            const dropdownOffice = area.querySelector('.office-data');
-            const InputIdOffice = area.querySelector('.id_office');
-            let writeIdOffice;
-            if (dropdownOffice.value){
-                writeIdOffice = writeIdInInput(area, dropdownOffice, InputIdOffice, 'office');
-            }
-            let newDataRows;
-            Promise.all([writeIdEmployee, writeIdOffice])
-                .then(() => {
-                    const inventoryNumbers = getlaptopFromSerialNumber();
-                    inventoryNumbers
-                        .then((res) => {
-                            const inventoryNumber = area.querySelector('.inventory_number').value;
-                            for (let i = 0; i < res.length; i++){
-                                const ObjEntries = Object.values(res[i]);
-                                ObjEntries.map((elem) => {
-                                    if ( elem === inventoryNumber) {
-                                        alert('Ноутбук с данным инвентарным номером уже существует!');
-                                        result = false;
-                                    }
-                                });
-                            }
-                            if (result === true) {
-                                newDataRows.shift();
-                                newDataRows.splice(15, 2);
-                                const addDeviceRequest = sendlaptops(newDataRows);
-                                addDeviceRequest.then(() => {
-                                    area.remove();
-                                    setTimeout(refreshView,500);
-                                }).catch(e => console.error(e));
-                            }
-
-                        })
-                        .catch(e => console.error(e));
-                });
-
+        } else if (type === 'update') {
+            return saveDevice(updatelaptops, ['id_device'])
         }
     });
 }
@@ -151,8 +169,8 @@ function checkInputsNotNull(area) {
     const rowElements = area.querySelectorAll("input");
     for (let i = 3; i < rowElements.length; i ++) {
         const oldValue = rowElements[i].value;
-        if (!oldValue) {
-            alert('Не все поля заполнены!');
+        if (oldValue === '') {
+            alert('Не все поля заполнены!' + oldValue);
             return false;
         }
     }
@@ -201,24 +219,15 @@ function listenDepreciation(area, depreciationElem) {
     });
 }
 
-function renderDropdown(elements, input) {
-    input.classList.add('dropdown__area');
-    const dropdown = dropdownHTML(elements);
-    input.insertAdjacentHTML('afterend', dropdown);
-}
-
-function getDataForDevice(area, classNameElement, query) {
+function getDataForDevice(area, classNameElement, query, hiddenInput) {
     const input = area.querySelector(classNameElement);
-    const queryPromise= query;
-    let values = {};
-    return queryPromise.then((res) => {
-        for (let i = 0; i < res.length; i++){
-            let ObjEntries = Object.values(res[i]);
-            ObjEntries.shift();
-            values[i] = ObjEntries;
-        }
-        renderDropdown(values, input);
-    }).catch(e => console.error(e));
+
+    return makeDropDown(input, () => {
+        return query().then((res) => res.map((data) => ({
+                id: Object.values(data)[0],
+                title: Object.values(data).slice(1).join(', ')
+            })));
+    }, area.querySelector(hiddenInput));
 }
 
 function getFormattedDate(date) {
