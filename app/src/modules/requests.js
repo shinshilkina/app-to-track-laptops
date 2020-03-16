@@ -125,7 +125,42 @@ const updateEmployee = ([id, name, position, phone]) => {
 //laptops
 
 const getlaptops = () => {
-    return sendHttpRequest('GET', 'http://localhost:5000/device/list');
+    const filtersService = window.filtersService;
+    const params = {};
+    const vendor = filtersService.getOrderVendor();
+    if (vendor) {
+        params['vendor'] = vendor;
+    }
+    const inventaryNumber = filtersService.getOrderInventaryNumber();
+    if (inventaryNumber) {
+        params['inventary_number'] = inventaryNumber;
+    }
+    const amoOn = filtersService.getAmoAmo();
+    if (amoOn) {
+        params['amo_on'] = amoOn;
+    }
+    const amoOff = filtersService.getAmoNotAmo();
+    if (amoOff) {
+        params['amo_off'] = amoOff;
+    }
+    const addedFrom = filtersService.getAddedStart();
+    if (addedFrom) {
+        params['added_from'] = addedFrom;
+    }
+    const addedTo = filtersService.getAddedEnd();
+    if (addedTo) {
+        params['added_to'] = addedTo;
+    }
+    const writtenOffFrom = filtersService.getOffStart();
+    if (writtenOffFrom) {
+        params['off_from'] = writtenOffFrom;
+    }
+    const writtenOffTo = filtersService.getOffEnd();
+    if (writtenOffTo) {
+        params['off_to'] = writtenOffTo;
+    }
+    const query = Object.keys(params).map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(params[key])).join('&');
+    return sendHttpRequest('GET', 'http://localhost:5000/device/list?' + query);
 };
 
 const getlaptopFromId = (id_device) => {

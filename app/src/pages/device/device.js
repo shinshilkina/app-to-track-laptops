@@ -12,6 +12,7 @@ import {listenButtonsDeviceUpdDel, removeInsUpdDeviceArea} from '../../modules/r
 import renderDivUpdIns from "../../modules/updInsWindow/UpdInsDevice.pug";
 import listenInputs from "../../modules/placeholders";
 import listenUpdInsDeviceArea from "../../modules/updInsWindow/UpdInsDevice";
+import {listenFiltersDevice} from "../../modules/filtres/filters_device";
 
 
 const getDataDevice = () => {
@@ -24,6 +25,7 @@ const getDataDevice = () => {
             rows: data
         });
         listenButtonsShowDevice();
+        listenFiltersDevice();
     })
 };
 
@@ -163,26 +165,27 @@ function getDates(viewArea) {
 function getEmployeeName(viewArea) {
     const employeeId = viewArea.querySelectorAll('.id_employee');
     for (let id of employeeId) {
-        getEmployeeFromId(id.textContent).then((data) => {
-            let textContent = [];
-            for (let i = 0; i < data.length; i++) {
-                for (let key in data[i]) {
-                    textContent.push(data[i][key]);
+        if (id.value !== '') {
+            getEmployeeFromId(id.textContent).then((data) => {
+                let textContent = [];
+                for (let i = 0; i < data.length; i++) {
+                    for (let key in data[i]) {
+                        textContent.push(data[i][key]);
+                    }
                 }
-            }
-            textContent.splice(0, 1);
-            textContent.splice(2, 1);
-            textContent[1].toString().toLowerCase(textContent[1].toString());
-            textContent.join('');
-            const employeeArea = id.parentElement.querySelectorAll('.employee-data');
-            for (let elem of employeeArea) {
-                if (!elem.classList.contains('title')){
-                    elem.textContent = textContent;
+                textContent.splice(0, 1);
+                textContent.splice(2, 1);
+                textContent[1].toString().toLowerCase(textContent[1].toString());
+                textContent.join('');
+                const employeeArea = id.parentElement.querySelectorAll('.employee-data');
+                for (let elem of employeeArea) {
+                    if (!elem.classList.contains('title')){
+                        elem.textContent = textContent;
+                    }
                 }
-            }
-        }).catch(e => console.error(e));
+            }).catch(e => console.error(e));
+        }
     }
-
 }
 
 function getOfficeValue(viewArea) {
