@@ -72,14 +72,19 @@ function listenUpdInsDeviceArea(area, type) {
     const promise2 = getDataForDevice(area, '.office-data', getOffice, '.id_office');
 
     Promise.all([promise1, promise2])
-        .then(() => listenDropdownShow(area));
+        .then(() => {
+            const dropdownInputs = area.querySelectorAll('.dropdown__area');
+            debugger
+            for (let input of dropdownInputs) {
+                input.setAttribute('disabled', true);
+            }
+            listenDropdownShow(area);
+        });
 
-    let inputsNumber = area.querySelectorAll('.serial_number, .inventory_number');
-    for (let input of inputsNumber) {
-        input.setAttribute('maxLength', 10);
-        if (type === 'update'){
-            input.setAttribute('disabled', true);
-        }
+    let inputsNumber = area.querySelector('.inventory_number');
+    inputsNumber.setAttribute('maxLength', 10);
+    if (type === 'update'){
+        inputsNumber.setAttribute('disabled', true);
     }
 
     const depreciationElem = area.querySelector('.depreciation');

@@ -230,12 +230,12 @@ function deleteParamsFromDevice(paramName, paramValue) {
     });
 }
 
-const buttonsShowFiltres = parent.querySelector('.filter-device__select');
-buttonsShowFiltres.addEventListener('click',
+const buttonsShowFilters = document.querySelector('.filter-device__select');
+buttonsShowFilters.addEventListener('click',
     function (event) {
-        let dropdownBody = buttonsShowFiltres.parentElement.querySelector('.filter-device__items');
+        let dropdownBody = document.querySelector('main .filter-device__items');
         dropdownBody.classList.toggle('invisible');
-        buttonsShowFiltres.classList.toggle('rotated');
+        buttonsShowFilters.classList.toggle('rotated');
     }
 );
 
