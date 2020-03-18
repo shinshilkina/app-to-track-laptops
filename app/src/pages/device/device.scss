@@ -105,7 +105,6 @@
       }
     }
   }
-//filter-date-off-start
   & .filter-date-off{
     margin-bottom: 0.5rem;
     & .filter-date-off-start , .filter-date-off-end{
@@ -113,6 +112,15 @@
       & input {
         margin-left: 0.5rem;
       }
+    }
+  }
+  & .filter-employee , & .filter-office {
+    & .dropdown__select {
+      top: -2.2rem;
+      right: 1.5rem;
+    }
+    & .dropdown {
+      top: 0.7rem;
     }
   }
 

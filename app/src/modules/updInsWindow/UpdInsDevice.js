@@ -25,7 +25,7 @@ const operationSystemsValues = [
     'Linux'
 ];
 
-const makeDropDown = (input, options, opt_hiddenInput) => {
+function makeDropDown (input, options, opt_hiddenInput) {
     return options()
         .then((variants) => {
             input.classList.add('dropdown__area');
@@ -74,7 +74,6 @@ function listenUpdInsDeviceArea(area, type) {
     Promise.all([promise1, promise2])
         .then(() => {
             const dropdownInputs = area.querySelectorAll('.dropdown__area');
-            debugger
             for (let input of dropdownInputs) {
                 input.setAttribute('disabled', true);
             }
@@ -239,10 +238,11 @@ function getDataForDevice(area, classNameElement, query, hiddenInput) {
 
     return makeDropDown(input, () => {
         return query().then((res) => res.map((data) => ({
+
                 id: Object.values(data)[0],
                 title: Object.values(data).slice(1).join(', ')
             })));
-    }, area.querySelector(hiddenInput));
+    }, (hiddenInput) ? area.querySelector(hiddenInput): null);
 }
 
 function getFormattedDate(date) {
@@ -257,4 +257,4 @@ function getFormattedDate(date) {
     return year + '-' + month + '-' + day;
 }
 
-export default listenUpdInsDeviceArea;
+export {listenUpdInsDeviceArea, getDataForDevice};

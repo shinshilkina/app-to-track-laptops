@@ -10,6 +10,12 @@ for (let button of buttons){
         const employeeArea = document.querySelector('main .employee');
         const deviceArea = document.querySelector('main .device');
         const officeArea = document.querySelector('main .office');
+        const windowsInsertUpdate = document.querySelectorAll('main .window');
+        for (let wind of windowsInsertUpdate) {
+            wind.remove();
+        }
+        const windShowMoreAboutDevice = document.querySelector('main .view-div-more');
+        windShowMoreAboutDevice ? windShowMoreAboutDevice.remove() : null;
 
         prevActivePage.classList.toggle('active');
         prevActivePage.classList.toggle('invisible');

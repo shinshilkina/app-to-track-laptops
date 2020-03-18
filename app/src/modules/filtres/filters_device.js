@@ -1,27 +1,46 @@
-import {getlaptops} from "../requests";
+import {getEmployees, getlaptops, getOffice} from "../requests";
+import refreshView from "../refreshView";
+import {getDataForDevice} from '../updInsWindow/UpdInsDevice';
+import listenDropdownShow from '../dropdown/dropdown';
+
+
+const area = document.querySelector('.filter-device__items');
+getDataForDevice(area, '.filter-employee-input', getEmployees);
+getDataForDevice(area, '.filter-office-input', getOffice).then(() => listenDropdownShow(area));
+
 
 function listenFiltersDevice() {
     const filterArea = document.querySelector('main .device .filter-device__items');
     const buttonCancel = filterArea.querySelector('.cancel');
+    const buttonSelect = document.querySelector('.filter-device__select');
 
     buttonCancel.addEventListener('click', function (event) {
         const inputElements = filterArea.querySelectorAll('input');
         for (let input of inputElements) {
             if (input.type === 'checkbox') {
                 input.checked = true;
-            }
+            } else
             if (input.type === 'date') {
                 input.value = input.defaultValue;
+            } else {
+               input.dataset.value ? delete input.dataset.value : null;
             }
         }
         filterArea.classList.toggle('invisible');
+        buttonSelect.classList.toggle('rotated');
     });
 
     const buttonSave = filterArea.querySelector('.save');
 
     buttonSave.addEventListener('click', function (event) {
-        console.log(filtersService);
-        getlaptops().then((res) => console.log(res)).catch((e) => console.log(e));
+        getlaptops().then((res) => {
+            if (!filterArea.classList.contains('invisible')) {
+                const area = document.querySelector('main .device');
+                filterArea.classList.toggle('invisible');
+                buttonSelect.classList.toggle('rotated');
+                refreshView(area);
+            }
+        }).catch((e) => console.log(e));
     });
 }
 
@@ -41,6 +60,12 @@ window.filtersService = {
     off: {
         from: null,
         to: null
+    },
+    employee: {
+        id: null
+    },
+    office: {
+        id: null
     },
     setOrderVendor(bool) {
         this.order.vendor = bool;
@@ -89,6 +114,18 @@ window.filtersService = {
     },
     getOffEnd() {
         return this.off.to;
+    },
+    setEmployee(id) {
+        this.employee.id = id;
+    },
+    getEmployee() {
+        return this.employee.id;
+    },
+    setOffice(id) {
+        this.office.id = id;
+    },
+    getOffice() {
+        return this.office.id;
     }
 };
 
@@ -131,5 +168,18 @@ const offTo = document.querySelector('main .filter-device__items .filter-date-of
 offTo.addEventListener( 'input', function() {
     filtersService.setOffEnd(offTo.value);
 });
+
+const employeeId = document.querySelector('.filter-employee-input');
+employeeId.addEventListener( 'change', function() {
+        filtersService.setEmployee(employeeId.dataset.value);
+});
+
+const officeId = document.querySelector('main .filter-device__items .filter-office-input');
+officeId.addEventListener( 'change', function() {
+    if (officeId.dataset.id) {
+        filtersService.setOffice(officeId.dataset.value);
+    }
+});
+
 
 export {listenFiltersDevice};

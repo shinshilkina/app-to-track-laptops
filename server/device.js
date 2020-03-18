@@ -8,6 +8,8 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
         const addedTo = req.query.added_to;
         const offFrom = req.query.off_from;
         const offTo = req.query.off_to;
+        const employee = req.query.employee;
+        const office = req.query.office;
 
         const order = [];
         const conditions = [];
@@ -35,6 +37,12 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
         }
         if (offTo) {
             conditions.push(['write_off_date', '<=', offTo]);
+        }
+        if (employee) {
+            conditions.push(['id_employee', '=', employee]);
+        }
+        if (office) {
+            conditions.push(['id_office', '=', office]);
         }
 
         let queryPostfix = '';

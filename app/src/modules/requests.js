@@ -28,6 +28,15 @@ const sendHttpRequest = (method, url, data) => {
 const getEmployees = () => {
     return sendHttpRequest('GET', 'http://localhost:5000/employees/list');
 };
+
+const getEmployeeNames = () => {
+    return sendHttpRequest('GET', 'http://localhost:5000/employees/list/name');
+};
+
+const getEmployeePositions = () => {
+    return sendHttpRequest('GET', 'http://localhost:5000/employees/list/position');
+};
+
 const getEmployeeFromId = (id) => {
     return sendHttpRequest('POST', 'http://localhost:5000/employees/list/id', {
         id_employee: id
@@ -158,6 +167,14 @@ const getlaptops = () => {
     const writtenOffTo = filtersService.getOffEnd();
     if (writtenOffTo) {
         params['off_to'] = writtenOffTo;
+    }
+    const employeeId = filtersService.getEmployee();
+    if (employeeId) {
+        params['employee'] = employeeId;
+    }
+    const officeId = filtersService.getOffice();
+    if (officeId) {
+        params['office'] = officeId;
     }
     const query = Object.keys(params).map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(params[key])).join('&');
     return sendHttpRequest('GET', 'http://localhost:5000/device/list?' + query);
@@ -374,4 +391,5 @@ export {getEmployees, deleteEmployee, updateEmployee, sendEmployee,
     getlaptops, deletelaptops, updatelaptops,sendlaptops,
     getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId, getOfficeFromId,
     getlaptopFromId, getlaptopFromManufacturer, getlaptopFromModels, getlaptopFromSerialNumber,
-    getEmployeeFindId, getOfficeFindId, getEmployeeLaptops, getLocationLaptops};
+    getEmployeeFindId, getOfficeFindId, getEmployeeLaptops, getLocationLaptops,
+    getEmployeeNames, getEmployeePositions};

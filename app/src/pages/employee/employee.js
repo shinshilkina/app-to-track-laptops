@@ -11,6 +11,7 @@ import refreshView from "../../modules/refreshView";
 import renderDivShowMore from "../../modules/render_view/renderDivDeviceMore.pug";
 import {listenButtonsDeviceUpdDel} from "../../modules/render_view/renderDivDeviceMore";
 import {deleteParamsFromDevice, redactDivAllAboutDevice} from "../device/device";
+import {getDropdownsInFiltersEmployee} from '../../modules/filtres/filters-employee';
 
 
 const getData = () => {
@@ -27,7 +28,7 @@ const getData = () => {
                 },
                 {
                     class: 'name',
-                    title: 'Имя'
+                    title: 'ФИО'
                 },
                 {
                     class: 'position',
@@ -138,5 +139,6 @@ addButton.addEventListener('click', function (event) {
 });
 
 document.addEventListener("DOMContentLoaded", getData);
+
 
 export {getData, getDevicesDiv};

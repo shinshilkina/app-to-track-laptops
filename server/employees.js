@@ -9,6 +9,28 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             restAPIerror(res, e);
         }
     });
+
+    app.get('/employees/list/name', async (req, res) => {
+        try{
+            const [rows] = await mysqlQuery(
+                'SELECT name FROM employees;'
+            );
+            res.status(200).send(rows);
+        } catch (e) {
+            restAPIerror(res, e);
+        }
+    });
+
+    app.get('/employees/list/position', async (req, res) => {
+        try{
+            const [rows] = await mysqlQuery(
+                'SELECT position FROM employees;'
+            );
+            res.status(200).send(rows);
+        } catch (e) {
+            restAPIerror(res, e);
+        }
+    });
     app.post('/employees/list/find_id', async (req, res) => {
         const {name, position, phone_number} = req.body;
         try{

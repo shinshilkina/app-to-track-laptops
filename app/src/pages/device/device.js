@@ -11,7 +11,7 @@ import refreshView from "../../modules/refreshView";
 import {listenButtonsDeviceUpdDel, removeInsUpdDeviceArea} from '../../modules/render_view/renderDivDeviceMore';
 import renderDivUpdIns from "../../modules/updInsWindow/UpdInsDevice.pug";
 import listenInputs from "../../modules/placeholders";
-import listenUpdInsDeviceArea from "../../modules/updInsWindow/UpdInsDevice";
+import {listenUpdInsDeviceArea} from "../../modules/updInsWindow/UpdInsDevice";
 import {listenFiltersDevice} from "../../modules/filtres/filters_device";
 
 
@@ -57,7 +57,6 @@ function addDescriptionDevice(viewArea) {
         'description': 'Описание: ',
         'OS': 'Операционная система :',
         'status': 'Статус: ',
-        'depreciation': 'Амортизация: ',
         'depreciation_lenght': 'Срок амортизации :',
         'employee-data' : 'Работник: ',
         'office-data' : 'Место :'
@@ -106,6 +105,10 @@ function redactDivAllAboutDevice() {
     getOfficeValue(viewDivDevice);
     getDates(viewDivDevice);
     addDescriptionDevice(viewDivDevice);
+    const depreciation = viewDivDevice.querySelector('.depreciation');
+    if (depreciation.textContent === '0') {
+        depreciation.textContent = 'Не амортизирован';
+    } else depreciation.textContent = 'Амортизирован';
 }
 
 const parent = document.querySelector("main").querySelector('.device');
@@ -165,8 +168,8 @@ function getDates(viewArea) {
 function getEmployeeName(viewArea) {
     const employeeId = viewArea.querySelectorAll('.id_employee');
     for (let id of employeeId) {
-        if (id.value !== '') {
-            getEmployeeFromId(id.textContent).then((data) => {
+        getEmployeeFromId(id.textContent).then((data) => {
+            if (data.length !== 0) {
                 let textContent = [];
                 for (let i = 0; i < data.length; i++) {
                     for (let key in data[i]) {
@@ -183,8 +186,9 @@ function getEmployeeName(viewArea) {
                         elem.textContent = textContent;
                     }
                 }
-            }).catch(e => console.error(e));
-        }
+            }
+
+        }).catch(e => console.error(e));
     }
 }
 
@@ -192,23 +196,26 @@ function getOfficeValue(viewArea) {
     const officeId = viewArea.querySelectorAll('.id_office');
     for (let id of officeId) {
         getOfficeFromId(id.textContent).then((data) => {
-            let textContent = [];
-            for (let i = 0; i < data.length; i++) {
-                for (let key in data[i]) {
-                    textContent.push(data[i][key]);
+            if (data.length !== 0) {
+                let textContent = [];
+                for (let i = 0; i < data.length; i++) {
+                    for (let key in data[i]) {
+                        textContent.push(data[i][key]);
+                    }
+                }
+                textContent.splice(0, 1);
+                textContent.join('');
+                const officeArea = id.parentElement.querySelectorAll('.office-data');
+                const newLine = '\r';
+                for (let elem of officeArea) {
+                    if (!elem.classList.contains('title')){
+                        elem.textContent = textContent.map((elem) => {
+                            return newLine + elem;
+                        });
+                    }
                 }
             }
-            textContent.splice(0, 1);
-            textContent.join('');
-            const officeArea = id.parentElement.querySelectorAll('.office-data');
-            const newLine = '\r';
-            for (let elem of officeArea) {
-                if (!elem.classList.contains('title')){
-                    elem.textContent = textContent.map((elem) => {
-                        return newLine + elem;
-                    });
-                }
-            }
+
         }).catch(e => console.error(e));
     }
 

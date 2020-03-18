@@ -2,7 +2,7 @@ import {deletelaptops, getlaptopFromId} from "../requests";
 import refreshView from "../refreshView";
 import renderDivUpdIns from '../updInsWindow/UpdInsDevice.pug';
 import listenInputs from "../placeholders";
-import listenUpdInsDeviceArea from "../updInsWindow/UpdInsDevice";
+import {listenUpdInsDeviceArea} from "../updInsWindow/UpdInsDevice";
 
 function listenButtonsDeviceUpdDel() {
     const buttonDelete = document.querySelector('.view-div-more').querySelector('.button__delete');
@@ -20,6 +20,7 @@ function listenButtonsDeviceUpdDel() {
     const buttonUpdate = document.querySelector('.view-div-more').querySelector('.button__update');
 
     buttonUpdate.addEventListener('click', function (event) {
+
         const viewAreaAboutDevice = document.querySelector('.view-div-more');
         viewAreaAboutDevice.remove();
         const row = this.parentElement.parentElement;

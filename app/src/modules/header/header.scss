@@ -15,7 +15,11 @@
       width: 8rem;
       margin: 0 1rem;
     }
-    & .employees:hover, & .office:hover, & .device:hover {
+    & .FAQ {
+      width: 3.5rem;
+      margin: 0 1rem;
+    }
+    & .employees:hover, & .office:hover, & .device:hover , & .FAQ:hover{
       padding: 0.5rem 0.5rem;
       background-color: #FFFFFF;
       border-radius: 1.7rem 1.7rem;

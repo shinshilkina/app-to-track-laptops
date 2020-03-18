@@ -19,7 +19,7 @@
     font-size: 1.2em;
     margin-bottom: 1rem;
   }
-  & .id_employee {
+  & .id_employee, & .id_office, & .devices{
     display: none;
   }
   & input {
@@ -39,9 +39,4 @@
   }
 }
 
-.device + .insert {
-  & .id_employee, & .id_office {
-    display: table-cell !important;
-  }
-}
 
