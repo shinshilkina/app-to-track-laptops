@@ -3,6 +3,15 @@
 .device {
   font-family: Montserrat, sans-serif;
   width: 90%;
+
+  & .save-as-table {
+    width: 13rem;
+    padding: 0.2rem 0.2rem;
+    color: #179BB2;
+    border: 1px solid #179BB2;
+    border-radius: 1.5rem 1.5rem;
+  }
+
     & .view-header {
       display: flex;
     }
@@ -100,6 +109,8 @@
     margin-bottom: 0.5rem;
     & .filter-date-start , .filter-date-end{
       display: flex;
+      margin-top: 0.7rem;
+      margin-bottom: 0.7rem;
       & input {
         margin-left: 0.5rem;
       }
@@ -109,6 +120,8 @@
     margin-bottom: 0.5rem;
     & .filter-date-off-start , .filter-date-off-end{
       display: flex;
+      margin-top: 0.7rem;
+      margin-bottom: 0.7rem;
       & input {
         margin-left: 0.5rem;
       }

@@ -1,10 +1,12 @@
 import './device.scss';
 import renderDiv from '../../modules/render_view/renderDiv.pug';
 import renderDivShowMore from '../../modules/render_view/renderDivDeviceMore.pug';
-import {getEmployees, deleteEmployee, updateEmployee, sendEmployee,
-    getlaptops, deletelaptops, updatelaptops,sendlaptops,
+import {
+    getEmployees, deleteEmployee, updateEmployee, sendEmployee,
+    getlaptops, deletelaptops, updatelaptops, sendlaptops,
     getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId,
-    getOfficeFromId, getlaptopFromId} from '../../modules/requests';
+    getOfficeFromId, getlaptopFromId, getlaptopTable
+} from '../../modules/requests';
 import '../../modules/refreshView';
 import {windowUpdIns, getElements,getNewRow} from '../../modules/updInsWindow/window.js';
 import refreshView from "../../modules/refreshView";
@@ -13,6 +15,8 @@ import renderDivUpdIns from "../../modules/updInsWindow/UpdInsDevice.pug";
 import listenInputs from "../../modules/placeholders";
 import {listenUpdInsDeviceArea} from "../../modules/updInsWindow/UpdInsDevice";
 import {listenFiltersDevice} from "../../modules/filtres/filters_device";
+import {getFormattedDate} from '../../modules/updInsWindow/UpdInsDevice';
+const stringify = require('csv-stringify');
 
 
 const getDataDevice = () => {
@@ -26,6 +30,7 @@ const getDataDevice = () => {
         });
         listenButtonsShowDevice();
         listenFiltersDevice();
+        console.log(data);
     })
 };
 
@@ -48,18 +53,18 @@ function correctHtmlDevice(viewArea) {
 
 function addDescriptionDevice(viewArea) {
     const descriprions = {
-        'manufacturer': 'Производитель :',
-        'model': 'Модель :',
-        'serial_number': 'Серийный номер :',
-        'inventory_number': 'Инвернтарный номер :',
-        'date_added': 'Дата поступления: ',
-        'write_off_date': 'Дата списания :',
+        'manufacturer': 'Производитель:',
+        'model': 'Модель:',
+        'serial_number': 'Серийный номер:',
+        'inventory_number': 'Инвернтарный номер:',
+        'date_added': 'Дата поступления(ГГГГ-ММ-ДД): ',
+        'write_off_date': 'Дата списания(ГГГГ-ММ-ДД):',
         'description': 'Описание: ',
-        'OS': 'Операционная система :',
+        'OS': 'Операционная система:',
         'status': 'Статус: ',
-        'depreciation_lenght': 'Срок амортизации :',
+        'depreciation_lenght': 'Срок амортизации:',
         'employee-data' : 'Работник: ',
-        'office-data' : 'Место :'
+        'office-data' : 'Место:'
     };
     const addDescription = (element) => {
         const className = element.className;
@@ -145,24 +150,12 @@ addButton.addEventListener('click', function (event) {
 document.addEventListener("DOMContentLoaded", getDataDevice);
 
 function getDates(viewArea) {
-    const dateAddedEl = viewArea.querySelectorAll('.date_added');
-    const dateOffEl = viewArea.querySelectorAll('.write_off_date');
-    for (let date of dateAddedEl) {
-        let dateAddedStr = date.textContent.substr(0,10).split("-");
-        const dateAdd = new Date(parseInt(dateAddedStr[0], 10), parseInt(dateAddedStr[1], 10),
-            parseInt(dateAddedStr[2], 10));
-        date.textContent =  dateAdd.getDate()  +'.'
-            + dateAdd.getMonth() +'.'+ dateAdd.getFullYear();
-    }
-
-    for (let date of dateOffEl) {
-        let dateOffStr = date.textContent.substr(0,10).split("-");
-
-        const dateOff = new Date(parseInt(dateOffStr[0], 10), parseInt(dateOffStr[1], 10),
-            parseInt(dateOffStr[2], 10));
-        date.textContent =  dateOff.getDate()  +'.'
-        + dateOff.getMonth() +'.'+ dateOff.getFullYear();
-    }
+    const dataInputs = viewArea.querySelectorAll('.date_added, .write_off_date');
+    dataInputs.forEach(element => {
+        let date = new Date(element.textContent);
+        date = getFormattedDate(date);
+        element.textContent = date;
+    });
 }
 
 function getEmployeeName(viewArea) {
@@ -245,6 +238,11 @@ buttonsShowFilters.addEventListener('click',
         buttonsShowFilters.classList.toggle('rotated');
     }
 );
+
+const printButton = document.querySelector('.save-as-table');
+printButton.addEventListener('click', function (event) {
+    getlaptopTable();
+});
 
 
 export {getDataDevice, listenButtonsDeviceUpdDel, redactDivAllAboutDevice, deleteParamsFromDevice, addDescriptionDevice};

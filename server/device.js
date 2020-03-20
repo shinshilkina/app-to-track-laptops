@@ -1,3 +1,5 @@
+const stringify = require('csv-stringify');
+
 module.exports = (app, mysqlQuery, restAPIerror) => {
     app.get('/device/list', async (req, res) => {
         const vendor = req.query.vendor === 'true';
@@ -197,4 +199,77 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             restAPIerror(res,e);
         }
     });
+    app.get('/device/download', async (req, res) => {
+        try {
+            const [rows] = await mysqlQuery(
+            `select device.manufacturer, device.model, device.serial_number, device.inventory_number, device.date_added,
+            device.write_off_date, device.description, device.OS, device.status, device.depreciation, device.depreciation_lenght,
+            employees.name, employees.position, employees.phone_number, offices.office, offices.housing, offices.type 
+            from device left join employees ON device.id_employee = employees.id_employee left join offices ON device.id_office = offices.id_office;`
+        );
+
+            res.setHeader('Content-Type', 'text/csv');
+            res.setHeader('Content-Disposition', 'attachment; filename=\"' + 'download-' + Date.now() + '.csv\"');
+            res.setHeader('Cache-Control', 'no-cache');
+            res.setHeader('Pragma', 'no-cache');
+
+            res.status(200);
+
+            const rowsJSON = Object.values(JSON.parse(JSON.stringify(rows)));
+            const map = {
+                'manufacturer': 'Производитель',
+                'model': 'Модель',
+                'serial_number': 'Серийный номер',
+                'inventory_number': 'Инвентарный номер',
+                'date_added': 'Дата поступления',
+                'write_off_date': 'Дата списания',
+                'description': 'Описание',
+                'OS': 'Операционная система',
+                'status': 'Статус',
+                'depreciation': 'Амортизация',
+                'depreciation_lenght': 'Срок амортизации',
+                'name': 'ФИО сотрудника',
+                'position': 'Должность',
+                'phone_number': 'Номер телефона',
+                'office': 'Кабинет',
+                'housing': 'Корпус',
+                'type': 'Тип кабинета'
+            };
+            let resultObjects = rowsJSON.map((obj) => Object.keys(map).reduce((result, k) => {result[map[k]] = obj[k]; return result;}, {}));
+
+            const getFormattedDate  = (date) => {
+                const year = date.substring(0, 4);
+                const month = date.substring(5, 7);
+                const day = date.substring(8, 10);
+
+                return day + '/' + month + '/' + year;
+            };
+
+            const getValueDepreciation = (dep) => {
+                let result;
+                if (dep === 0) {
+                    result = 'Не амортизирован';
+                } else if (dep === 1) {
+                    result = 'Амортизирован';
+                }
+                return result;
+            };
+
+            resultObjects = resultObjects.map((obj) => {
+                obj['Дата поступления'] = getFormattedDate(obj['Дата поступления']);
+                obj['Дата списания'] = getFormattedDate(obj['Дата списания']);
+                obj['Амортизация'] = getValueDepreciation(obj['Амортизация']);
+                return obj;
+            });
+            
+            stringify(resultObjects, { header: true })
+                .pipe(res);
+
+        } catch (e) {
+            restAPIerror(res, e);
+        }
+    });
 };
+
+
+

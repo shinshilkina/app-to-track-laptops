@@ -41,9 +41,41 @@ function makeDropDown (input, options, opt_hiddenInput) {
                 }
             }
         });
-};
+}
+
+function addDescriptionDeviceInputs(viewArea) {
+    const descriprions = {
+        'manufacturer': 'Производитель:',
+        'model': 'Модель:',
+        'serial_number': 'Серийный номер:',
+        'inventory_number': 'Инвернтарный номер:',
+        'date_added': 'Дата поступления(ММ-ДД-ГГГГ): ',
+        'write_off_date': 'Дата списания(ММ-ДД-ГГГГ):',
+        'description': 'Описание: ',
+        'OS': 'Операционная система:',
+        'status': 'Статус: ',
+        'depreciation_lenght': 'Срок амортизации:',
+        'employee-data' : 'Работник: ',
+        'office-data' : 'Место:'
+    };
+    const addDescription = (element) => {
+        const className = element.className;
+        const descr = document.createElement('div');
+        descr.textContent = descriprions[className];
+        descr.classList.add(className + '-title');
+        const parentDiv = element.parentNode;
+        parentDiv.insertBefore(descr, element);
+    };
+    const elements = viewArea.querySelectorAll('input');
+    for (let element of elements) {
+        if (typeof descriprions[element.className] !== "undefined") {
+            addDescription(element);
+        }
+    }
+}
 
 function listenUpdInsDeviceArea(area, type) {
+    addDescriptionDeviceInputs(area);
     const dataInputs = area.querySelectorAll('.date_added, .write_off_date');
     dataInputs.forEach(element => {
         let date = new Date(element.value);
@@ -73,10 +105,6 @@ function listenUpdInsDeviceArea(area, type) {
 
     Promise.all([promise1, promise2])
         .then(() => {
-            const dropdownInputs = area.querySelectorAll('.dropdown__area');
-            for (let input of dropdownInputs) {
-                input.setAttribute('disabled', true);
-            }
             listenDropdownShow(area);
         });
 
@@ -257,4 +285,4 @@ function getFormattedDate(date) {
     return year + '-' + month + '-' + day;
 }
 
-export {listenUpdInsDeviceArea, getDataForDevice};
+export {listenUpdInsDeviceArea, getDataForDevice, getFormattedDate};

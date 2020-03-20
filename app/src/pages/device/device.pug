@@ -1,7 +1,8 @@
-div.view(class='device active')
+div.view(class='device invisible')
     span.view__title='Список ноутбуков'
         div.refresh(type='button')
         div.add-device(type='button')
+        div.save-as-table(type = 'button')='скачать таблицу'
     div.filter-device(type='button')='Фильтр'
         div.filter-device__select
     div.filter-device__items(class='invisible')
@@ -34,9 +35,9 @@ div.view(class='device active')
                 div.filter-date-off-title='По '
                 input.filter-date-off-end-input(type='date')
         div.filter-employee='Сотрудник'
-            input.filter-employee-input(value = 'Все')
+            input.filter-employee-input(placeholder = 'Все')
         div.filter-office='Место'
-            input.filter-office-input(value = 'Все')
+            input.filter-office-input(placeholder = 'Все')
         div.buttons
             div.save(type='button')='Сохранить'
             div.cancel(type='button')='Отменить'

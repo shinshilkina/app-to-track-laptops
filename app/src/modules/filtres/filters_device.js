@@ -26,8 +26,10 @@ function listenFiltersDevice() {
                input.dataset.value ? delete input.dataset.value : null;
             }
         }
-        filterArea.classList.toggle('invisible');
-        buttonSelect.classList.toggle('rotated');
+        if (!filterArea.classList.contains('invisible')) {
+            filterArea.classList.toggle('invisible');
+            buttonSelect.classList.toggle('rotated');
+        }
     });
 
     const buttonSave = filterArea.querySelector('.save');

@@ -10,6 +10,7 @@ for (let button of buttons){
         const employeeArea = document.querySelector('main .employee');
         const deviceArea = document.querySelector('main .device');
         const officeArea = document.querySelector('main .office');
+        const FAQArea = document.querySelector('main .FAQ');
         const windowsInsertUpdate = document.querySelectorAll('main .window');
         for (let wind of windowsInsertUpdate) {
             wind.remove();
@@ -31,6 +32,9 @@ for (let button of buttons){
             officeArea.classList.toggle('active');
             officeArea.classList.toggle('invisible');
             refreshView(officeArea);
+        }else if (newActivePageClass==='FAQ') {
+            FAQArea.classList.toggle('active');
+            FAQArea.classList.toggle('invisible');
         }
     });
 }

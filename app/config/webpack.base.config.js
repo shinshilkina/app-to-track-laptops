@@ -88,5 +88,8 @@ module.exports = new configurator.default().merge({
     devServer: {
         watchContentBase: true,
         hot: true
+    },
+    node: {
+        fs: "empty"
     }
 });

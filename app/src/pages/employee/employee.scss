@@ -31,7 +31,7 @@
       margin-left: auto;
       margin-right: auto;
       width: 100%;
-      & .element{
+      & .element {
         list-style: none;
         font-family: Montserrat, sans-serif;
         word-wrap: break-word;
@@ -39,6 +39,7 @@
         white-space: pre;
 
         background-color: rgba(255,255,255, 0.5);
+
         & .devices {
           & .div-device {
             margin: 0.2rem 0rem;
@@ -46,24 +47,24 @@
             border-radius: 1rem 1rem;
           }
         }
-        & .name , & .position , & .phone_number {
-
-        }
-        & .id_employee{
+        & .id_employee {
           display: none;
         }
-        & .buttons{
+        & .buttons {
           display: flex;
           flex-wrap: wrap;
-          & .button__delete{
+          & .button__delete {
             @include buttonsAddDel(url("../../modules/icons/icons8-delete.svg"));
             margin-right: 1rem;
           }
-          & .button__update{
-            @include buttonsAddDel(url("../../modules/icons/add-button.svg"));
+          & .button__update {
+            @include buttonsAddDel(url("../../modules/icons/icons8-pen-64.png"));
           }
         }
 
+      }
+      & .header {
+        display: table-row !important;
       }
     }
   }

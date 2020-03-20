@@ -180,6 +180,10 @@ const getlaptops = () => {
     return sendHttpRequest('GET', 'http://localhost:5000/device/list?' + query);
 };
 
+const getlaptopTable = () => {
+    location.href = 'http://localhost:5000/device/download';
+};
+
 const getlaptopFromId = (id_device) => {
     return sendHttpRequest('POST', 'http://localhost:5000/device/list/id', {
         id_device: id_device
@@ -213,14 +217,6 @@ const getLocationLaptops = (id_office) => {
         .catch(err => {
             console.log(err);
         });
-};
-
-const getlaptopFromManufacturer = () => {
-    return sendHttpRequest('GET', 'http://localhost:5000/device/list/manufacturer');
-};
-
-const getlaptopFromModels= () => {
-    return sendHttpRequest('GET', 'http://localhost:5000/device/list/model');
 };
 
 const getlaptopFromSerialNumber = () => {
@@ -300,11 +296,6 @@ const updatelaptops = ([id_employee, id_office, manufacturer, model, serial_numb
             console.log(err);
         });
 };
-
-function convertToDataTime(date) {
-    const newDate = new Date(date);
-    return newDate.toISOString().slice(0, 19).replace('T', ' ');
-}
 
 //OFFICES
 
@@ -390,6 +381,6 @@ const updateOffice = ([id_office, office, housing, type]) => {
 export {getEmployees, deleteEmployee, updateEmployee, sendEmployee,
     getlaptops, deletelaptops, updatelaptops,sendlaptops,
     getOffice, deleteOffice, updateOffice, sendOffice, getEmployeeFromId, getOfficeFromId,
-    getlaptopFromId, getlaptopFromManufacturer, getlaptopFromModels, getlaptopFromSerialNumber,
+    getlaptopFromId, getlaptopFromSerialNumber,
     getEmployeeFindId, getOfficeFindId, getEmployeeLaptops, getLocationLaptops,
-    getEmployeeNames, getEmployeePositions};
+    getEmployeeNames, getEmployeePositions, getlaptopTable};

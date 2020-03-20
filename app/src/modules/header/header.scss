@@ -1,9 +1,14 @@
 @import "../../theme/default-theme";
 
 .header {
+  display: flex;
+  & .logoFIT {
+    left: 0;
+    width: 20%;
+  }
   & .elements {
     height: 3rem;
-
+    width: 60%;
     list-style: none;
     display: flex;
     justify-content: center;
@@ -16,7 +21,7 @@
       margin: 0 1rem;
     }
     & .FAQ {
-      width: 3.5rem;
+      width: 12rem;
       margin: 0 1rem;
     }
     & .employees:hover, & .office:hover, & .device:hover , & .FAQ:hover{
