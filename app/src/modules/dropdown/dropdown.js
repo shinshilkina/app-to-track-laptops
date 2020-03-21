@@ -28,18 +28,29 @@ function listenDropdownShow (area) {
     }
 }
 
-
+function checkExistAllVariants(areaItems) {
+    const allDivElements = areaItems.querySelectorAll('div');
+    for (let element of allDivElements) {
+        if (element.textContent === 'Все'){
+            return true;
+        }
+    }
+    return false;
+}
 
 function addAllVariantsItem() {
     const items = document.querySelectorAll('.dropdown__items');
     for (let item of items) {
-        const liElement = document.createElement('li');
-        const divElement = document.createElement('div');
-        divElement.textContent = 'Все';
-        divElement.className = 'item';
-        divElement.dataset.id = null;
-        liElement.appendChild(divElement);
-        item.prepend(liElement);
+        const existVariant = checkExistAllVariants(item);
+        if (existVariant === false) {
+            const liElement = document.createElement('li');
+            const divElement = document.createElement('div');
+            divElement.textContent = 'Все';
+            divElement.className = 'item';
+            divElement.dataset.id = null;
+            liElement.appendChild(divElement);
+            item.prepend(liElement);
+        }
     }
 }
 
