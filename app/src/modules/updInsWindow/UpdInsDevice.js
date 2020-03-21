@@ -54,6 +54,7 @@ function addDescriptionDeviceInputs(viewArea) {
         'description': 'Описание: ',
         'OS': 'Операционная система:',
         'status': 'Статус: ',
+        'status_date': 'Дата установки статуса: ',
         'depreciation_lenght': 'Срок амортизации:',
         'employee-data' : 'Работник: ',
         'office-data' : 'Место:'
@@ -75,8 +76,12 @@ function addDescriptionDeviceInputs(viewArea) {
 }
 
 function listenUpdInsDeviceArea(area, type) {
+    area.querySelector('.employee-data').readonly = true;
+    area.querySelector('.office-data').readonly = true;
+    area.querySelector('.status').readonly = true;
+
     addDescriptionDeviceInputs(area);
-    const dataInputs = area.querySelectorAll('.date_added, .write_off_date');
+    const dataInputs = area.querySelectorAll('.date_added, .write_off_date, .status_date');
     dataInputs.forEach(element => {
         let date = new Date(element.value);
         date = getFormattedDate(date);
@@ -102,6 +107,7 @@ function listenUpdInsDeviceArea(area, type) {
 
     const promise1 = getDataForDevice(area, '.employee-data', getEmployees, '.id_employee');
     const promise2 = getDataForDevice(area, '.office-data', getOffice, '.id_office');
+
 
     Promise.all([promise1, promise2])
         .then(() => {
@@ -132,6 +138,9 @@ function saveChanges(area, type) {
             const inputId = area.querySelector(classInput);
             const dropdown= area.querySelector(classDropdown);
             if (inputId.value === ''|| inputId.value === null || inputId.value != dropdown.dataset.value) {
+                if (typeof dropdown.dataset.value == "undefined") {
+                    dropdown.dataset.value=null;
+                }
                 inputId.value = dropdown.dataset.value;
             }
         };
@@ -140,7 +149,7 @@ function saveChanges(area, type) {
 
         const fieldsToSend = [
             'id_employee', 'id_office', 'manufacturer', 'model', 'serial_number', 'inventory_number', 'date_added',
-            'write_off_date', 'description', 'OS', 'status', 'depreciation', 'depreciation_lenght'
+            'write_off_date', 'description', 'OS', 'status', 'status_date', 'depreciation', 'depreciation_lenght'
         ];
         const saveDevice = (saveCallback, additionalFields) => {
             const dataOrder = fieldsToSend.concat(additionalFields);
@@ -285,4 +294,4 @@ function getFormattedDate(date) {
     return year + '-' + month + '-' + day;
 }
 
-export {listenUpdInsDeviceArea, getDataForDevice, getFormattedDate};
+export {listenUpdInsDeviceArea, getDataForDevice, getFormattedDate, makeDropDown};

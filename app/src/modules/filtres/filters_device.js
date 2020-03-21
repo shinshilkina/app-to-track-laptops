@@ -1,13 +1,26 @@
 import {getEmployees, getlaptops, getOffice} from "../requests";
 import refreshView from "../refreshView";
-import {getDataForDevice} from '../updInsWindow/UpdInsDevice';
+import {getDataForDevice, makeDropDown} from '../updInsWindow/UpdInsDevice';
 import listenDropdownShow from '../dropdown/dropdown';
+
 
 
 const area = document.querySelector('.filter-device__items');
 getDataForDevice(area, '.filter-employee-input', getEmployees);
 getDataForDevice(area, '.filter-office-input', getOffice).then(() => listenDropdownShow(area));
-
+const stats = [
+    'на складе',
+    'в эксплуатации',
+    'в ремонте',
+    'списан'
+];
+makeDropDown(
+    area.querySelector('.filter-status-input'),
+    () => Promise.resolve(stats.map((title, index) => ({
+        title: title,
+        id: title
+    })))
+);
 
 function listenFiltersDevice() {
     const filterArea = document.querySelector('main .device .filter-device__items');
@@ -63,6 +76,9 @@ window.filtersService = {
         from: null,
         to: null
     },
+    status: {
+        status: null
+    },
     employee: {
         id: null
     },
@@ -117,6 +133,12 @@ window.filtersService = {
     getOffEnd() {
         return this.off.to;
     },
+    setStatus(status) {
+        this.status.status = status;
+    },
+    getStatus() {
+        return this.status.status;
+    },
     setEmployee(id) {
         this.employee.id = id;
     },
@@ -169,6 +191,11 @@ offFrom.addEventListener( 'input', function() {
 const offTo = document.querySelector('main .filter-device__items .filter-date-off-end-input');
 offTo.addEventListener( 'input', function() {
     filtersService.setOffEnd(offTo.value);
+});
+
+const statusValue = document.querySelector('.filter-status-input');
+statusValue.addEventListener( 'change', function() {
+    filtersService.setStatus(statusValue.dataset.value);
 });
 
 const employeeId = document.querySelector('.filter-employee-input');

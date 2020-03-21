@@ -10,6 +10,7 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
         const addedTo = req.query.added_to;
         const offFrom = req.query.off_from;
         const offTo = req.query.off_to;
+        const status = req.query.status;
         const employee = req.query.employee;
         const office = req.query.office;
 
@@ -39,6 +40,9 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
         }
         if (offTo) {
             conditions.push(['write_off_date', '<=', offTo]);
+        }
+        if (status) {
+            conditions.push(['status', '=', status]);
         }
         if (employee) {
             conditions.push(['id_employee', '=', employee]);
@@ -120,15 +124,17 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
     });
 
     app.post('/device/add', async (req, res) => {
-        const {id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-            write_off_date, description, OS,status, depreciation, depreciation_lenght} = req.body;
+        let {id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
+            write_off_date, description, OS,status, status_date, depreciation, depreciation_lenght} = req.body;
+        id_employee === 'null' ? id_employee = null: null;
+        id_office === 'null' ? id_office = null: null;
         try {
             await mysqlQuery(
                 `INSERT INTO device(id_employee, id_office, manufacturer, model, serial_number, inventory_number, 
-                date_added, write_off_date, description, OS, status, depreciation, depreciation_lenght) 
-                VALUES (?, ?, ?, ?, ?, ?, STR_TO_DATE(?,'%Y-%m-%d'), STR_TO_DATE(?,'%Y-%m-%d'), ?, ?, ?, ?, ?);`,
+                date_added, write_off_date, description, OS, status, status_date, depreciation, depreciation_lenght) 
+                VALUES (?, ?, ?, ?, ?, ?, STR_TO_DATE(?,'%Y-%m-%d'), STR_TO_DATE(?,'%Y-%m-%d'), ?, ?, ?, ?, ?, ?);`,
                 [id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-                    write_off_date, description, OS, status, depreciation, depreciation_lenght]
+                    write_off_date, description, OS, status, status_date, depreciation, depreciation_lenght]
             );
             res.status(200).send({
                 success: true
@@ -178,19 +184,22 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
         }
     });
     app.post('/device/update', async (req, res) => {
-        const {id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-            write_off_date, description, OS,status, depreciation, depreciation_lenght, id_device} = req.body;
+        let {id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
+            write_off_date, description, OS,status, status_date, depreciation, depreciation_lenght, id_device} = req.body;
+        id_employee === 'null' ? id_employee = null: null;
+        id_office === 'null' ? id_office = null: null;
         try {
             await mysqlQuery(
                 `UPDATE device SET id_employee = ?, 
                     id_office = ?, manufacturer = ?, model = ?,
                     serial_number = ?, inventory_number = ?,
                     date_added = ?, write_off_date = ?, 
-                    description = ?, OS = ? ,status =? , depreciation = ?, 
+                    description = ?, OS = ? ,status =? , 
+                    status_date = ?, depreciation = ?, 
                     depreciation_lenght = ?
                     WHERE id_device = ?;`,
                 [id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-                    write_off_date, description, OS,status, depreciation, depreciation_lenght, id_device]
+                    write_off_date, description, OS,status, status_date, depreciation, depreciation_lenght, id_device]
             );
             res.status(200).send({
                 success: true
@@ -203,7 +212,7 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
         try {
             const [rows] = await mysqlQuery(
             `select device.manufacturer, device.model, device.serial_number, device.inventory_number, device.date_added,
-            device.write_off_date, device.description, device.OS, device.status, device.depreciation, device.depreciation_lenght,
+            device.write_off_date, device.description, device.OS, device.status, device.status_date, device.depreciation, device.depreciation_lenght,
             employees.name, employees.position, employees.phone_number, offices.office, offices.housing, offices.type 
             from device left join employees ON device.id_employee = employees.id_employee left join offices ON device.id_office = offices.id_office;`
         );
@@ -226,6 +235,7 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
                 'description': 'Описание',
                 'OS': 'Операционная система',
                 'status': 'Статус',
+                'status_date': 'Дата статуса',
                 'depreciation': 'Амортизация',
                 'depreciation_lenght': 'Срок амортизации',
                 'name': 'ФИО сотрудника',
@@ -238,11 +248,15 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             let resultObjects = rowsJSON.map((obj) => Object.keys(map).reduce((result, k) => {result[map[k]] = obj[k]; return result;}, {}));
 
             const getFormattedDate  = (date) => {
-                const year = date.substring(0, 4);
-                const month = date.substring(5, 7);
-                const day = date.substring(8, 10);
+                if (date) {
+                    const year = date.substring(0, 4);
+                    const month = date.substring(5, 7);
+                    const day = date.substring(8, 10);
 
-                return day + '/' + month + '/' + year;
+                    return day + '/' + month + '/' + year;
+                } else {
+                    return date;
+                }
             };
 
             const getValueDepreciation = (dep) => {
@@ -258,6 +272,7 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             resultObjects = resultObjects.map((obj) => {
                 obj['Дата поступления'] = getFormattedDate(obj['Дата поступления']);
                 obj['Дата списания'] = getFormattedDate(obj['Дата списания']);
+                obj['Дата статуса'] = getFormattedDate(obj['Дата статуса']);
                 obj['Амортизация'] = getValueDepreciation(obj['Амортизация']);
                 return obj;
             });

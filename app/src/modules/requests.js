@@ -22,23 +22,25 @@ const sendHttpRequest = (method, url, data) => {
     });
 };
 
+const localhost = 'http://localhost:5000/';
+
 /**
  * @returns {Promise<Object>}
  */
 const getEmployees = () => {
-    return sendHttpRequest('GET', 'http://localhost:5000/employees/list');
+    return sendHttpRequest('GET', localhost + 'employees/list');
 };
 
 const getEmployeeNames = () => {
-    return sendHttpRequest('GET', 'http://localhost:5000/employees/list/name');
+    return sendHttpRequest('GET', localhost + 'employees/list/name');
 };
 
 const getEmployeePositions = () => {
-    return sendHttpRequest('GET', 'http://localhost:5000/employees/list/position');
+    return sendHttpRequest('GET', localhost + 'employees/list/position');
 };
 
 const getEmployeeFromId = (id) => {
-    return sendHttpRequest('POST', 'http://localhost:5000/employees/list/id', {
+    return sendHttpRequest('POST', localhost + 'employees/list/id', {
         id_employee: id
     })
         .then(responseData => {
@@ -52,7 +54,7 @@ const getEmployeeFromId = (id) => {
 const getEmployeeFindId = ([name, position, phone]) => {
     phone = parseInt(phone, 10);
     if (!isNaN(phone) ) {
-        return sendHttpRequest('POST', 'http://localhost:5000/employees/list/find_id', {
+        return sendHttpRequest('POST', localhost + 'employees/list/find_id', {
             name: name,
             position: position,
             phone_number: phone
@@ -71,7 +73,7 @@ const getEmployeeFindId = ([name, position, phone]) => {
  * @returns {Promise<Object>}
  */
 const deleteEmployee = (id) => {
-    return sendHttpRequest('POST', 'http://localhost:5000/employees/delete', {
+    return sendHttpRequest('POST', localhost + 'employees/delete', {
         id_employee: id
     })
         .then(responseData => {
@@ -90,7 +92,7 @@ const deleteEmployee = (id) => {
 const sendEmployee = ([name, position, phone]) => {
     phone = parseInt(phone, 10);
     if (!isNaN(phone) ) {
-        return sendHttpRequest('POST', 'http://localhost:5000/employees/add', {
+        return sendHttpRequest('POST', localhost + 'employees/add', {
             name: name,
             position: position,
             phone_number: phone
@@ -115,7 +117,7 @@ const sendEmployee = ([name, position, phone]) => {
 const updateEmployee = ([id, name, position, phone]) => {
     phone = parseInt(phone, 10);
     if (!isNaN(phone) ) {
-        return sendHttpRequest('POST', 'http://localhost:5000/employees/update', {
+        return sendHttpRequest('POST', localhost + 'employees/update', {
             id_employee: id,
             name: name,
             position: position,
@@ -168,6 +170,10 @@ const getlaptops = () => {
     if (writtenOffTo) {
         params['off_to'] = writtenOffTo;
     }
+    const status = filtersService.getStatus();
+    if (status) {
+        params['status'] = status;
+    }
     const employeeId = filtersService.getEmployee();
     if (employeeId) {
         params['employee'] = employeeId;
@@ -177,15 +183,15 @@ const getlaptops = () => {
         params['office'] = officeId;
     }
     const query = Object.keys(params).map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(params[key])).join('&');
-    return sendHttpRequest('GET', 'http://localhost:5000/device/list?' + query);
+    return sendHttpRequest('GET', localhost + 'device/list?' + query);
 };
 
 const getlaptopTable = () => {
-    location.href = 'http://localhost:5000/device/download';
+    location.href = localhost + 'device/download';
 };
 
 const getlaptopFromId = (id_device) => {
-    return sendHttpRequest('POST', 'http://localhost:5000/device/list/id', {
+    return sendHttpRequest('POST', localhost + 'device/list/id', {
         id_device: id_device
     })
         .then(responseData => {
@@ -197,7 +203,7 @@ const getlaptopFromId = (id_device) => {
 };
 
 const getEmployeeLaptops = (id_employee) => {
-    return sendHttpRequest('POST', 'http://localhost:5000/device/list/employee', {
+    return sendHttpRequest('POST', localhost + 'device/list/employee', {
         id_employee: id_employee
     })
         .then(responseData => {
@@ -208,7 +214,7 @@ const getEmployeeLaptops = (id_employee) => {
         });
 };
 const getLocationLaptops = (id_office) => {
-    return sendHttpRequest('POST', 'http://localhost:5000/device/list/office', {
+    return sendHttpRequest('POST', localhost + 'device/list/office', {
         id_office: id_office
     })
         .then(responseData => {
@@ -220,12 +226,12 @@ const getLocationLaptops = (id_office) => {
 };
 
 const getlaptopFromSerialNumber = () => {
-    return sendHttpRequest('GET', 'http://localhost:5000/device/list/inventory_number')
+    return sendHttpRequest('GET', localhost + 'device/list/inventory_number')
         .then((res) => res.map((data) => data['inventory_number']));
 };
 
 const deletelaptops = (id) => {
-    return sendHttpRequest('POST', 'http://localhost:5000/device/delete', {
+    return sendHttpRequest('POST', localhost + 'device/delete', {
         id_device: id
     })
         .then(responseData => {
@@ -237,14 +243,14 @@ const deletelaptops = (id) => {
 };
 
 const sendlaptops = ([id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-                         write_off_date, description, OS, status, depreciation, depreciation_lenght]) => {
+                         write_off_date, description, OS, status, status_date, depreciation, depreciation_lenght]) => {
     id_employee = parseInt(id_employee, 10);
     id_office = parseInt(id_office, 10);
     if (depreciation === '1') {
         depreciation = true;
     } else depreciation=false;
 
-    return sendHttpRequest('POST', 'http://localhost:5000/device/add', {
+    return sendHttpRequest('POST', localhost + 'device/add', {
         id_employee : id_employee,
         id_office : id_office,
         manufacturer : manufacturer,
@@ -256,6 +262,7 @@ const sendlaptops = ([id_employee, id_office, manufacturer, model, serial_number
         description : description,
         OS : OS,
         status: status,
+        status_date: status_date,
         depreciation : depreciation,
         depreciation_lenght : depreciation_lenght
     })
@@ -268,12 +275,12 @@ const sendlaptops = ([id_employee, id_office, manufacturer, model, serial_number
 };
 
 const updatelaptops = ([id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-                           write_off_date, description, OS, status, depreciation, depreciation_lenght, id_device]) => {
+                           write_off_date, description, OS, status, status_date, depreciation, depreciation_lenght, id_device]) => {
 
    // date_added = convertToDataTime(date_added);
     //write_off_date = convertToDataTime(write_off_date);
 
-    return sendHttpRequest('POST', 'http://localhost:5000/device/update', {
+    return sendHttpRequest('POST', localhost + 'device/update', {
         id_employee : id_employee,
         id_office : id_office,
         manufacturer : manufacturer,
@@ -285,6 +292,7 @@ const updatelaptops = ([id_employee, id_office, manufacturer, model, serial_numb
         description : description,
         OS : OS,
         status: status,
+        status_date: status_date,
         depreciation : depreciation,
         depreciation_lenght : depreciation_lenght,
         id_device : id_device
@@ -300,11 +308,11 @@ const updatelaptops = ([id_employee, id_office, manufacturer, model, serial_numb
 //OFFICES
 
 const getOffice = () => {
-    return sendHttpRequest('GET', 'http://localhost:5000/offices/list');
+    return sendHttpRequest('GET', localhost + 'offices/list');
 };
 
 const getOfficeFromId = (id_office) => {
-    return sendHttpRequest('POST', 'http://localhost:5000/offices/list/id', {
+    return sendHttpRequest('POST', localhost + 'offices/list/id', {
         id_office: id_office
     })
         .then(responseData => {
@@ -316,7 +324,7 @@ const getOfficeFromId = (id_office) => {
 };
 
 const getOfficeFindId = ([office, housing, type]) => {
-    return sendHttpRequest('POST', 'http://localhost:5000/offices/list/find_id', {
+    return sendHttpRequest('POST', localhost + 'offices/list/find_id', {
         office : office,
         housing : housing,
         type : type
@@ -330,7 +338,7 @@ const getOfficeFindId = ([office, housing, type]) => {
 };
 
 const deleteOffice = (id_office) => {
-    return sendHttpRequest('POST', 'http://localhost:5000/offices/delete', {
+    return sendHttpRequest('POST', localhost + 'offices/delete', {
         id: id_office
     })
         .then(responseData => {
@@ -343,7 +351,7 @@ const deleteOffice = (id_office) => {
 
 const sendOffice = ([office, housing, type]) => {
 
-    return sendHttpRequest('POST', 'http://localhost:5000/offices/add', {
+    return sendHttpRequest('POST', localhost + 'offices/add', {
         office : office,
         housing : housing,
         type : type
@@ -364,7 +372,7 @@ const sendOffice = ([office, housing, type]) => {
  * @returns {Promise<Object>}
  */
 const updateOffice = ([id_office, office, housing, type]) => {
-    return sendHttpRequest('POST', 'http://localhost:5000/offices/update', {
+    return sendHttpRequest('POST', localhost + 'offices/update', {
         office : office,
         housing : housing,
         type : type,

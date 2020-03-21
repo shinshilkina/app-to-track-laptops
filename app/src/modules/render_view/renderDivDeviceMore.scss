@@ -6,7 +6,7 @@
   left: 30%;
 
   padding: 1.5rem 1.5rem;
-  width: 40%;
+  width: 30%;
   font-family: Montserrat, sans-serif;
 
   background-color: #FFFFFF;
@@ -14,6 +14,9 @@
   border: 1px solid $purple;
   & .title {
     color: $dark_shade_50;
+  }
+  & .title, & .depreciation {
+    margin-top: 0.3rem;
   }
   & .id_employee, & .id_office, & .id_device {
     display: none;
@@ -26,11 +29,17 @@
       @include buttonSaveCancel($purple);
       border: 1px solid $purple;
       width: 8rem;
+      margin-right: auto;
     }
     & .button__update {
       @include buttonSaveCancel(#000000);
       background-image: $gradient;
       width: 8rem;
+      margin-left: auto;
+      margin-right: 1rem;
+    }
+    .invisible {
+      display: none;
     }
   }
 }

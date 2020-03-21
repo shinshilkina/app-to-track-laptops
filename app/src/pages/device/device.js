@@ -30,7 +30,6 @@ const getDataDevice = () => {
         });
         listenButtonsShowDevice();
         listenFiltersDevice();
-        console.log(data);
     })
 };
 
@@ -62,6 +61,7 @@ function addDescriptionDevice(viewArea) {
         'description': 'Описание: ',
         'OS': 'Операционная система:',
         'status': 'Статус: ',
+        'status_date': 'Дата установки статуса: ',
         'depreciation_lenght': 'Срок амортизации:',
         'employee-data' : 'Работник: ',
         'office-data' : 'Место:'
@@ -132,6 +132,7 @@ addButton.addEventListener('click', function (event) {
             date_added: "",
             write_off_date: "",
             status: "",
+            status_date: "",
             depreciation: "0",
             depreciation_lenght: "",
             description: "",
@@ -150,11 +151,16 @@ addButton.addEventListener('click', function (event) {
 document.addEventListener("DOMContentLoaded", getDataDevice);
 
 function getDates(viewArea) {
-    const dataInputs = viewArea.querySelectorAll('.date_added, .write_off_date');
+    const dataInputs = viewArea.querySelectorAll('.date_added, .write_off_date, .status_date');
     dataInputs.forEach(element => {
-        let date = new Date(element.textContent);
-        date = getFormattedDate(date);
-        element.textContent = date;
+        if (element.textContent !== "") {
+            let date = new Date(element.textContent);
+            date = getFormattedDate(date);
+            element.textContent = date;
+        }
+        else {
+            element.textContent = 'Не указано';
+        }
     });
 }
 

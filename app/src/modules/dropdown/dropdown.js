@@ -1,8 +1,8 @@
 import './dropdown.scss'
 
-function listenDropdownShow (parent) {
+function listenDropdownShow (area) {
     addAllVariantsItem();
-    const buttonsShowDropdown = parent.querySelectorAll('.dropdown__select');
+    const buttonsShowDropdown = area.querySelectorAll('.dropdown__select');
     for (let button of buttonsShowDropdown){
         button.addEventListener('click',
             function (event) {
@@ -13,7 +13,22 @@ function listenDropdownShow (parent) {
             }
         );
     }
+    const dropdownInputs = area.querySelectorAll('.dropdown__area');
+    for (let input of dropdownInputs) {
+        if (input.type === 'text') {
+            input.addEventListener('click', function (event) {
+                const dropdown = input.nextSibling;
+                const dropdownSelect = dropdown.querySelector('.dropdown__select');
+                const dropdownItems = dropdown.querySelector('.dropdown__items');
+                dropdownItems.classList.toggle('invisible');
+                dropdownSelect.classList.toggle('rotated');
+                listenChoice(dropdownSelect);
+            });
+        }
+    }
 }
+
+
 
 function addAllVariantsItem() {
     const items = document.querySelectorAll('.dropdown__items');
