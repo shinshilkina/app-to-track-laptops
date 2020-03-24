@@ -2,8 +2,6 @@
 
 .update , .insert{
   width: 25rem;
-  display: flex;
-  flex-wrap: wrap;
 
   position: absolute;
   top: 20%;
@@ -13,17 +11,21 @@
 
   background: white;
   border-radius: 5px;
-
-  & .title{
+  font-family: Montserrat, sans-serif;
+  font-size: 1em;
+  & .title {
     font-family: Montserrat, sans-serif;
     font-size: 1.2em;
-    margin-bottom: 1rem;
+    font-weight: bold;
   }
   & .id_employee, & .id_office, & .devices{
     display: none;
   }
   & input {
     @include input;
+
+    display: flex;
+    flex-wrap: wrap;
   }
   & .buttons {
     display: flex;
@@ -37,6 +39,7 @@
       background-image: $gradient;
     }
   }
+
 }
 
 

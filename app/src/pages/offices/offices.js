@@ -98,6 +98,10 @@ function listenButtonsOffice() {
     const buttonsDevice = document.querySelectorAll('main .office .element .div-device');
     for (let button of buttonsDevice) {
         button.addEventListener('click', function (event) {
+            const viewAreaDevice = document.querySelector('.view-div-more');
+            if (viewAreaDevice) {
+                viewAreaDevice.remove();
+            }
             const id = this.dataset.value;
             const elements = getlaptopFromId(id);
             elements.then((res) => {

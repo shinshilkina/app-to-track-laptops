@@ -6,7 +6,7 @@ class deviceModel {
      */
     constructor(data) {
         /**
-         * @type {number}
+         * @type {nАмортизиumber}
          * @private
          */
         this._id = -1;

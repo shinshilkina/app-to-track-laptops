@@ -1,3 +1,8 @@
-body{
+body {
   background-color: #E5E5E5;
+}
+
+input[type=button], div[type=button], .div-device,
+.button__delete, .button__update, .dropdown__select {
+  cursor:pointer;
 }

@@ -12,6 +12,9 @@
   background-color: #FFFFFF;
   border-radius: 1.7rem 1.7rem;
   border: 1px solid $purple;
+
+  white-space: pre-wrap;
+  word-break: break-all;
   & .title {
     color: $dark_shade_50;
   }
@@ -21,7 +24,7 @@
   & .id_employee, & .id_office, & .id_device {
     display: none;
   }
-  & .buttons{
+  & .buttons {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;

@@ -4,8 +4,8 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
     app.get('/device/list', async (req, res) => {
         const vendor = req.query.vendor === 'true';
         const inventaryNumber = req.query.inventary_number === 'true';
-        const amoOn = req.query.amo_on === 'true';
-        const amoOff = req.query.amo_off === 'true';
+        let amoOn = req.query.amo_on === 'true';
+        let amoOff = req.query.amo_off === 'true';
         const addedFrom = req.query.added_from;
         const addedTo = req.query.added_to;
         const offFrom = req.query.off_from;
@@ -13,6 +13,11 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
         const status = req.query.status;
         const employee = req.query.employee;
         const office = req.query.office;
+
+        if (amoOn === true && amoOff === true) {
+            amoOn = false;
+            amoOff = false;
+        }
 
         const order = [];
         const conditions = [];
@@ -220,7 +225,12 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
     });
     app.post('/device/update', async (req, res) => {
         let {id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-            write_off_date, status_date, date_amo, description, OS,status, depreciation, depreciation_lenght, id_device} = req.body;
+            write_off_date, date_amo, description, OS, status, status_date, depreciation, depreciation_lenght, id_device} = req.body;
+
+        /*
+        'id_employee', 'id_office', 'manufacturer', 'model', 'serial_number', 'inventory_number', 'date_added',
+            'write_off_date', 'date_amo', 'description', 'OS', 'status', 'status_date', 'depreciation', 'depreciation_lenght'
+         */
 
         id_employee === 'null' ? id_employee = null: null;
         id_office === 'null' ? id_office = null: null;
@@ -252,8 +262,10 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             postfixDates += `date_amo = STR_TO_DATE(?,\'%Y-%m-%d\'),`;
         }
 
-        console.log(postfixDates);
-        console.log(date_added, write_off_date, status_date);
+        console.log(`id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
+            write_off_date, status_date, date_amo, description, OS, status, depreciation, depreciation_lenght, id_device`);
+        console.log(id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
+            write_off_date, status_date, date_amo, description, OS, status, depreciation, depreciation_lenght, id_device);
         try {
             await mysqlQuery(
                 `UPDATE device SET id_employee = ?, 
@@ -301,7 +313,7 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
                 'status_date': 'Дата статуса',
                 'depreciation': 'Амортизация',
                 'depreciation_lenght': 'Срок амортизации',
-                'date_amo': 'Дата амортизации',
+                'date_amo': 'Срок амортизации',
                 'name': 'ФИО сотрудника',
                 'position': 'Должность',
                 'phone_number': 'Номер телефона',
@@ -325,9 +337,9 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
 
             const getValueDepreciation = (dep) => {
                 let result;
-                if (dep === 0) {
+                if (dep === 1) {
                     result = 'Не амортизирован';
-                } else if (dep === 1) {
+                } else if (dep === 0) {
                     result = 'Амортизирован';
                 }
                 return result;
@@ -338,7 +350,7 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
                 obj['Дата списания'] = getFormattedDate(obj['Дата списания']);
                 obj['Дата статуса'] = getFormattedDate(obj['Дата статуса']);
                 obj['Амортизация'] = getValueDepreciation(obj['Амортизация']);
-                obj['Дата амортизации'] = getFormattedDate(obj['Дата амортизации']);
+                obj['Срок амортизации'] = getFormattedDate(obj['Срок амортизации']);
                 return obj;
             });
             

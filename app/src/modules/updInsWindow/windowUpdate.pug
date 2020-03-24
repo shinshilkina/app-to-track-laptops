@@ -1,7 +1,7 @@
 div.window
     span.title
     each element in locals
-        input(class = element.className)
+        input(class = element.className, placeholder=element.value, value=element.value)
     div.buttons
         div.cancel(type="button")="Отменить"
         div.save(type="button")="Сохранить"

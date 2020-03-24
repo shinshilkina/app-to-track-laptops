@@ -169,12 +169,12 @@ orderInventaryNumber.addEventListener( 'change', function() {
     filtersService.setOrderVendor(null);
 });
 
-const amoNotAmo = document.querySelector('main .filter-device__items .filter-depreciation-off-checkbox');
+const amoNotAmo = document.querySelector('main .filter-device__items .filter-depreciation-on-checkbox');
 amoNotAmo.addEventListener( 'change', function() {
     filtersService.setAmoNotAmo(this.checked);
 });
 
-const amoAmo = document.querySelector('main .filter-device__items .filter-depreciation-on-checkbox');
+const amoAmo = document.querySelector('main .filter-device__items .filter-depreciation-off-checkbox');
 amoAmo.addEventListener( 'change', function() {
     filtersService.setAmoAmo(this.checked);
 });

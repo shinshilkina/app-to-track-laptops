@@ -68,7 +68,7 @@ function addDescriptionDevice(viewArea) {
         'status': 'Статус: ',
         'status_date': 'Дата установки статуса: ',
         'depreciation_lenght': 'Срок амортизации (кол-во месяцев):',
-        'date_amo': 'Дата амортизации: ',
+        'date_amo': 'Срок амортизации: ',
         'employee-data' : 'Работник: ',
         'office-data' : 'Место:'
     };
@@ -132,7 +132,7 @@ function redactDivAllAboutDevice(button) {
         }
     }
     const depreciation = viewDivDevice.querySelector('.depreciation');
-    if (depreciation.textContent === '0') {
+    if (depreciation.textContent === '1') {
         depreciation.textContent = 'Не амортизирован';
     } else depreciation.textContent = 'Амортизирован';
 }

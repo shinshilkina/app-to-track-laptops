@@ -8,18 +8,22 @@ div.view(class='device invisible')
     div.filter-device__items(class='')
         div.filter-sort='Сортировка'
             div.filter-abc
-                input.filter-abc-radio(type='radio' name = 'filter' checked)
-                div.filter-abc-title='По производителю'
+                label.filter-abc-title
+                    input.filter-abc-radio(type='radio' name = 'filter' checked)
+                    ='По производителю'
             div.filter-inventary_number
-                input.filter-inventary_number-radio(type='radio' name = 'filter' checked)
-                div.filter-inventary_number-title='По инвентарному номеру'
+                label.filter-inventary_number-title
+                    input.filter-inventary_number-radio(type='radio' name = 'filter' checked)
+                    ='По инвентарному номеру'
         div.filter-depreciation='Амортизация'
             div.filter-depreciation-off-area
-                input.filter-depreciation-off-checkbox(type='checkbox')
-                div.filter-depreciation-off-title='Не амортизирован'
+                label.filter-depreciation-off-title
+                    input.filter-depreciation-off-checkbox(type='checkbox')
+                    ='Не амортизирован'
             div.filter-depreciation-on-area
-                input.filter-depreciation-on-checkbox(type='checkbox')
-                div.filter-depreciation-on-title='Амортизирован'
+                label.filter-depreciation-on-title
+                    input.filter-depreciation-on-checkbox(type='checkbox')
+                    ='Амортизирован'
         div.filter-date-add='Интервал поступления'
             div.filter-date-start
                 div.filter-date-start-title='C '

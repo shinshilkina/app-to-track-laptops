@@ -1,5 +1,6 @@
 import './window.scss';
 import windowUpdate from "./window.pug";
+import windowUpdateType from './windowUpdate.pug';
 import {getEmployees, deleteEmployee, updateEmployee, sendEmployee,
     getlaptops, deletelaptops, updatelaptops,sendlaptops,
     getOffice, deleteOffice, updateOffice, sendOffice} from '../../modules/requests';
@@ -14,19 +15,55 @@ const windowUpdIns = (row, type) => {
     catchPopUp();
     const area = document.querySelector("main");
     const rowElements = getElements(row);
-    const popUp = windowUpdate(rowElements);
-    area.insertAdjacentHTML('beforeend', popUp);
+    if (type === 'insert') {
+        const popUp = windowUpdate(rowElements);
+        area.insertAdjacentHTML('beforeend', popUp);
+    } else {
+        const popUp = windowUpdateType(rowElements);
+        area.insertAdjacentHTML('beforeend', popUp);
+    }
     const popUpR = document.querySelector('.window');
     popUpR.classList.add(type);
+
+    const phoneNumber = popUpR.querySelector('.phone_number');
+    if (phoneNumber) {
+        phoneNumber.setAttribute('maxLength', 25);
+    }
+
     const title = popUpR.querySelector('.title');
     if (type === 'update') {
         title.textContent = 'Изменить';
     } else if (type === 'insert') {
         title.textContent = 'Добаваить';
     }
-
+    addDescriptionOfficeAndEmployeesInputs(popUpR);
     listenButtonsWindow(popUpR, rowElements);
 };
+
+function addDescriptionOfficeAndEmployeesInputs(viewArea) {
+    const descriprions = {
+        'name': 'ФИО:',
+        'position': 'Должность:',
+        'phone_number': 'Номер телефона:',
+        'office': 'Кабинет:',
+        'housing': 'Корпус: ',
+        'type': 'Тип кабинета:'
+    };
+    const addDescription = (element) => {
+        const className = element.className;
+        const descr = document.createElement('div');
+        descr.textContent = descriprions[className];
+        descr.classList.add(className + '-title');
+        const parentDiv = element.parentNode;
+        parentDiv.insertBefore(descr, element);
+    };
+    const elements = viewArea.querySelectorAll('input');
+    for (let element of elements) {
+        if (typeof descriprions[element.className] !== "undefined") {
+            addDescription(element);
+        }
+    }
+}
 
 function catchPopUp() {
     const popUp = document.querySelector('.window');

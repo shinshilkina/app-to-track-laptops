@@ -38,6 +38,8 @@
         text-align: center;
         white-space: pre;
 
+        white-space: pre-wrap;
+
         background-color: rgba(255,255,255, 0.5);
 
         & .devices {
@@ -46,6 +48,9 @@
             background-color: #FFFFFF;
             border-radius: 1rem 1rem;
           }
+        }
+        & .name {
+          width: 20%;
         }
         & .id_employee {
           display: none;

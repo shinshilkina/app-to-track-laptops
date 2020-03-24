@@ -22,7 +22,9 @@ const sendHttpRequest = (method, url, data) => {
     });
 };
 
-const localhost = 'http://localhost:5000/';
+let localhost = 'http://localhost:5000/';
+localhost = '/api/';
+
 
 /**
  * @returns {Promise<Object>}
@@ -90,22 +92,17 @@ const deleteEmployee = (id) => {
  * @returns {Promise<Object>}
  */
 const sendEmployee = ([name, position, phone]) => {
-    phone = parseInt(phone, 10);
-    if (!isNaN(phone) ) {
-        return sendHttpRequest('POST', localhost + 'employees/add', {
-            name: name,
-            position: position,
-            phone_number: phone
+    return sendHttpRequest('POST', localhost + 'employees/add', {
+        name: name,
+        position: position,
+        phone_number: phone
+    })
+        .then(responseData => {
+            console.log(responseData);
         })
-            .then(responseData => {
-                console.log(responseData);
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    }
-    else alert('Номер телефона вводится только цифрами');
-
+        .catch(err => {
+            console.log(err);
+        });
 };
 /**
  * @param id
@@ -115,22 +112,18 @@ const sendEmployee = ([name, position, phone]) => {
  * @returns {Promise<Object>}
  */
 const updateEmployee = ([id, name, position, phone]) => {
-    phone = parseInt(phone, 10);
-    if (!isNaN(phone) ) {
-        return sendHttpRequest('POST', localhost + 'employees/update', {
-            id_employee: id,
-            name: name,
-            position: position,
-            phone_number: phone
+    return sendHttpRequest('POST', localhost + 'employees/update', {
+        id_employee: id,
+        name: name,
+        position: position,
+        phone_number: phone
+    })
+        .then(responseData => {
+            console.log(responseData);
         })
-            .then(responseData => {
-                console.log(responseData);
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    }
-    else alert('Номер телефона вводится только цифрами');
+        .catch(err => {
+            console.log(err);
+        });
 };
 
 //laptops
@@ -243,7 +236,7 @@ const deletelaptops = (id) => {
 };
 
 const sendlaptops = ([id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-                         write_off_date, description, OS, status, status_date, depreciation, depreciation_lenght]) => {
+                         write_off_date, date_amo, description, OS, status, status_date, depreciation, depreciation_lenght]) => {
     id_employee = parseInt(id_employee, 10);
     id_office = parseInt(id_office, 10);
     if (depreciation === '1') {
@@ -259,6 +252,7 @@ const sendlaptops = ([id_employee, id_office, manufacturer, model, serial_number
         inventory_number : inventory_number,
         date_added :date_added,
         write_off_date : write_off_date,
+        date_amo: date_amo,
         description : description,
         OS : OS,
         status: status,
@@ -275,7 +269,7 @@ const sendlaptops = ([id_employee, id_office, manufacturer, model, serial_number
 };
 
 const updatelaptops = ([id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-                           write_off_date, description, OS, status, status_date, depreciation, depreciation_lenght, id_device]) => {
+                           write_off_date, date_amo, description, OS, status, status_date, depreciation, depreciation_lenght, id_device]) => {
 
    // date_added = convertToDataTime(date_added);
     //write_off_date = convertToDataTime(write_off_date);
@@ -289,6 +283,7 @@ const updatelaptops = ([id_employee, id_office, manufacturer, model, serial_numb
         inventory_number : inventory_number,
         date_added :date_added,
         write_off_date : write_off_date,
+        date_amo : date_amo,
         description : description,
         OS : OS,
         status: status,

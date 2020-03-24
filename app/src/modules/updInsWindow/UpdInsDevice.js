@@ -55,7 +55,7 @@ function addDescriptionDeviceInputs(viewArea) {
         'status': 'Статус: ',
         'status_date': 'Дата установки статуса: ',
         'depreciation_lenght': 'Срок амортизации (кол-во месяцев):',
-        'date_amo': 'Дата амортизации (ММ-ДД-ГГГГ):',
+        'date_amo': 'Срок амортизации (ММ-ДД-ГГГГ):',
         'employee-data' : 'Работник: ',
         'office-data' : 'Место:'
     };
@@ -139,6 +139,8 @@ function listenUpdInsDeviceArea(area, type, topAlign) {
     if (type === 'update'){
         inputsNumber.setAttribute('disabled', true);
     }
+    let inputsSerialNumber = area.querySelector('.serial_number');
+    inputsSerialNumber.setAttribute('maxLength', 100);
 
     const depreciationElem = area.querySelector('.depreciation');
     depreciationRender(area, depreciationElem);
@@ -266,7 +268,7 @@ function depreciationRender(area, depreciationElem) {
 
     const depreciationLabel = document.createElement("div");
     depreciationLabel.className = 'label';
-    if (depreciationElem.value === '1') {
+    if (depreciationElem.value === '0') {
         depreciationLabel.textContent='Амортизирован';
     } else {
         depreciationLabel.textContent='Не амортизирован';
@@ -312,6 +314,7 @@ function changeInputsDate(area) {
     const dateAmoValue = dateAmo.value;
 
     statusInput.addEventListener('change', function () {
+
         if (statusInput.value === 'в эксплуатации' && dateAmo.value === '') {
             const colDepr = parseInt(deprLength.value, 10);
             let date = changeMonths(new Date(Date.now()), +parseInt(deprLength.value , 10)).toString();
@@ -353,24 +356,27 @@ function checkDepreciation(area) {
 
     const amoLabel = area.querySelector('.depreciation__div .label');
     const dateAmo = area.querySelector('.date_amo').value;
+
+
+
     if (dateAmo !== '') {
         const dateAmoDate = new Date(area.querySelector('.date_amo').value);
         const today = new Date(Date.now());
-        if (dateAmoDate >= today) {
-            amo.value = 1;
+        if (dateAmoDate < today) {
+            amo.value = 0;
             amoLabel.textContent = 'Амортизирован';
         } else  {
-            amo.value = 0;
+            amo.value = 1;
             amoLabel.textContent = 'Не амортизирован';
         }
     } else  {
         amo.value = 0;
-        amoLabel.textContent = 'Не амортизирован';
+        amoLabel.textContent = 'Амортизирован';
     }
 
     if (statusValue === 'списан') {
         amo.value = 0;
-        amoLabel.textContent = 'Не амортизирован';
+        amoLabel.textContent = 'Амортизирован';
     }
 }
 
