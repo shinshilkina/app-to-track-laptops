@@ -106,6 +106,11 @@ function listenButtonsOffice() {
                 viewArea.insertAdjacentHTML('beforeend', divHTML);
                 redactDivAllAboutDevice();
                 listenButtonsDeviceUpdDel();
+
+                const areaInitParams = button.getBoundingClientRect();
+                const offsettop = window.scrollY;
+                const top = parseInt((areaInitParams.top + offsettop), 10) ;
+                document.querySelector('.view-div-more').style = "top:" + top + "px";
             }).catch(e => console.error(e));
         });
     }

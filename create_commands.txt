@@ -21,7 +21,7 @@ create table device(
     model varchar(250),
     serial_number varchar(10),
     inventory_number varchar(10),
-    date_added datetime not null,
+    date_added datetime,
     write_off_date DATETIME,
     status varchar(150),
     depreciation boolean not null default 0,

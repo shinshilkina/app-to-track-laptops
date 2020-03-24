@@ -29,10 +29,9 @@ const getDataDevice = () => {
             rows: data
         });
         listenButtonsShowDevice();
-        listenFiltersDevice();
     })
 };
-
+listenFiltersDevice();
 /**
  * @param data{Object}
  */
@@ -47,7 +46,13 @@ function correctHtmlDevice(viewArea) {
     getDates(viewArea);
     getEmployeeName(viewArea);
     getOfficeValue(viewArea);
-    addDescriptionDevice(viewArea)
+    addDescriptionDevice(viewArea);
+    const status = viewArea.querySelectorAll('.status');
+    for (let stat of status) {
+        if (!stat.classList.contains('title') && stat.textContent === '') {
+            stat.textContent = 'Не указано';
+        }
+    }
 }
 
 function addDescriptionDevice(viewArea) {
@@ -62,7 +67,8 @@ function addDescriptionDevice(viewArea) {
         'OS': 'Операционная система:',
         'status': 'Статус: ',
         'status_date': 'Дата установки статуса: ',
-        'depreciation_lenght': 'Срок амортизации:',
+        'depreciation_lenght': 'Срок амортизации (кол-во месяцев):',
+        'date_amo': 'Дата амортизации: ',
         'employee-data' : 'Работник: ',
         'office-data' : 'Место:'
     };
@@ -97,19 +103,34 @@ function listenButtonsShowDevice() {
                 const divHTML = renderDivShowMore(res);
                 const viewArea = document.querySelector("main");
                 viewArea.insertAdjacentHTML('beforeend', divHTML);
-                redactDivAllAboutDevice();
+                redactDivAllAboutDevice(button);
                 listenButtonsDeviceUpdDel();
+
+                const initArea = button.parentElement.parentElement;
+                const areaInitParams = initArea.getBoundingClientRect();
+                const offsettop = window.scrollY;
+                const top = parseInt((areaInitParams.top + offsettop), 10) ;
+                document.querySelector('.view-div-more').style = "top:" + top + "px";
             }).catch(e => console.error(e));
         });
     }
 }
 
-function redactDivAllAboutDevice() {
+function redactDivAllAboutDevice(button) {
     const viewDivDevice = document.querySelector('.view-div-more');
+
+
+
     getEmployeeName(viewDivDevice);
     getOfficeValue(viewDivDevice);
     getDates(viewDivDevice);
     addDescriptionDevice(viewDivDevice);
+    const status = viewDivDevice.querySelectorAll('.status');
+    for (let stat of status) {
+        if (!stat.classList.contains('title') && stat.textContent === '') {
+            stat.textContent = 'Не указано';
+        }
+    }
     const depreciation = viewDivDevice.querySelector('.depreciation');
     if (depreciation.textContent === '0') {
         depreciation.textContent = 'Не амортизирован';
@@ -135,6 +156,7 @@ addButton.addEventListener('click', function (event) {
             status_date: "",
             depreciation: "0",
             depreciation_lenght: "",
+            date_amo: "",
             description: "",
             OS: ""
         }
@@ -151,7 +173,7 @@ addButton.addEventListener('click', function (event) {
 document.addEventListener("DOMContentLoaded", getDataDevice);
 
 function getDates(viewArea) {
-    const dataInputs = viewArea.querySelectorAll('.date_added, .write_off_date, .status_date');
+    const dataInputs = viewArea.querySelectorAll('.date_added, .write_off_date, .status_date, .date_amo');
     dataInputs.forEach(element => {
         if (element.textContent !== "") {
             let date = new Date(element.textContent);
@@ -235,15 +257,6 @@ function deleteParamsFromDevice(paramName, paramValue) {
         });
     });
 }
-
-const buttonsShowFilters = document.querySelector('.filter-device__select');
-buttonsShowFilters.addEventListener('click',
-    function (event) {
-        let dropdownBody = document.querySelector('main .filter-device__items');
-        dropdownBody.classList.toggle('invisible');
-        buttonsShowFilters.classList.toggle('rotated');
-    }
-);
 
 const printButton = document.querySelector('.save-as-table');
 printButton.addEventListener('click', function (event) {

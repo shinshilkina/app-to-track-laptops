@@ -55,32 +55,46 @@ function getElements(row) {
 function listenButtonsWindow(popUp, rowElements) {
     const buttonSave = popUp.querySelector('.save');
     const buttonCancel = popUp.querySelector('.cancel');
-    const activePage = document.querySelector("main").querySelector('.active');
+    let activePage = document.querySelector("main").querySelector('.active');
+    let refreshPage;
+    if (activePage.classList.contains('employee')) {
+        refreshPage = document.querySelector("main").querySelector('.employee');
+    } else
+    if (activePage.classList.contains('office')) {
+        refreshPage = document.querySelector("main").querySelector('.office');
+    }
+
     buttonCancel.addEventListener('click', function (event) {
         popUp.remove();
     });
 
     buttonSave.addEventListener('click', function (event) {
-        const values = getNewRow(popUp, rowElements);
+        let values = getNewRow(popUp, rowElements);
+        values.map((value) => {
+            return value
+        });
         if (popUp.classList.contains('update')) {
             if (activePage.classList.contains('employee')) {
                 const update = updateEmployee(values);
-                update.then(setTimeout(refreshView,500, activePage));
+                update.then(() => refreshView(refreshPage));
             } else
             if (activePage.classList.contains('office')) {
                 const update = updateOffice(values);
-                update.then(setTimeout(refreshView,500, activePage));
+                update.then(() => refreshView(refreshPage));
             }
         } else if (popUp.classList.contains('insert')) {
             values.splice(0, 1);
-            const verifyValues = checkElementsInsert(popUp, rowElements);
-            if (verifyValues) {
+            let flag = true;
+            for (let i = 0; i < values.length; i++) {
+                values[i] === '' ? flag = false : null;
+            }
+            if (flag === true) {
                 if (activePage.classList.contains('employee')) {
                     const insert = sendEmployee(values);
-                    insert.then(setTimeout(refreshView,500));
+                    insert.then(() => refreshView(refreshPage));
                 } else if (activePage.classList.contains('office')) {
                     const insert = sendOffice(values);
-                    insert.then(setTimeout(refreshView,500));
+                    insert.then(() => refreshView(refreshPage));
                 }
             }
         }
@@ -101,13 +115,24 @@ function checkElementsInsert(popUp, rowElements) {
 
 function getNewRow(window, rowElements) {
     const newValues = [];
-    for (let i = 0; i < rowElements.length; i ++) {
-        const element = rowElements[i];
+    let messageParams = '';
+    for (let i = 0; i < rowElements.length - 1; i ++) {
+        const obj = rowElements[i];
+        const className = '.' + obj['className'];
+        const element = window.querySelector(className);
         if (element.classList.contains('dropdown__area')){
             element.classList.toggle('dropdown__area');
         }
         const classElement = "." + element.className;
         newValues.push(window.querySelector(classElement).value);
+        if (window.querySelector(classElement).value === '' &&
+        classElement != '.id_office' && classElement != '.id_employee') {
+            messageParams += window.querySelector(classElement).placeholder + ', ';
+        }
+    }
+    if (messageParams !== '') {
+        messageParams = messageParams.substring(0, messageParams.length-2);
+        alert('Не заполнены основные поля: ' + messageParams);
     }
     return newValues;
 }

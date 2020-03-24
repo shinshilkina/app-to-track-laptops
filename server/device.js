@@ -125,16 +125,51 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
 
     app.post('/device/add', async (req, res) => {
         let {id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-            write_off_date, description, OS,status, status_date, depreciation, depreciation_lenght} = req.body;
+            write_off_date, status_date, date_amo, description, OS, status, depreciation, depreciation_lenght} = req.body;
         id_employee === 'null' ? id_employee = null: null;
         id_office === 'null' ? id_office = null: null;
+        depreciation_lenght === 'null' ? depreciation_lenght = null: null;
+
+        let postfixDates;
+        if (date_added === '') {
+            postfixDates = '?,';
+            date_added = null;
+        } else {
+            postfixDates = `STR_TO_DATE(?,\'%Y-%m-%d\'),`;
+        }
+        if (write_off_date === '') {
+            postfixDates += '?,';
+            write_off_date = null;
+        } else {
+            postfixDates += `STR_TO_DATE(?,\'%Y-%m-%d\'),`;
+        }
+        if (status_date === '') {
+            postfixDates += '?,';
+            status_date = null;
+        } else {
+            postfixDates += `STR_TO_DATE(?,\'%Y-%m-%d\'),`;
+        }
+        if (date_amo === '') {
+            postfixDates += '?,';
+            date_amo = null;
+        } else {
+            postfixDates += `STR_TO_DATE(?,\'%Y-%m-%d\'),`;
+        }
+
+        console.log(`INSERT INTO device(id_employee, id_office, manufacturer, model, serial_number, inventory_number, 
+                date_added, write_off_date, status_date, date_amo, description, OS, status, depreciation, depreciation_lenght) 
+                VALUES (?, ?, ?, ?, ?, ?,` +  postfixDates + `?, ?, ?, ?, ?);`);
+        console.log(id_employee +', ' + id_office +', ' + manufacturer +', ' + model +', ' + serial_number +', ' +
+            inventory_number +', ' + date_added +', ' + write_off_date +', ' + status_date +', ' + date_amo +', ' +
+            description +', ' + OS +', ' + status +', ' + depreciation +', ' + depreciation_lenght);
+
         try {
             await mysqlQuery(
                 `INSERT INTO device(id_employee, id_office, manufacturer, model, serial_number, inventory_number, 
-                date_added, write_off_date, description, OS, status, status_date, depreciation, depreciation_lenght) 
-                VALUES (?, ?, ?, ?, ?, ?, STR_TO_DATE(?,'%Y-%m-%d'), STR_TO_DATE(?,'%Y-%m-%d'), ?, ?, ?, ?, ?, ?);`,
+                date_added, write_off_date, status_date, date_amo, description, OS, status, depreciation, depreciation_lenght) 
+                VALUES (?, ?, ?, ?, ?, ?,` +  postfixDates + `?, ?, ?, ?, ?);`,
                 [id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-                    write_off_date, description, OS, status, status_date, depreciation, depreciation_lenght]
+                    write_off_date, status_date, date_amo, description, OS, status, depreciation, depreciation_lenght]
             );
             res.status(200).send({
                 success: true
@@ -185,21 +220,49 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
     });
     app.post('/device/update', async (req, res) => {
         let {id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-            write_off_date, description, OS,status, status_date, depreciation, depreciation_lenght, id_device} = req.body;
+            write_off_date, status_date, date_amo, description, OS,status, depreciation, depreciation_lenght, id_device} = req.body;
+
         id_employee === 'null' ? id_employee = null: null;
         id_office === 'null' ? id_office = null: null;
+        depreciation_lenght === '' ? depreciation_lenght = null: null;
+
+        let postfixDates;
+        if (date_added === '') {
+            postfixDates = 'date_added = ?,';
+            date_added = null;
+        } else {
+            postfixDates = `date_added = STR_TO_DATE(?,\'%Y-%m-%d\'),`;
+        }
+        if (write_off_date === '') {
+            postfixDates += 'write_off_date = ?,';
+            write_off_date = null;
+        } else {
+            postfixDates += `write_off_date = STR_TO_DATE(?,\'%Y-%m-%d\'),`;
+        }
+        if (status_date === '') {
+            postfixDates += 'status_date = ?,';
+            status_date = null;
+        } else {
+            postfixDates += `status_date = STR_TO_DATE(?,\'%Y-%m-%d\'),`;
+        }
+        if (date_amo === '') {
+            postfixDates += 'date_amo = ?,';
+            date_amo = null;
+        } else {
+            postfixDates += `date_amo = STR_TO_DATE(?,\'%Y-%m-%d\'),`;
+        }
+
+        console.log(postfixDates);
+        console.log(date_added, write_off_date, status_date);
         try {
             await mysqlQuery(
                 `UPDATE device SET id_employee = ?, 
                     id_office = ?, manufacturer = ?, model = ?,
                     serial_number = ?, inventory_number = ?,
-                    date_added = ?, write_off_date = ?, 
-                    description = ?, OS = ? ,status =? , 
-                    status_date = ?, depreciation = ?, 
-                    depreciation_lenght = ?
+                    `+ postfixDates + ` description = ?, OS = ? ,status =?, depreciation = ?, depreciation_lenght = ?
                     WHERE id_device = ?;`,
                 [id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
-                    write_off_date, description, OS,status, status_date, depreciation, depreciation_lenght, id_device]
+                    write_off_date, status_date, date_amo, description, OS, status, depreciation, depreciation_lenght, id_device]
             );
             res.status(200).send({
                 success: true
@@ -212,7 +275,7 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
         try {
             const [rows] = await mysqlQuery(
             `select device.manufacturer, device.model, device.serial_number, device.inventory_number, device.date_added,
-            device.write_off_date, device.description, device.OS, device.status, device.status_date, device.depreciation, device.depreciation_lenght,
+            device.write_off_date, device.description, device.OS, device.status, device.status_date, device.depreciation, device.depreciation_lenght, date_amo,
             employees.name, employees.position, employees.phone_number, offices.office, offices.housing, offices.type 
             from device left join employees ON device.id_employee = employees.id_employee left join offices ON device.id_office = offices.id_office;`
         );
@@ -238,6 +301,7 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
                 'status_date': 'Дата статуса',
                 'depreciation': 'Амортизация',
                 'depreciation_lenght': 'Срок амортизации',
+                'date_amo': 'Дата амортизации',
                 'name': 'ФИО сотрудника',
                 'position': 'Должность',
                 'phone_number': 'Номер телефона',
@@ -274,6 +338,7 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
                 obj['Дата списания'] = getFormattedDate(obj['Дата списания']);
                 obj['Дата статуса'] = getFormattedDate(obj['Дата статуса']);
                 obj['Амортизация'] = getValueDepreciation(obj['Амортизация']);
+                obj['Дата амортизации'] = getFormattedDate(obj['Дата амортизации']);
                 return obj;
             });
             

@@ -30,31 +30,35 @@ function listenFiltersDevice() {
     buttonCancel.addEventListener('click', function (event) {
         const inputElements = filterArea.querySelectorAll('input');
         for (let input of inputElements) {
+
             if (input.type === 'checkbox') {
-                input.checked = true;
+                input.checked = false;
+                filtersService.setAmoAmo(false);
+                filtersService.setAmoNotAmo(false);
             } else
             if (input.type === 'date') {
                 input.value = input.defaultValue;
+                filtersService.setAddedStart(null);
+                filtersService.setAddedEnd(null);
+                filtersService.setOffStart(null);
+                filtersService.setOffEnd(null);
             } else {
-               input.dataset.value ? delete input.dataset.value : null;
+                input.value = input.defaultValue;
+                input.dataset.value ? delete input.dataset.value : null;
+                filtersService.setOffice(null);
+                filtersService.setEmployee(null);
+                filtersService.setStatus(null);
             }
         }
-        if (!filterArea.classList.contains('invisible')) {
-            filterArea.classList.toggle('invisible');
-            buttonSelect.classList.toggle('rotated');
-        }
+        const area = document.querySelector('main .device');
+        refreshView(area);
     });
 
     const buttonSave = filterArea.querySelector('.save');
-
     buttonSave.addEventListener('click', function (event) {
         getlaptops().then((res) => {
-            if (!filterArea.classList.contains('invisible')) {
-                const area = document.querySelector('main .device');
-                filterArea.classList.toggle('invisible');
-                buttonSelect.classList.toggle('rotated');
-                refreshView(area);
-            }
+            const area = document.querySelector('main .device');
+            refreshView(area);
         }).catch((e) => console.log(e));
     });
 }
@@ -156,11 +160,13 @@ window.filtersService = {
 const orderVendor = document.querySelector('main .filter-device__items .filter-abc-radio');
 orderVendor.addEventListener( 'change', function() {
     filtersService.setOrderVendor(this.checked);
+    filtersService.setOrderInventaryNumber(null);
 });
 
 const orderInventaryNumber = document.querySelector('main .filter-device__items .filter-inventary_number-radio');
 orderInventaryNumber.addEventListener( 'change', function() {
     filtersService.setOrderInventaryNumber(this.checked);
+    filtersService.setOrderVendor(null);
 });
 
 const amoNotAmo = document.querySelector('main .filter-device__items .filter-depreciation-off-checkbox');
@@ -200,14 +206,12 @@ statusValue.addEventListener( 'change', function() {
 
 const employeeId = document.querySelector('.filter-employee-input');
 employeeId.addEventListener( 'change', function() {
-        filtersService.setEmployee(employeeId.dataset.value);
+    filtersService.setEmployee(employeeId.dataset.value);
 });
 
-const officeId = document.querySelector('main .filter-device__items .filter-office-input');
+const officeId = document.querySelector('.filter-office-input');
 officeId.addEventListener( 'change', function() {
-    if (officeId.dataset.id) {
-        filtersService.setOffice(officeId.dataset.value);
-    }
+    filtersService.setOffice(officeId.dataset.value);
 });
 
 

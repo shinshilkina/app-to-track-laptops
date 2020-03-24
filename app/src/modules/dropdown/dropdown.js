@@ -9,9 +9,9 @@ function listenDropdownShow (area) {
                 let dropdownBody = button.parentElement.querySelector('.dropdown__items');
                 dropdownBody.classList.toggle('invisible');
                 button.classList.toggle('rotated');
-                listenChoice(button);
             }
         );
+        listenChoice(button);
     }
     const dropdownInputs = area.querySelectorAll('.dropdown__area');
     for (let input of dropdownInputs) {
@@ -29,20 +29,22 @@ function listenDropdownShow (area) {
 }
 
 function checkExistAllVariants(areaItems) {
-    const allDivElements = areaItems.querySelectorAll('div');
-    for (let element of allDivElements) {
-        if (element.textContent === 'Все'){
-            return true;
+       const allDivElements = areaItems.querySelectorAll('div');
+        for (let element of allDivElements) {
+            if (element.textContent === 'Все'){
+                return true;
+            }
         }
-    }
     return false;
 }
 
 function addAllVariantsItem() {
     const items = document.querySelectorAll('.dropdown__items');
+
     for (let item of items) {
         const existVariant = checkExistAllVariants(item);
-        if (existVariant === false) {
+        const parentPopUp = item.parentElement.parentElement.parentElement;
+        if (existVariant === false && !parentPopUp.classList.contains('view-div-updIns')) {
             const liElement = document.createElement('li');
             const divElement = document.createElement('div');
             divElement.textContent = 'Все';

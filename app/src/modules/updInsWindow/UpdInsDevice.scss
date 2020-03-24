@@ -5,7 +5,7 @@
   left: 30%;
 
   padding: 1.5rem 1.5rem;
-  width: 30% !important;
+  width: 40% !important;
   font-family: Montserrat, sans-serif;
 
   background-color: #FFFFFF;
@@ -28,11 +28,13 @@
       display: flex;
       & .checkbox {
         width: 10%;
+        display: none;
       }
       & .label {
         display: flex;
         justify-content: center;
         align-items: center;
+        margin-bottom: 0.5rem;
       }
     }
   }

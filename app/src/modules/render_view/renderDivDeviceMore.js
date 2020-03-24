@@ -22,6 +22,8 @@ function listenButtonsDeviceUpdDel() {
     buttonUpdate.addEventListener('click', function (event) {
 
         const viewAreaAboutDevice = document.querySelector('.view-div-more');
+        const topAlign = viewAreaAboutDevice.getBoundingClientRect().top + window.scrollY;
+
         viewAreaAboutDevice.remove();
         const row = this.parentElement.parentElement;
         const id_str = row.querySelector('.id_device').textContent;
@@ -32,7 +34,7 @@ function listenButtonsDeviceUpdDel() {
             viewArea.insertAdjacentHTML('beforeend', divHTML);
             const areaUpdateDevice = document.querySelector('.view-div-updIns');
             listenInputs(areaUpdateDevice);
-            listenUpdInsDeviceArea(areaUpdateDevice, 'update');
+            listenUpdInsDeviceArea(areaUpdateDevice, 'update' , topAlign);
         }).catch(e => console.error(e));
     });
 
