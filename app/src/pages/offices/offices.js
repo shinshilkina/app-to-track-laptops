@@ -50,6 +50,15 @@ const getDataOffice = () => {
         });
         const paramIdelements = document.querySelectorAll('main .office .id_office');
         getDevicesDiv(paramIdelements, 'id_office').then(() => listenButtonsOffice());
+    }).catch((err) => {
+        if (!document.querySelector('main .office .sorry')){
+            const sorry = document.createElement('div');
+            sorry.className = 'sorry';
+            sorry.textContent = 'Ошибка сервера';
+            sorry.style = 'margin-top: 20px; font-weight: bold; font-size: 1.5em';
+            const parentDiv = document.querySelector('main .office');
+            parentDiv.append(sorry);
+        }
     })
 };
 

@@ -61,7 +61,17 @@ const getActiveConnection = async () => {
     next();
   });
 
-employees(app, mysqlQuery, restAPIerror);
-offices(app, mysqlQuery, restAPIerror);
-device(app, mysqlQuery, restAPIerror);
+async function updateAmo() {
+  try {
+     await mysqlQuery('UPDATE device SET depreciation = 0 WHERE date_amo < SYSDATE();');
+  } catch(e) {
+    console.error(e);
+  }
+  setTimeout(updateAmo, 60 * 1000);
+}
 
+updateAmo().then(() => {
+  employees(app, mysqlQuery, restAPIerror);
+  offices(app, mysqlQuery, restAPIerror);
+  device(app, mysqlQuery, restAPIerror);
+});

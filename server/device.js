@@ -97,17 +97,19 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             restAPIerror(res, e);
         }
     });
-    app.get('/device/list/manufacturer', async (req, res) => {
+    app.get('/device/list/date_amo', async (req, res) => {
         try {
             const [rows, fields] = await mysqlQuery(
-                'SELECT manufacturer FROM device'
+                'SELECT date_amo, id_device FROM device;'
             );
             res.status(200).send(rows);
         } catch (e) {
             restAPIerror(res, e);
         }
     });
-    app.get('/device/list/model', async (req, res) => {
+    app.post('/device/update/date_amo', async (req, res) => {
+        let {id_employee, id_office, manufacturer, model, serial_number, inventory_number, date_added,
+            write_off_date, status_date, date_amo, description, OS, status, depreciation, depreciation_lenght} = req.body;
         try {
             const [rows, fields] = await mysqlQuery(
                 'SELECT model FROM device'
@@ -118,6 +120,7 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
         }
     });
     app.get('/device/list/inventory_number', async (req, res) => {
+
         try {
             const [rows, fields] = await mysqlQuery(
                 'SELECT inventory_number FROM device'
@@ -283,6 +286,7 @@ module.exports = (app, mysqlQuery, restAPIerror) => {
             restAPIerror(res,e);
         }
     });
+
     app.get('/device/download', async (req, res) => {
         try {
             const [rows] = await mysqlQuery(

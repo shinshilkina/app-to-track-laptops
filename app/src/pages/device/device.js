@@ -28,7 +28,23 @@ const getDataDevice = () => {
         renderViewDevice({
             rows: data
         });
+        if (data.length === 0) {
+            debugger
+            const sorry = document.createElement('div');
+            sorry.textContent = 'К сожалению, по данному запросу ничего не найдено';
+            const parentDiv = document.querySelector('main .device');
+            parentDiv.append(sorry);
+        }
         listenButtonsShowDevice();
+    }).catch((err) => {
+        if (!document.querySelector('main .device .sorry')){
+            const sorry = document.createElement('div');
+            sorry.className = 'sorry';
+            sorry.textContent = 'Ошибка сервера';
+            sorry.style = 'margin-top: 20px; font-weight: bold; font-size: 1.5em';
+            const parentDiv = document.querySelector('main .device');
+            parentDiv.append(sorry);
+        }
     })
 };
 listenFiltersDevice();

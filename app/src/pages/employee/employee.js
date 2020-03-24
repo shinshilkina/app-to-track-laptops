@@ -52,6 +52,15 @@ const getData = () => {
         });
         const paramIdelements = document.querySelectorAll('main .employee .id_employee');
         getDevicesDiv(paramIdelements, 'id_employee').then(() => listenButtons());
+    }).catch((err) => {
+        if (!document.querySelector('main .employee .sorry')){
+            const sorry = document.createElement('div');
+            sorry.className = 'sorry';
+            sorry.textContent = 'Ошибка сервера';
+            sorry.style = 'margin-top: 20px; font-weight: bold; font-size: 1.5em';
+            const parentDiv = document.querySelector('main .employee');
+            parentDiv.append(sorry);
+        }
     })
 };
 

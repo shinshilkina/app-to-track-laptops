@@ -58,11 +58,13 @@
 .filter-device {
   width: 10rem;
   margin-top: 0.5rem;
-  background-image: $gradient;
+  background-color: #FFFFFF;
   text-transform: uppercase;
+  justify-content: center;
   padding: 0.5rem 0.5rem;
-  border-radius: 0.5rem 0.5rem;
-  //position: relative;
+  border-radius: 1.75rem 1.75rem 0 0;
+  border: 1px solid $purple;
+  border-bottom: solid transparent;
   display: flex;
 
   & .rotated {
@@ -105,7 +107,7 @@
   padding: 1rem 1rem;
 
   background-color: rgb(255, 255, 255);
-  border-radius: 0.5rem 1.75rem 1.75rem 1.75rem;
+  border-radius: 0rem 1.75rem 1.75rem 1.75rem;
   border: 1px solid $purple;
   & .filter-sort, .filter-depreciation {
     margin-bottom: 0.5rem;
