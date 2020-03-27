@@ -5,17 +5,6 @@ create table employees(
     phone_number int
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-
-create table user (
-    id_user int not null AUTO_INCREMENT primary key,
-    id_employee int,
-    login varchar(20) not null,
-    password varchar(32) not null,
-    foreign key (id_employee)
-        references employees(id_employee)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-
 create table offices (
     id_office int not null AUTO_INCREMENT primary key,
     office varchar(150) not null,
@@ -32,8 +21,11 @@ create table device(
     model varchar(250),
     serial_number varchar(10),
     inventory_number varchar(10),
-    date_added datetime not null,
+    date_added datetime,
     write_off_date DATETIME,
+    status varchar(150),
+    depreciation boolean not null default 0,
+    depreciation_lenght varchar(50),
     description varchar(250),
     OS varchar(100),
     foreign key (id_employee)
@@ -42,15 +34,4 @@ create table device(
             references offices(id_office)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-
-create table requests(
-    id_request int not null AUTO_INCREMENT primary key,
-    id_user int not null,
-    id_device int,
-    date datetime not null,
-    description varchar(250),
-    foreign key (id_user)
-           references user(id_user),
-    foreign key (id_device)
-           references device(id_device)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+depreciation - амортизация

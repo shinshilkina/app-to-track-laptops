@@ -1,0 +1,11 @@
+div.view-div-more
+    each row in locals
+        div.element
+            each col, i in row
+                div(class=i)=col
+            div.employee-data='Не указано'
+            div.office-data='Не указано'
+            div.buttons
+                div.button__delete(type='button' class='invisible')='Удалить'
+                div.button__update(type='button')='Изменить'
+                div.button__cancel(type='button')='Отменить'

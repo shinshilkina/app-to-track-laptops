@@ -1,0 +1,56 @@
+div.view(class='device invisible')
+    span.view__title='Список ноутбуков'
+        div.refresh(type='button')
+        div.add-device(type='button')
+        div.save-as-table(type = 'button')='скачать таблицу'
+    div.filter-device='Фильтры'
+        div.filter-device__select
+    div.filter-device__items(class='')
+        div.filter-sort='Сортировка'
+            div.filter-abc
+                label.filter-abc-title
+                    input.filter-abc-radio(type='radio' name = 'filter' checked)
+                    ='По производителю'
+            div.filter-inventary_number
+                label.filter-inventary_number-title
+                    input.filter-inventary_number-radio(type='radio' name = 'filter' checked)
+                    ='По инвентарному номеру'
+        div.filter-depreciation='Амортизация'
+            div.filter-depreciation-off-area
+                label.filter-depreciation-off-title
+                    input.filter-depreciation-off-checkbox(type='checkbox')
+                    ='Не амортизирован'
+            div.filter-depreciation-on-area
+                label.filter-depreciation-on-title
+                    input.filter-depreciation-on-checkbox(type='checkbox')
+                    ='Амортизирован'
+        div.filter-date-add='Интервал поступления'
+            div.filter-date-start
+                div.filter-date-start-title='C '
+                input.filter-date-add-start-input(type='date')
+            div.filter-date-end
+                div.filter-date-end-title='По '
+                input.filter-date-add-end-input(type='date')
+        div.filter-date-off='Интервал списания'
+            div.filter-date-off-start
+                div.filter-date-off-title='C '
+                input.filter-date-off-start-input(type='date')
+            div.filter-date-off-end
+                div.filter-date-off-title='По '
+                input.filter-date-off-end-input(type='date')
+        div.filter-inputs
+            div.filter-status='Статус'
+                input.filter-status-input(placeholder = 'Все' readonly)
+            div.filter-employee='Сотрудник'
+                input.filter-employee-input(placeholder = 'Все' readonly)
+            div.filter-office='Место'
+                input.filter-office-input(placeholder = 'Все' readonly)
+        div.buttons
+            div.save(type='button')='Сохранить'
+            div.cancel(type='button')='Отменить'
+    ul.list
+
+
+
+
+//invisible

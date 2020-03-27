@@ -1,0 +1,192 @@
+@import "../../theme/default-theme";
+
+.device {
+  font-family: Montserrat, sans-serif;
+  width: 90%;
+  & .save-as-table {
+    width: 13rem;
+    padding: 0.2rem 0.2rem;
+    color: #179BB2;
+    border: 1px solid #179BB2;
+    border-radius: 1.5rem 1.5rem;
+  }
+
+    & .view-header {
+      display: flex;
+    }
+    & .view-div {
+      display: flex;
+      flex-wrap: wrap;
+      & .element {
+        width: 20rem;
+        background-color: #FFFFFF;
+        border-radius: 1.7rem 1.7rem;
+        padding: 1rem 1rem;
+        margin: 0.5rem 1rem;
+
+        white-space: pre-wrap;
+        word-break: break-all;
+        & div {
+          white-space: pre-wrap;
+          word-break: break-all;
+        }
+        & .id_device, & .serial_number, & .depreciation,
+        & .id_employee, & .id_office,
+        & .depreciation_lenght, & .description, & .OS{
+          display: none;
+        }
+        & .button__more {
+          width: 60%;
+          margin-top: 0.5rem;
+          margin-left: auto;
+          margin-right: auto;
+          background-image: $gradient;
+          text-transform: uppercase;
+          padding: 0.5rem 0.5rem;
+          border-radius: 0.5rem 0.5rem;
+        }
+        & .title.button__more {
+          display: none;
+        }
+        & .title {
+          color: $dark_shade_50;
+        }
+      }
+    }
+  }
+
+.filter-device {
+  width: 10rem;
+  margin-top: 0.5rem;
+  background-color: #FFFFFF;
+  text-transform: uppercase;
+  justify-content: center;
+  padding: 0.5rem 0.5rem;
+  border-radius: 1.75rem 1.75rem 0 0;
+  border: 1px solid $purple;
+  border-bottom: solid transparent;
+  display: flex;
+
+  & .rotated {
+    transform:rotate(180deg);
+    -webkit-transform:rotate(180deg);
+    -moz-transform:rotate(180deg);
+    -o-transform:rotate(180deg);
+  }
+
+  &__select {
+    position: absolute;
+    width: 1.2rem;
+    height: 1.2rem;
+    right: 1rem;
+    top: 0.5rem;
+    background-image: url("../../modules/icons/expand_more.png");
+    background-color: rgba(255,255,255,0.25);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    align-self: center;
+
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+  }
+  &__items {
+    width: 15rem;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+}
+.filter-device__items {
+  //position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  font-family: Montserrat, sans-serif;
+  width: 90%;
+  padding: 1rem 1rem;
+
+  background-color: rgb(255, 255, 255);
+  border-radius: 0rem 1.75rem 1.75rem 1.75rem;
+  border: 1px solid $purple;
+  & .filter-sort, .filter-depreciation {
+    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
+    & .filter-abc, .filter-inventary_number, .filter-depreciation-off-area, .filter-depreciation-on-area{
+      display: flex;
+    }
+  }
+  & .filter-date-add{
+    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
+    & .filter-date-start , .filter-date-end{
+      display: flex;
+      margin-top: 0.7rem;
+      margin-bottom: 0.7rem;
+      & input {
+        margin-left: 0.5rem;
+      }
+    }
+  }
+  & .filter-date-off {
+    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
+    & .filter-date-off-start , .filter-date-off-end{
+      display: flex;
+      margin-top: 0.7rem;
+      margin-bottom: 0.7rem;
+      & input {
+        margin-left: 0.5rem;
+      }
+    }
+  }
+  & .filter-inputs {
+    display: flex;
+    flex-direction: column;
+    margin-right: 0.5rem;
+    & .filter-employee , & .filter-office, & .filter-status {
+
+      & .dropdown__select {
+        top: -2.2rem;
+        right: 1.5rem;
+      }
+      & .dropdown {
+        top: 0.7rem;
+      }
+    }
+  }
+
+
+  & .buttons {
+    display: flex;
+    flex-direction: column;
+    & .save {
+      width: 7rem;
+      margin: 0.75rem 0.3rem 0.5rem auto;
+      background-image: $gradient;
+      text-transform: uppercase;
+      padding: 0.5rem 0.5rem;
+      border-radius: 1.7rem 1.7rem;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    & .cancel {
+      @include buttonSaveCancel($dark_shade_50);
+      border: 1px solid $dark_shade_50;
+      width: 7rem;
+      margin: 0.75rem auto 0.5rem 0.3rem;
+    }
+  }
+
+}
+
+
+.add-device {
+  @include buttonsAddDel(url("../../modules/icons/add-button.svg"));
+  margin-left: 1rem;
+  position: absolute;
+  left: 19rem;
+  top: 0.2rem;
+}

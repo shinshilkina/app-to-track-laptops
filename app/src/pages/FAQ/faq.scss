@@ -1,0 +1,11 @@
+@import "../../theme/default-theme";
+
+.about {
+  font-family: Montserrat, sans-serif ;
+  h1 {
+    text-align: center;
+  }
+  & .educator, & .student {
+    margin-left: 3rem;
+  }
+}

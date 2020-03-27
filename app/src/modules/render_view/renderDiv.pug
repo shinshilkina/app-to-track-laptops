@@ -1,0 +1,10 @@
+div.view-div
+    each row in rows
+        div.element
+            each col, i in row
+                div(class=i)=col
+            div.employee-data='Не указано'
+            div.office-data='Не указано'
+            div.buttons
+                div.button__more(type='button')='Показать больше'
+            br

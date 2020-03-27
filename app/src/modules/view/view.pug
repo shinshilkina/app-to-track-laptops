@@ -1,5 +1,14 @@
-div.view
-    span.view__title='Список сотрудников'
-    div.view__refresh(type='button')
-    ul.view_list
 
+mixin updateOrAddEmployee(className, title)
+    div(class=className + ' unvisible')
+        div(class=className + '__title')=title
+        div(class=className + '__id unvisible')
+        input(class=className + '__name')
+        input(class=className + '__position')
+        input(class=className + '__phone')
+        div(class=className + '__buttons')
+            div(class=className + '__buttons__cancel' type='button')='отменить'
+            div(class=className + '__buttons__save' type='button')='сохранить'
+
++updateOrAddEmployee('update','Изменить данные работника')
++updateOrAddEmployee('add', 'Добавить работника')

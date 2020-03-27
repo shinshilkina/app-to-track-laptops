@@ -3,6 +3,8 @@ const webpack = require('webpack');
 const configurator = require('webpack-config');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const devMode = process.env.NODE_ENV !== 'production';
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = new configurator.default().merge({
     entry: './src/entry.js',
@@ -50,8 +52,8 @@ module.exports = new configurator.default().merge({
                 use: ["pug-loader"]
             },
             {
-                test: /\.m?js$/,
-                exclude: /(node_modules|bower_components)/,
+                test: /\.js$/,
+                exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
                     options: {
@@ -62,6 +64,7 @@ module.exports = new configurator.default().merge({
             {
                 test: /\.s[ac]ss$/i,
                 use: [
+
                     'style-loader',
                     'css-loader',
                     'sass-loader',
@@ -85,6 +88,10 @@ module.exports = new configurator.default().merge({
         ]
     },
     devServer: {
-        watchContentBase: true
+        watchContentBase: true,
+        hot: true
+    },
+    node: {
+        fs: "empty"
     }
 });

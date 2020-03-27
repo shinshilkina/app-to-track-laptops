@@ -1,0 +1,55 @@
+@import "../../theme/default-theme";
+.view-div-updIns {
+  position: absolute;
+  top: 25%;
+  left: 30%;
+
+  padding: 1.5rem 1.5rem;
+  width: 40% !important;
+  font-family: Montserrat, sans-serif;
+
+  background-color: #FFFFFF;
+  border-radius: 1.7rem 1.7rem;
+
+  z-index: 2;
+  & .element {
+
+  }
+  & input {
+    @include input;
+  }
+  & .id_employee, & .id_office, & .id_device {
+    display: none;
+  }
+  & .depreciation {
+    width: 20%;
+    display: none;
+    &__div {
+      display: flex;
+      & .checkbox {
+        width: 10%;
+        display: none;
+      }
+      & .label {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+  & .buttons {
+    display: flex;
+    & .cancel{
+      @include buttonSaveCancel($dark_shade_50);
+      border: 1px solid $dark_shade_25;
+      margin-left: auto;
+    }
+    & .save{
+      @include buttonSaveCancel(#FFFFFF);
+      margin-left: 1rem;
+      margin-right: auto;
+      background-image: $gradient;
+    }
+  }
+}

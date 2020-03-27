@@ -1,0 +1,10 @@
+div.view-div-updIns(class='device')
+    each row in locals
+        div.element
+            each col, i in row
+                input(class=i value=col)
+            input.employee-data(placeholder = 'Данные о работнике')
+            input.office-data(placeholder = 'Данные о месте')
+            div.buttons
+                div.cancel(type="button")="Отменить"
+                div.save(type="button")="Сохранить"

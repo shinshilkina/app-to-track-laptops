@@ -1,0 +1,60 @@
+@import "../../theme/default-theme";
+
+.dropdown__area {
+  @include input();
+  margin-bottom: 0;
+  border-radius: 4px 4px 0 0;
+}
+.dropdown {
+  position: relative;
+  width: 100%;
+  font-family: Montserrat, sans-serif;
+
+  &__select {
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    right: 2rem;
+    top: -2.4rem;
+    background-image: url("../icons/expand_more.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    align-self: center;
+
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+  }
+  & .rotated {
+    transform:rotate(180deg);
+    -webkit-transform:rotate(180deg);
+    -moz-transform:rotate(180deg);
+    -o-transform:rotate(180deg);
+    margin-top: 0.5rem;
+  }
+  &__items {
+    width: 95%;
+    list-style: none;
+    margin-top: -0.7rem;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem 0 1rem;
+    background: #FFFFFF;
+    border: 1px solid $dark_shade_50;
+    border-top: solid transparent;
+    border-radius: 0 0 4px 4px;
+    box-sizing: border-box;
+    & .item {
+      display: flex;
+      align-items: stretch;
+      font-size: 0.9em;
+      letter-spacing: 0.12em;
+      padding: 0.3rem 0 0.3rem 0;
+      border-bottom: 1px solid $dark_shade_50;
+    }
+    & .invisible {
+      display: none;
+    }
+  }
+}
